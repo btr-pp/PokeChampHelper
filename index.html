@@ -1,1178 +1,1613 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-Hant">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#1a1a2e">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<link rel="manifest" href="manifest.json">
-<link rel="icon" href="logo.png">
-<link rel="apple-touch-icon" href="icons/icon-192.png">
-<title>Pokex — 寶可夢屬性相剋查詢</title>
-<style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-
-body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  background: #1a1a2e;
-  color: #e0e0e0;
-  font-size: 16px;
-  min-height: 100vh;
-}
-
-.container {
-  max-width: 480px;
-  margin: 0 auto;
-  padding: 20px 16px 40px;
-}
-
-h1 {
-  text-align: center;
-  font-size: 1.4rem;
-  margin-bottom: 6px;
-  color: #fff;
-}
-
-.subtitle {
-  text-align: center;
-  font-size: 0.85rem;
-  color: #888;
-  margin-bottom: 20px;
-}
-
-.section-label {
-  font-size: 0.9rem;
-  color: #aaa;
-  margin-bottom: 10px;
-}
-
-/* Tabs */
-.tabs {
-  display: flex;
-  gap: 4px;
-  margin-bottom: 20px;
-  background: #0f3460;
-  border-radius: 12px;
-  padding: 4px;
-}
-
-.tab-btn {
-  flex: 1;
-  min-height: 42px;
-  border: none;
-  border-radius: 10px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  cursor: pointer;
-  background: transparent;
-  color: #8899aa;
-  transition: all 0.2s;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.tab-btn.active {
-  background: #e63946;
-  color: #fff;
-}
-
-/* Type Grid */
-.type-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-  margin-bottom: 16px;
-}
-
-.type-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 44px;
-  border: 2px solid transparent;
-  border-radius: 10px;
-  font-size: 0.95rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform 0.1s, border-color 0.15s, opacity 0.15s;
-  color: #fff;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.4);
-  -webkit-tap-highlight-color: transparent;
-  user-select: none;
-}
-
-.type-btn:active { transform: scale(0.95); }
-.type-btn.selected { border-color: #fff; transform: scale(1.05); box-shadow: 0 0 12px rgba(255,255,255,0.3); }
-.type-btn.disabled { opacity: 0.35; pointer-events: none; }
-
-.selected-display {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  min-height: 40px;
-  margin-bottom: 12px;
-  flex-wrap: wrap;
-}
-
-.selected-display .placeholder { color: #666; font-size: 0.9rem; }
-
-.selected-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: #fff;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.4);
-}
-
-.selected-tag .remove {
-  cursor: pointer;
-  margin-left: 4px;
-  font-size: 1.1rem;
-  opacity: 0.7;
-}
-.selected-tag .remove:hover { opacity: 1; }
-
-.actions {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 24px;
-}
-
-.btn-query, .btn-clear, .btn-add-member {
-  flex: 1;
-  min-height: 46px;
-  border: none;
-  border-radius: 10px;
-  font-size: 1rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: opacity 0.15s;
-}
-
-.btn-query { background: #e63946; color: #fff; }
-.btn-query:disabled { background: #555; cursor: default; }
-.btn-clear { background: #333; color: #ccc; }
-.btn-add-member { background: #2d6a4f; color: #fff; }
-.btn-add-member:disabled { background: #555; cursor: default; }
-
-.results { display: flex; flex-direction: column; gap: 14px; }
-
-.card {
-  border-radius: 12px;
-  padding: 16px;
-  background: #16213e;
-}
-
-.card h2 {
-  font-size: 1rem;
-  margin-bottom: 10px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.card.weakness h2 { color: #ff6b6b; }
-.card.resist h2 { color: #51cf66; }
-.card.immune h2 { color: #adb5bd; }
-.card.advice h2 { color: #ffd43b; }
-
-.card .tags { display: flex; flex-wrap: wrap; gap: 6px; }
-
-.tag {
-  display: inline-flex;
-  align-items: center;
-  padding: 4px 10px;
-  border-radius: 6px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: #fff;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.4);
-}
-
-.tag .mult {
-  margin-left: 4px;
-  font-size: 0.75rem;
-  opacity: 0.85;
-}
-
-.card .empty { color: #555; font-size: 0.9rem; }
-
-/* Team Section */
-.team-panel { display: none; }
-.team-panel.active { display: block; }
-.query-panel { display: none; }
-.query-panel.active { display: block; }
-
-.team-tabs {
-  display: flex;
-  gap: 6px;
-  margin-bottom: 16px;
-}
-
-.team-tab {
-  flex: 1;
-  min-height: 40px;
-  border: 2px solid #334;
-  border-radius: 10px;
-  background: transparent;
-  color: #aaa;
-  font-size: 0.85rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.15s;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.team-tab.active {
-  border-color: #ffd43b;
-  color: #ffd43b;
-  background: rgba(255,212,59,0.1);
-}
-
-.team-members {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-bottom: 16px;
-}
-
-.team-member {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: #16213e;
-  border-radius: 10px;
-  padding: 10px 14px;
-  min-height: 44px;
-}
-
-.team-member .member-info {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  min-width: 0;
-  flex: 1;
-}
-
-.team-member .member-name {
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: #fff;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 100px;
-}
-
-.team-member .member-types {
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-}
-
-.team-member .remove-member {
-  background: none;
-  border: none;
-  color: #e63946;
-  font-size: 1.3rem;
-  cursor: pointer;
-  padding: 0 4px;
-  flex-shrink: 0;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.team-member-empty {
-  background: #16213e;
-  border: 2px dashed #334;
-  border-radius: 10px;
-  padding: 10px 14px;
-  min-height: 44px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #445;
-  font-size: 0.85rem;
-}
-
-.team-actions {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 16px;
-}
-
-.btn-analyze {
-  flex: 1;
-  min-height: 46px;
-  border: none;
-  border-radius: 10px;
-  font-size: 1rem;
-  font-weight: 700;
-  cursor: pointer;
-  background: #ffd43b;
-  color: #1a1a2e;
-}
-.btn-analyze:disabled { background: #555; color: #888; cursor: default; }
-
-.btn-clear-team {
-  flex: 1;
-  min-height: 46px;
-  border: none;
-  border-radius: 10px;
-  font-size: 1rem;
-  font-weight: 700;
-  cursor: pointer;
-  background: #333;
-  color: #ccc;
-}
-
-.team-results { display: flex; flex-direction: column; gap: 14px; }
-
-.name-input-wrapper {
-  position: relative;
-  margin-bottom: 14px;
-}
-
-.name-input-wrapper .name-icon {
-  position: absolute;
-  left: 14px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 1.1rem;
-  pointer-events: none;
-}
-
-.name-input {
-  width: 100%;
-  padding: 12px 14px 12px 40px;
-  border: 2px solid #445;
-  border-radius: 12px;
-  background: #0f3460;
-  color: #fff;
-  font-size: 16px;
-  font-weight: 600;
-  outline: none;
-  transition: border-color 0.2s, box-shadow 0.2s;
-}
-.name-input:focus { border-color: #ffd43b; box-shadow: 0 0 0 3px rgba(255,212,59,0.15); }
-.name-input::placeholder { color: #667; font-weight: 400; }
-
-/* Opponent matchup section */
-.opponent-section {
-  margin-top: 20px;
-  padding-top: 16px;
-  border-top: 1px solid #223;
-}
-
-.opponent-section h3 {
-  font-size: 0.95rem;
-  color: #ff6b6b;
-  margin-bottom: 12px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.opponent-selected {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  min-height: 36px;
-  margin-bottom: 10px;
-  flex-wrap: wrap;
-}
-
-.opponent-selected .placeholder { color: #556; font-size: 0.85rem; }
-
-.btn-clear-opponent {
-  min-height: 36px;
-  padding: 0 16px;
-  border: none;
-  border-radius: 8px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  cursor: pointer;
-  background: #333;
-  color: #aaa;
-  margin-bottom: 14px;
-}
-
-.matchup-result {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.matchup-member {
-  background: rgba(255,255,255,0.03);
-  border-radius: 10px;
-  padding: 12px;
-}
-
-.matchup-member-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 6px;
-}
-
-.matchup-member-name {
-  font-weight: 600;
-  font-size: 0.9rem;
-  color: #fff;
-}
-
-.matchup-badge {
-  font-size: 0.78rem;
-  font-weight: 700;
-  padding: 2px 10px;
-  border-radius: 20px;
-}
-
-.matchup-badge.great { background: #2d6a4f; color: #51cf66; }
-.matchup-badge.ok { background: #5c4d1a; color: #ffd43b; }
-.matchup-badge.bad { background: #6b2020; color: #ff6b6b; }
-.matchup-badge.immune-badge { background: #333; color: #adb5bd; }
-
-.matchup-detail {
-  font-size: 0.82rem;
-  color: #aaa;
-  line-height: 1.6;
-}
-
-.matchup-recommend {
-  margin-top: 10px;
-  padding: 10px 12px;
-  background: rgba(255,212,59,0.08);
-  border-radius: 8px;
-  border-left: 3px solid #ffd43b;
-}
-
-.matchup-recommend-title {
-  font-size: 0.82rem;
-  font-weight: 600;
-  color: #ffd43b;
-  margin-bottom: 6px;
-}
-
-/* Threat scenario */
-.threat-scenario {
-  background: rgba(255,255,255,0.03);
-  border-radius: 8px;
-  padding: 12px;
-  margin-bottom: 8px;
-}
-
-.threat-scenario:last-child { margin-bottom: 0; }
-
-.threat-header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 8px;
-  font-size: 0.9rem;
-}
-
-.threat-header .threat-type-label {
-  font-weight: 700;
-}
-
-.threat-affected {
-  font-size: 0.82rem;
-  color: #ff9999;
-  margin-bottom: 6px;
-  line-height: 1.5;
-}
-
-.threat-counter {
-  font-size: 0.82rem;
-  color: #aaa;
-  margin-bottom: 4px;
-}
-
-.divider {
-  border: none;
-  border-top: 1px solid #223;
-  margin: 8px 0;
-}
-</style>
-</head>
-<body>
-<div class="container">
-  <h1>寶可夢屬性相剋查詢</h1>
-  <p class="subtitle">查詢屬性弱點，或建立隊伍分析攻略</p>
-
-  <div class="tabs">
-    <button class="tab-btn active" onclick="switchTab('query')">屬性查詢</button>
-    <button class="tab-btn" onclick="switchTab('team')">我的隊伍</button>
-  </div>
-
-  <!-- Query Panel -->
-  <div class="query-panel active" id="queryPanel">
-    <p class="section-label">選擇屬性（最多 2 個）</p>
-    <div class="type-grid" id="typeGrid"></div>
-
-    <div class="selected-display" id="selectedDisplay">
-      <span class="placeholder">尚未選擇屬性</span>
-    </div>
-
-    <div class="actions">
-      <button class="btn-query" id="btnQuery" disabled>查詢</button>
-      <button class="btn-clear" id="btnClear">清除</button>
-    </div>
-
-    <div class="results" id="results"></div>
-  </div>
-
-  <!-- Team Panel -->
-  <div class="team-panel" id="teamPanel">
-    <div class="team-tabs" id="teamTabs"></div>
-
-    <p class="section-label">隊伍成員（最多 4 隻）</p>
-    <div class="team-members" id="teamMembers"></div>
-
-    <div id="teamAddSection">
-      <p class="section-label">新增成員</p>
-      <div class="name-input-wrapper">
-        <span class="name-icon">🏷️</span>
-        <input type="text" class="name-input" id="memberNameInput" placeholder="輸入寶可夢名稱（選填）" maxlength="20">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta
+      name="description"
+      content="查詢寶可夢屬性弱點、建立隊伍並取得對戰建議"
+    />
+    <meta name="theme-color" content="#1a1a2e" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <meta name="apple-mobile-web-app-title" content="Pokex" />
+    <link rel="manifest" href="manifest.json" />
+    <link rel="icon" href="logo.png" />
+    <link rel="apple-touch-icon" href="icons/icon-192.png" />
+    <link
+      rel="icon"
+      type="image/png"
+      href="icons/icon-192.png"
+      sizes="192x192"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      href="icons/icon-512.png"
+      sizes="512x512"
+    />
+    <title>Pokex — 寶可夢屬性相剋查詢</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial, sans-serif;
+        background: #1a1a2e;
+        color: #e0e0e0;
+        font-size: 16px;
+        min-height: 100vh;
+      }
+
+      .container {
+        max-width: 480px;
+        margin: 0 auto;
+        padding: 20px 16px 40px;
+      }
+
+      h1 {
+        text-align: center;
+        font-size: 1.4rem;
+        margin-bottom: 6px;
+        color: #fff;
+      }
+
+      .subtitle {
+        text-align: center;
+        font-size: 0.85rem;
+        color: #888;
+        margin-bottom: 20px;
+      }
+
+      .section-label {
+        font-size: 0.9rem;
+        color: #aaa;
+        margin-bottom: 10px;
+      }
+
+      /* Tabs */
+      .tabs {
+        display: flex;
+        gap: 4px;
+        margin-bottom: 20px;
+        background: #0f3460;
+        border-radius: 12px;
+        padding: 4px;
+      }
+
+      .tab-btn {
+        flex: 1;
+        min-height: 42px;
+        border: none;
+        border-radius: 10px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        cursor: pointer;
+        background: transparent;
+        color: #8899aa;
+        transition: all 0.2s;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      .tab-btn.active {
+        background: #e63946;
+        color: #fff;
+      }
+
+      /* Type Grid */
+      .type-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+        margin-bottom: 16px;
+      }
+
+      .type-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 44px;
+        border: 2px solid transparent;
+        border-radius: 10px;
+        font-size: 0.95rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition:
+          transform 0.1s,
+          border-color 0.15s,
+          opacity 0.15s;
+        color: #fff;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+        -webkit-tap-highlight-color: transparent;
+        user-select: none;
+      }
+
+      .type-btn:active {
+        transform: scale(0.95);
+      }
+      .type-btn.selected {
+        border-color: #fff;
+        transform: scale(1.05);
+        box-shadow: 0 0 12px rgba(255, 255, 255, 0.3);
+      }
+      .type-btn.disabled {
+        opacity: 0.35;
+        pointer-events: none;
+      }
+
+      .selected-display {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-height: 40px;
+        margin-bottom: 12px;
+        flex-wrap: wrap;
+      }
+
+      .selected-display .placeholder {
+        color: #666;
+        font-size: 0.9rem;
+      }
+
+      .selected-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #fff;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+      }
+
+      .selected-tag .remove {
+        cursor: pointer;
+        margin-left: 4px;
+        font-size: 1.1rem;
+        opacity: 0.7;
+      }
+      .selected-tag .remove:hover {
+        opacity: 1;
+      }
+
+      .actions {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 24px;
+      }
+
+      .btn-query,
+      .btn-clear,
+      .btn-add-member {
+        flex: 1;
+        min-height: 46px;
+        border: none;
+        border-radius: 10px;
+        font-size: 1rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: opacity 0.15s;
+      }
+
+      .btn-query {
+        background: #e63946;
+        color: #fff;
+      }
+      .btn-query:disabled {
+        background: #555;
+        cursor: default;
+      }
+      .btn-clear {
+        background: #333;
+        color: #ccc;
+      }
+      .btn-add-member {
+        background: #2d6a4f;
+        color: #fff;
+      }
+      .btn-add-member:disabled {
+        background: #555;
+        cursor: default;
+      }
+
+      .results {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+
+      .card {
+        border-radius: 12px;
+        padding: 16px;
+        background: #16213e;
+      }
+
+      .card h2 {
+        font-size: 1rem;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .card.weakness h2 {
+        color: #ff6b6b;
+      }
+      .card.resist h2 {
+        color: #51cf66;
+      }
+      .card.immune h2 {
+        color: #adb5bd;
+      }
+      .card.advice h2 {
+        color: #ffd43b;
+      }
+
+      .card .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+
+      .tag {
+        display: inline-flex;
+        align-items: center;
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #fff;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+      }
+
+      .tag .mult {
+        margin-left: 4px;
+        font-size: 0.75rem;
+        opacity: 0.85;
+      }
+
+      .card .empty {
+        color: #555;
+        font-size: 0.9rem;
+      }
+
+      /* Team Section */
+      .team-panel {
+        display: none;
+      }
+      .team-panel.active {
+        display: block;
+      }
+      .query-panel {
+        display: none;
+      }
+      .query-panel.active {
+        display: block;
+      }
+
+      .team-tabs {
+        display: flex;
+        gap: 6px;
+        margin-bottom: 16px;
+      }
+
+      .team-tab {
+        flex: 1;
+        min-height: 40px;
+        border: 2px solid #334;
+        border-radius: 10px;
+        background: transparent;
+        color: #aaa;
+        font-size: 0.85rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.15s;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      .team-tab.active {
+        border-color: #ffd43b;
+        color: #ffd43b;
+        background: rgba(255, 212, 59, 0.1);
+      }
+
+      .team-members {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-bottom: 16px;
+      }
+
+      .team-member {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: #16213e;
+        border-radius: 10px;
+        padding: 10px 14px;
+        min-height: 44px;
+      }
+
+      .team-member .member-info {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-width: 0;
+        flex: 1;
+      }
+
+      .team-member .member-name {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #fff;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100px;
+      }
+
+      .team-member .member-types {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+      }
+
+      .team-member .remove-member {
+        background: none;
+        border: none;
+        color: #e63946;
+        font-size: 1.3rem;
+        cursor: pointer;
+        padding: 0 4px;
+        flex-shrink: 0;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      .team-member-empty {
+        background: #16213e;
+        border: 2px dashed #334;
+        border-radius: 10px;
+        padding: 10px 14px;
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #445;
+        font-size: 0.85rem;
+      }
+
+      .team-actions {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 16px;
+      }
+
+      .btn-analyze {
+        flex: 1;
+        min-height: 46px;
+        border: none;
+        border-radius: 10px;
+        font-size: 1rem;
+        font-weight: 700;
+        cursor: pointer;
+        background: #ffd43b;
+        color: #1a1a2e;
+      }
+      .btn-analyze:disabled {
+        background: #555;
+        color: #888;
+        cursor: default;
+      }
+
+      .btn-clear-team {
+        flex: 1;
+        min-height: 46px;
+        border: none;
+        border-radius: 10px;
+        font-size: 1rem;
+        font-weight: 700;
+        cursor: pointer;
+        background: #333;
+        color: #ccc;
+      }
+
+      .team-results {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+
+      .name-input-wrapper {
+        position: relative;
+        margin-bottom: 14px;
+      }
+
+      .name-input-wrapper .name-icon {
+        position: absolute;
+        left: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 1.1rem;
+        pointer-events: none;
+      }
+
+      .name-input {
+        width: 100%;
+        padding: 12px 14px 12px 40px;
+        border: 2px solid #445;
+        border-radius: 12px;
+        background: #0f3460;
+        color: #fff;
+        font-size: 16px;
+        font-weight: 600;
+        outline: none;
+        transition:
+          border-color 0.2s,
+          box-shadow 0.2s;
+      }
+      .name-input:focus {
+        border-color: #ffd43b;
+        box-shadow: 0 0 0 3px rgba(255, 212, 59, 0.15);
+      }
+      .name-input::placeholder {
+        color: #667;
+        font-weight: 400;
+      }
+
+      /* Opponent matchup section */
+      .opponent-section {
+        margin-top: 20px;
+        padding-top: 16px;
+        border-top: 1px solid #223;
+      }
+
+      .opponent-section h3 {
+        font-size: 0.95rem;
+        color: #ff6b6b;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .opponent-selected {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-height: 36px;
+        margin-bottom: 10px;
+        flex-wrap: wrap;
+      }
+
+      .opponent-selected .placeholder {
+        color: #556;
+        font-size: 0.85rem;
+      }
+
+      .btn-clear-opponent {
+        min-height: 36px;
+        padding: 0 16px;
+        border: none;
+        border-radius: 8px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        cursor: pointer;
+        background: #333;
+        color: #aaa;
+        margin-bottom: 14px;
+      }
+
+      .matchup-result {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .matchup-member {
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: 10px;
+        padding: 12px;
+      }
+
+      .matchup-member-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 6px;
+      }
+
+      .matchup-member-name {
+        font-weight: 600;
+        font-size: 0.9rem;
+        color: #fff;
+      }
+
+      .matchup-badge {
+        font-size: 0.78rem;
+        font-weight: 700;
+        padding: 2px 10px;
+        border-radius: 20px;
+      }
+
+      .matchup-badge.great {
+        background: #2d6a4f;
+        color: #51cf66;
+      }
+      .matchup-badge.ok {
+        background: #5c4d1a;
+        color: #ffd43b;
+      }
+      .matchup-badge.bad {
+        background: #6b2020;
+        color: #ff6b6b;
+      }
+      .matchup-badge.immune-badge {
+        background: #333;
+        color: #adb5bd;
+      }
+
+      .matchup-detail {
+        font-size: 0.82rem;
+        color: #aaa;
+        line-height: 1.6;
+      }
+
+      .matchup-recommend {
+        margin-top: 10px;
+        padding: 10px 12px;
+        background: rgba(255, 212, 59, 0.08);
+        border-radius: 8px;
+        border-left: 3px solid #ffd43b;
+      }
+
+      .matchup-recommend-title {
+        font-size: 0.82rem;
+        font-weight: 600;
+        color: #ffd43b;
+        margin-bottom: 6px;
+      }
+
+      /* Threat scenario */
+      .threat-scenario {
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: 8px;
+        padding: 12px;
+        margin-bottom: 8px;
+      }
+
+      .threat-scenario:last-child {
+        margin-bottom: 0;
+      }
+
+      .threat-header {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 8px;
+        font-size: 0.9rem;
+      }
+
+      .threat-header .threat-type-label {
+        font-weight: 700;
+      }
+
+      .threat-affected {
+        font-size: 0.82rem;
+        color: #ff9999;
+        margin-bottom: 6px;
+        line-height: 1.5;
+      }
+
+      .threat-counter {
+        font-size: 0.82rem;
+        color: #aaa;
+        margin-bottom: 4px;
+      }
+
+      .divider {
+        border: none;
+        border-top: 1px solid #223;
+        margin: 8px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>寶可夢屬性相剋查詢</h1>
+      <p class="subtitle">查詢屬性弱點，或建立隊伍分析攻略</p>
+
+      <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('query')">
+          屬性查詢
+        </button>
+        <button class="tab-btn" onclick="switchTab('team')">我的隊伍</button>
       </div>
-      <p class="section-label">選擇屬性（最多 2 個）</p>
-      <div class="type-grid" id="teamTypeGrid"></div>
 
-      <div class="selected-display" id="teamSelectedDisplay">
-        <span class="placeholder">尚未選擇屬性</span>
+      <!-- Query Panel -->
+      <div class="query-panel active" id="queryPanel">
+        <p class="section-label">選擇屬性（最多 2 個）</p>
+        <div class="type-grid" id="typeGrid"></div>
+
+        <div class="selected-display" id="selectedDisplay">
+          <span class="placeholder">尚未選擇屬性</span>
+        </div>
+
+        <div class="actions">
+          <button class="btn-query" id="btnQuery" disabled>查詢</button>
+          <button class="btn-clear" id="btnClear">清除</button>
+        </div>
+
+        <div class="results" id="results"></div>
       </div>
 
-      <div class="actions">
-        <button class="btn-add-member" id="btnAddMember" disabled>加入隊伍</button>
-        <button class="btn-clear" id="btnTeamClearSel">清除選擇</button>
+      <!-- Team Panel -->
+      <div class="team-panel" id="teamPanel">
+        <div class="team-tabs" id="teamTabs"></div>
+
+        <p class="section-label">隊伍成員（最多 4 隻）</p>
+        <div class="team-members" id="teamMembers"></div>
+
+        <div id="teamAddSection">
+          <p class="section-label">新增成員</p>
+          <div class="name-input-wrapper">
+            <span class="name-icon">🏷️</span>
+            <input
+              type="text"
+              class="name-input"
+              id="memberNameInput"
+              placeholder="輸入寶可夢名稱（選填）"
+              maxlength="20"
+            />
+          </div>
+          <p class="section-label">選擇屬性（最多 2 個）</p>
+          <div class="type-grid" id="teamTypeGrid"></div>
+
+          <div class="selected-display" id="teamSelectedDisplay">
+            <span class="placeholder">尚未選擇屬性</span>
+          </div>
+
+          <div class="actions">
+            <button class="btn-add-member" id="btnAddMember" disabled>
+              加入隊伍
+            </button>
+            <button class="btn-clear" id="btnTeamClearSel">清除選擇</button>
+          </div>
+        </div>
+
+        <hr class="divider" />
+
+        <div class="team-actions">
+          <button class="btn-analyze" id="btnAnalyze" disabled>
+            分析隊伍弱點與攻略
+          </button>
+          <button class="btn-clear-team" id="btnClearTeam">清空隊伍</button>
+        </div>
+
+        <div class="team-results" id="teamResults"></div>
+
+        <div
+          class="opponent-section"
+          id="opponentSection"
+          style="display: none"
+        >
+          <h3>🎯 即時對手分析</h3>
+          <p class="section-label">選擇當前對手的屬性（最多 2 個）</p>
+          <div class="type-grid" id="opponentTypeGrid"></div>
+          <div class="opponent-selected" id="opponentSelectedDisplay">
+            <span class="placeholder">點選對手的屬性</span>
+          </div>
+          <button class="btn-clear-opponent" id="btnClearOpponent">
+            清除對手
+          </button>
+          <div class="matchup-result" id="matchupResult"></div>
+        </div>
       </div>
     </div>
 
-    <hr class="divider">
+    <script>
+      const TYPES = [
+        { id: "normal", name: "一般", color: "#A8A77A" },
+        { id: "fire", name: "火", color: "#EE8130" },
+        { id: "water", name: "水", color: "#6390F0" },
+        { id: "electric", name: "電", color: "#F7D02C" },
+        { id: "grass", name: "草", color: "#7AC74C" },
+        { id: "ice", name: "冰", color: "#96D9D6" },
+        { id: "fighting", name: "格鬥", color: "#C22E28" },
+        { id: "poison", name: "毒", color: "#A33EA1" },
+        { id: "ground", name: "地面", color: "#E2BF65" },
+        { id: "flying", name: "飛行", color: "#A98FF3" },
+        { id: "psychic", name: "超能力", color: "#F95587" },
+        { id: "bug", name: "蟲", color: "#A6B91A" },
+        { id: "rock", name: "岩石", color: "#B6A136" },
+        { id: "ghost", name: "幽靈", color: "#735797" },
+        { id: "dragon", name: "龍", color: "#6F35FC" },
+        { id: "dark", name: "惡", color: "#705746" },
+        { id: "steel", name: "鋼", color: "#B7B7CE" },
+        { id: "fairy", name: "妖精", color: "#D685AD" },
+      ];
 
-    <div class="team-actions">
-      <button class="btn-analyze" id="btnAnalyze" disabled>分析隊伍弱點與攻略</button>
-      <button class="btn-clear-team" id="btnClearTeam">清空隊伍</button>
-    </div>
+      const DEFENSE = {
+        normal: { fighting: 2, ghost: 0 },
+        fire: {
+          water: 2,
+          ground: 2,
+          rock: 2,
+          fire: 0.5,
+          grass: 0.5,
+          ice: 0.5,
+          bug: 0.5,
+          steel: 0.5,
+          fairy: 0.5,
+        },
+        water: {
+          electric: 2,
+          grass: 2,
+          fire: 0.5,
+          water: 0.5,
+          ice: 0.5,
+          steel: 0.5,
+        },
+        electric: { ground: 2, electric: 0.5, flying: 0.5, steel: 0.5 },
+        grass: {
+          fire: 2,
+          ice: 2,
+          poison: 2,
+          flying: 2,
+          bug: 2,
+          water: 0.5,
+          electric: 0.5,
+          grass: 0.5,
+          ground: 0.5,
+        },
+        ice: { fire: 2, fighting: 2, rock: 2, steel: 2, ice: 0.5 },
+        fighting: {
+          flying: 2,
+          psychic: 2,
+          fairy: 2,
+          bug: 0.5,
+          rock: 0.5,
+          dark: 0.5,
+        },
+        poison: {
+          ground: 2,
+          psychic: 2,
+          fighting: 0.5,
+          poison: 0.5,
+          bug: 0.5,
+          grass: 0.5,
+          fairy: 0.5,
+        },
+        ground: {
+          water: 2,
+          grass: 2,
+          ice: 2,
+          poison: 0.5,
+          rock: 0.5,
+          electric: 0,
+        },
+        flying: {
+          electric: 2,
+          ice: 2,
+          rock: 2,
+          fighting: 0.5,
+          bug: 0.5,
+          grass: 0.5,
+          ground: 0,
+        },
+        psychic: { bug: 2, ghost: 2, dark: 2, fighting: 0.5, psychic: 0.5 },
+        bug: {
+          fire: 2,
+          flying: 2,
+          rock: 2,
+          fighting: 0.5,
+          ground: 0.5,
+          grass: 0.5,
+        },
+        rock: {
+          water: 2,
+          grass: 2,
+          fighting: 2,
+          ground: 2,
+          steel: 2,
+          normal: 0.5,
+          fire: 0.5,
+          poison: 0.5,
+          flying: 0.5,
+        },
+        ghost: {
+          ghost: 2,
+          dark: 2,
+          poison: 0.5,
+          bug: 0.5,
+          normal: 0,
+          fighting: 0,
+        },
+        dragon: {
+          ice: 2,
+          dragon: 2,
+          fairy: 2,
+          fire: 0.5,
+          water: 0.5,
+          electric: 0.5,
+          grass: 0.5,
+        },
+        dark: {
+          fighting: 2,
+          bug: 2,
+          fairy: 2,
+          ghost: 0.5,
+          dark: 0.5,
+          psychic: 0,
+        },
+        steel: {
+          fire: 2,
+          fighting: 2,
+          ground: 2,
+          normal: 0.5,
+          grass: 0.5,
+          ice: 0.5,
+          flying: 0.5,
+          psychic: 0.5,
+          bug: 0.5,
+          rock: 0.5,
+          dragon: 0.5,
+          steel: 0.5,
+          fairy: 0.5,
+          poison: 0,
+        },
+        fairy: {
+          poison: 2,
+          steel: 2,
+          fighting: 0.5,
+          bug: 0.5,
+          dark: 0.5,
+          dragon: 0,
+        },
+      };
 
-    <div class="team-results" id="teamResults"></div>
+      const OFFENSE = {
+        normal: { rock: 0.5, ghost: 0, steel: 0.5 },
+        fire: {
+          fire: 0.5,
+          water: 0.5,
+          grass: 2,
+          ice: 2,
+          bug: 2,
+          rock: 0.5,
+          dragon: 0.5,
+          steel: 2,
+        },
+        water: {
+          fire: 2,
+          water: 0.5,
+          grass: 0.5,
+          ground: 2,
+          rock: 2,
+          dragon: 0.5,
+        },
+        electric: {
+          water: 2,
+          electric: 0.5,
+          grass: 0.5,
+          ground: 0,
+          flying: 2,
+          dragon: 0.5,
+        },
+        grass: {
+          fire: 0.5,
+          water: 2,
+          grass: 0.5,
+          poison: 0.5,
+          ground: 2,
+          flying: 0.5,
+          bug: 0.5,
+          rock: 2,
+          dragon: 0.5,
+          steel: 0.5,
+        },
+        ice: {
+          fire: 0.5,
+          water: 0.5,
+          grass: 2,
+          ice: 0.5,
+          ground: 2,
+          flying: 2,
+          dragon: 2,
+          steel: 0.5,
+        },
+        fighting: {
+          normal: 2,
+          ice: 2,
+          poison: 0.5,
+          flying: 0.5,
+          psychic: 0.5,
+          bug: 0.5,
+          rock: 2,
+          ghost: 0,
+          dark: 2,
+          steel: 2,
+          fairy: 0.5,
+        },
+        poison: {
+          grass: 2,
+          poison: 0.5,
+          ground: 0.5,
+          rock: 0.5,
+          ghost: 0.5,
+          steel: 0,
+          fairy: 2,
+        },
+        ground: {
+          fire: 2,
+          electric: 2,
+          grass: 0.5,
+          poison: 2,
+          flying: 0,
+          bug: 0.5,
+          rock: 2,
+          steel: 2,
+        },
+        flying: {
+          electric: 0.5,
+          grass: 2,
+          fighting: 2,
+          bug: 2,
+          rock: 0.5,
+          steel: 0.5,
+        },
+        psychic: { fighting: 2, poison: 2, psychic: 0.5, dark: 0, steel: 0.5 },
+        bug: {
+          fire: 0.5,
+          grass: 2,
+          fighting: 0.5,
+          poison: 0.5,
+          flying: 0.5,
+          psychic: 2,
+          ghost: 0.5,
+          dark: 2,
+          steel: 0.5,
+          fairy: 0.5,
+        },
+        rock: {
+          fire: 2,
+          ice: 2,
+          fighting: 0.5,
+          ground: 0.5,
+          flying: 2,
+          bug: 2,
+          steel: 0.5,
+        },
+        ghost: { normal: 0, psychic: 2, ghost: 2, dark: 0.5 },
+        dragon: { dragon: 2, steel: 0.5, fairy: 0 },
+        dark: { fighting: 0.5, psychic: 2, ghost: 2, dark: 0.5, fairy: 0.5 },
+        steel: {
+          fire: 0.5,
+          water: 0.5,
+          electric: 0.5,
+          ice: 2,
+          rock: 2,
+          steel: 0.5,
+          fairy: 2,
+        },
+        fairy: {
+          fire: 0.5,
+          fighting: 2,
+          poison: 0.5,
+          dragon: 2,
+          dark: 2,
+          steel: 0.5,
+        },
+      };
 
-    <div class="opponent-section" id="opponentSection" style="display:none">
-      <h3>🎯 即時對手分析</h3>
-      <p class="section-label">選擇當前對手的屬性（最多 2 個）</p>
-      <div class="type-grid" id="opponentTypeGrid"></div>
-      <div class="opponent-selected" id="opponentSelectedDisplay">
-        <span class="placeholder">點選對手的屬性</span>
-      </div>
-      <button class="btn-clear-opponent" id="btnClearOpponent">清除對手</button>
-      <div class="matchup-result" id="matchupResult"></div>
-    </div>
-  </div>
-</div>
+      const typeMap = {};
+      TYPES.forEach((t) => (typeMap[t.id] = t));
 
-<script>
-const TYPES = [
-  { id: 'normal',   name: '一般', color: '#A8A77A' },
-  { id: 'fire',     name: '火',   color: '#EE8130' },
-  { id: 'water',    name: '水',   color: '#6390F0' },
-  { id: 'electric', name: '電',   color: '#F7D02C' },
-  { id: 'grass',    name: '草',   color: '#7AC74C' },
-  { id: 'ice',      name: '冰',   color: '#96D9D6' },
-  { id: 'fighting', name: '格鬥', color: '#C22E28' },
-  { id: 'poison',   name: '毒',   color: '#A33EA1' },
-  { id: 'ground',   name: '地面', color: '#E2BF65' },
-  { id: 'flying',   name: '飛行', color: '#A98FF3' },
-  { id: 'psychic',  name: '超能力', color: '#F95587' },
-  { id: 'bug',      name: '蟲',   color: '#A6B91A' },
-  { id: 'rock',     name: '岩石', color: '#B6A136' },
-  { id: 'ghost',    name: '幽靈', color: '#735797' },
-  { id: 'dragon',   name: '龍',   color: '#6F35FC' },
-  { id: 'dark',     name: '惡',   color: '#705746' },
-  { id: 'steel',    name: '鋼',   color: '#B7B7CE' },
-  { id: 'fairy',    name: '妖精', color: '#D685AD' },
-];
+      // ===== State =====
+      let selected = [];
+      let teamSelected = [];
+      let currentTab = "query";
+      let currentTeamIdx = 0;
+      // teams: array of 3 teams, each member is { name: string, types: [typeId...] }
+      let teams = [[], [], []];
 
-const DEFENSE = {
-  normal:   { fighting: 2, ghost: 0 },
-  fire:     { water: 2, ground: 2, rock: 2, fire: 0.5, grass: 0.5, ice: 0.5, bug: 0.5, steel: 0.5, fairy: 0.5 },
-  water:    { electric: 2, grass: 2, fire: 0.5, water: 0.5, ice: 0.5, steel: 0.5 },
-  electric: { ground: 2, electric: 0.5, flying: 0.5, steel: 0.5 },
-  grass:    { fire: 2, ice: 2, poison: 2, flying: 2, bug: 2, water: 0.5, electric: 0.5, grass: 0.5, ground: 0.5 },
-  ice:      { fire: 2, fighting: 2, rock: 2, steel: 2, ice: 0.5 },
-  fighting: { flying: 2, psychic: 2, fairy: 2, bug: 0.5, rock: 0.5, dark: 0.5 },
-  poison:   { ground: 2, psychic: 2, fighting: 0.5, poison: 0.5, bug: 0.5, grass: 0.5, fairy: 0.5 },
-  ground:   { water: 2, grass: 2, ice: 2, poison: 0.5, rock: 0.5, electric: 0 },
-  flying:   { electric: 2, ice: 2, rock: 2, fighting: 0.5, bug: 0.5, grass: 0.5, ground: 0 },
-  psychic:  { bug: 2, ghost: 2, dark: 2, fighting: 0.5, psychic: 0.5 },
-  bug:      { fire: 2, flying: 2, rock: 2, fighting: 0.5, ground: 0.5, grass: 0.5 },
-  rock:     { water: 2, grass: 2, fighting: 2, ground: 2, steel: 2, normal: 0.5, fire: 0.5, poison: 0.5, flying: 0.5 },
-  ghost:    { ghost: 2, dark: 2, poison: 0.5, bug: 0.5, normal: 0, fighting: 0 },
-  dragon:   { ice: 2, dragon: 2, fairy: 2, fire: 0.5, water: 0.5, electric: 0.5, grass: 0.5 },
-  dark:     { fighting: 2, bug: 2, fairy: 2, ghost: 0.5, dark: 0.5, psychic: 0 },
-  steel:    { fire: 2, fighting: 2, ground: 2, normal: 0.5, grass: 0.5, ice: 0.5, flying: 0.5, psychic: 0.5, bug: 0.5, rock: 0.5, dragon: 0.5, steel: 0.5, fairy: 0.5, poison: 0 },
-  fairy:    { poison: 2, steel: 2, fighting: 0.5, bug: 0.5, dark: 0.5, dragon: 0 },
-};
+      function loadTeams() {
+        try {
+          const saved = localStorage.getItem("poke-teams");
+          if (saved) {
+            const parsed = JSON.parse(saved);
+            // Migrate old format (array of type ids) to new format (object with name + types)
+            teams = parsed.map((team) =>
+              team.map((member) =>
+                Array.isArray(member) ? { name: "", types: member } : member,
+              ),
+            );
+          }
+        } catch (e) {}
+      }
 
-const OFFENSE = {
-  normal:   { rock: 0.5, ghost: 0, steel: 0.5 },
-  fire:     { fire: 0.5, water: 0.5, grass: 2, ice: 2, bug: 2, rock: 0.5, dragon: 0.5, steel: 2 },
-  water:    { fire: 2, water: 0.5, grass: 0.5, ground: 2, rock: 2, dragon: 0.5 },
-  electric: { water: 2, electric: 0.5, grass: 0.5, ground: 0, flying: 2, dragon: 0.5 },
-  grass:    { fire: 0.5, water: 2, grass: 0.5, poison: 0.5, ground: 2, flying: 0.5, bug: 0.5, rock: 2, dragon: 0.5, steel: 0.5 },
-  ice:      { fire: 0.5, water: 0.5, grass: 2, ice: 0.5, ground: 2, flying: 2, dragon: 2, steel: 0.5 },
-  fighting: { normal: 2, ice: 2, poison: 0.5, flying: 0.5, psychic: 0.5, bug: 0.5, rock: 2, ghost: 0, dark: 2, steel: 2, fairy: 0.5 },
-  poison:   { grass: 2, poison: 0.5, ground: 0.5, rock: 0.5, ghost: 0.5, steel: 0, fairy: 2 },
-  ground:   { fire: 2, electric: 2, grass: 0.5, poison: 2, flying: 0, bug: 0.5, rock: 2, steel: 2 },
-  flying:   { electric: 0.5, grass: 2, fighting: 2, bug: 2, rock: 0.5, steel: 0.5 },
-  psychic:  { fighting: 2, poison: 2, psychic: 0.5, dark: 0, steel: 0.5 },
-  bug:      { fire: 0.5, grass: 2, fighting: 0.5, poison: 0.5, flying: 0.5, psychic: 2, ghost: 0.5, dark: 2, steel: 0.5, fairy: 0.5 },
-  rock:     { fire: 2, ice: 2, fighting: 0.5, ground: 0.5, flying: 2, bug: 2, steel: 0.5 },
-  ghost:    { normal: 0, psychic: 2, ghost: 2, dark: 0.5 },
-  dragon:   { dragon: 2, steel: 0.5, fairy: 0 },
-  dark:     { fighting: 0.5, psychic: 2, ghost: 2, dark: 0.5, fairy: 0.5 },
-  steel:    { fire: 0.5, water: 0.5, electric: 0.5, ice: 2, rock: 2, steel: 0.5, fairy: 2 },
-  fairy:    { fire: 0.5, fighting: 2, poison: 0.5, dragon: 2, dark: 2, steel: 0.5 },
-};
+      function saveTeams() {
+        localStorage.setItem("poke-teams", JSON.stringify(teams));
+      }
 
-const typeMap = {};
-TYPES.forEach(t => typeMap[t.id] = t);
+      loadTeams();
 
-// ===== State =====
-let selected = [];
-let teamSelected = [];
-let currentTab = 'query';
-let currentTeamIdx = 0;
-// teams: array of 3 teams, each member is { name: string, types: [typeId...] }
-let teams = [[], [], []];
+      function getMemberLabel(member) {
+        const typesStr = member.types.map((id) => typeMap[id].name).join("/");
+        return member.name ? `${member.name}（${typesStr}）` : typesStr;
+      }
 
-function loadTeams() {
-  try {
-    const saved = localStorage.getItem('poke-teams');
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      // Migrate old format (array of type ids) to new format (object with name + types)
-      teams = parsed.map(team =>
-        team.map(member =>
-          Array.isArray(member) ? { name: '', types: member } : member
-        )
-      );
-    }
-  } catch(e) {}
-}
+      // ===== Tab switching =====
+      function switchTab(tab) {
+        currentTab = tab;
+        document.querySelectorAll(".tab-btn").forEach((btn, i) => {
+          btn.classList.toggle(
+            "active",
+            (i === 0 && tab === "query") || (i === 1 && tab === "team"),
+          );
+        });
+        document
+          .getElementById("queryPanel")
+          .classList.toggle("active", tab === "query");
+        document
+          .getElementById("teamPanel")
+          .classList.toggle("active", tab === "team");
+        if (tab === "query") render();
+        else renderTeam();
+      }
 
-function saveTeams() {
-  localStorage.setItem('poke-teams', JSON.stringify(teams));
-}
+      // ===== Query Panel =====
+      function render() {
+        const grid = document.getElementById("typeGrid");
+        grid.innerHTML = "";
+        TYPES.forEach((t) => {
+          const btn = document.createElement("button");
+          btn.className = "type-btn";
+          if (selected.includes(t.id)) btn.classList.add("selected");
+          else if (selected.length >= 2) btn.classList.add("disabled");
+          btn.style.background = t.color;
+          btn.textContent = t.name;
+          btn.onclick = () => toggle(t.id);
+          grid.appendChild(btn);
+        });
 
-loadTeams();
+        const display = document.getElementById("selectedDisplay");
+        if (selected.length === 0) {
+          display.innerHTML = '<span class="placeholder">尚未選擇屬性</span>';
+        } else {
+          display.innerHTML = selected
+            .map((id) => {
+              const t = typeMap[id];
+              return `<span class="selected-tag" style="background:${t.color}">${t.name}<span class="remove" onclick="toggle('${id}')">&times;</span></span>`;
+            })
+            .join("");
+        }
+        document.getElementById("btnQuery").disabled = selected.length === 0;
+      }
 
-function getMemberLabel(member) {
-  const typesStr = member.types.map(id => typeMap[id].name).join('/');
-  return member.name ? `${member.name}（${typesStr}）` : typesStr;
-}
+      function toggle(id) {
+        const i = selected.indexOf(id);
+        if (i >= 0) selected.splice(i, 1);
+        else if (selected.length < 2) selected.push(id);
+        render();
+      }
 
-// ===== Tab switching =====
-function switchTab(tab) {
-  currentTab = tab;
-  document.querySelectorAll('.tab-btn').forEach((btn, i) => {
-    btn.classList.toggle('active', (i === 0 && tab === 'query') || (i === 1 && tab === 'team'));
-  });
-  document.getElementById('queryPanel').classList.toggle('active', tab === 'query');
-  document.getElementById('teamPanel').classList.toggle('active', tab === 'team');
-  if (tab === 'query') render();
-  else renderTeam();
-}
+      function calcDefenseMultipliers(typeIds) {
+        const multipliers = {};
+        TYPES.forEach((atk) => {
+          let mult = 1;
+          typeIds.forEach((defId) => {
+            const defTable = DEFENSE[defId] || {};
+            mult *= defTable[atk.id] !== undefined ? defTable[atk.id] : 1;
+          });
+          multipliers[atk.id] = mult;
+        });
+        return multipliers;
+      }
 
-// ===== Query Panel =====
-function render() {
-  const grid = document.getElementById('typeGrid');
-  grid.innerHTML = '';
-  TYPES.forEach(t => {
-    const btn = document.createElement('button');
-    btn.className = 'type-btn';
-    if (selected.includes(t.id)) btn.classList.add('selected');
-    else if (selected.length >= 2) btn.classList.add('disabled');
-    btn.style.background = t.color;
-    btn.textContent = t.name;
-    btn.onclick = () => toggle(t.id);
-    grid.appendChild(btn);
-  });
+      function makeTagHtml(id, label) {
+        const t = typeMap[id];
+        return `<span class="tag" style="background:${t.color}">${t.name}${label ? `<span class="mult">${label}</span>` : ""}</span>`;
+      }
 
-  const display = document.getElementById('selectedDisplay');
-  if (selected.length === 0) {
-    display.innerHTML = '<span class="placeholder">尚未選擇屬性</span>';
-  } else {
-    display.innerHTML = selected.map(id => {
-      const t = typeMap[id];
-      return `<span class="selected-tag" style="background:${t.color}">${t.name}<span class="remove" onclick="toggle('${id}')">&times;</span></span>`;
-    }).join('');
-  }
-  document.getElementById('btnQuery').disabled = selected.length === 0;
-}
+      function makeCard(title, emoji, cls, groups) {
+        const allEmpty = groups.every((g) => g.ids.length === 0);
+        let tagsHtml = "";
+        if (allEmpty) {
+          tagsHtml = '<span class="empty">無</span>';
+        } else {
+          tagsHtml =
+            '<div class="tags">' +
+            groups
+              .flatMap((g) => g.ids.map((id) => makeTagHtml(id, g.label)))
+              .join("") +
+            "</div>";
+        }
+        return `<div class="card ${cls}"><h2>${emoji} ${title}</h2>${tagsHtml}</div>`;
+      }
 
-function toggle(id) {
-  const i = selected.indexOf(id);
-  if (i >= 0) selected.splice(i, 1);
-  else if (selected.length < 2) selected.push(id);
-  render();
-}
+      function query() {
+        if (selected.length === 0) return;
+        const multipliers = calcDefenseMultipliers(selected);
+        const weakness4x = [],
+          weakness2x = [],
+          resist05 = [],
+          resist025 = [],
+          immune = [];
 
-function calcDefenseMultipliers(typeIds) {
-  const multipliers = {};
-  TYPES.forEach(atk => {
-    let mult = 1;
-    typeIds.forEach(defId => {
-      const defTable = DEFENSE[defId] || {};
-      mult *= (defTable[atk.id] !== undefined ? defTable[atk.id] : 1);
-    });
-    multipliers[atk.id] = mult;
-  });
-  return multipliers;
-}
+        TYPES.forEach((t) => {
+          const m = multipliers[t.id];
+          if (m === 0) immune.push(t.id);
+          else if (m === 4) weakness4x.push(t.id);
+          else if (m === 2) weakness2x.push(t.id);
+          else if (m === 0.5) resist05.push(t.id);
+          else if (m === 0.25) resist025.push(t.id);
+        });
 
-function makeTagHtml(id, label) {
-  const t = typeMap[id];
-  return `<span class="tag" style="background:${t.color}">${t.name}${label ? `<span class="mult">${label}</span>` : ''}</span>`;
-}
+        document.getElementById("results").innerHTML =
+          makeCard("弱點", "🔥", "weakness", [
+            { ids: weakness4x, label: "×4" },
+            { ids: weakness2x, label: "×2" },
+          ]) +
+          makeCard("抵抗", "🛡️", "resist", [
+            { ids: resist025, label: "×¼" },
+            { ids: resist05, label: "×½" },
+          ]) +
+          makeCard("免疫", "🚫", "immune", [{ ids: immune, label: "×0" }]);
+      }
 
-function makeCard(title, emoji, cls, groups) {
-  const allEmpty = groups.every(g => g.ids.length === 0);
-  let tagsHtml = '';
-  if (allEmpty) {
-    tagsHtml = '<span class="empty">無</span>';
-  } else {
-    tagsHtml = '<div class="tags">' + groups.flatMap(g =>
-      g.ids.map(id => makeTagHtml(id, g.label))
-    ).join('') + '</div>';
-  }
-  return `<div class="card ${cls}"><h2>${emoji} ${title}</h2>${tagsHtml}</div>`;
-}
+      document.getElementById("btnQuery").onclick = query;
+      document.getElementById("btnClear").onclick = () => {
+        selected = [];
+        document.getElementById("results").innerHTML = "";
+        render();
+      };
 
-function query() {
-  if (selected.length === 0) return;
-  const multipliers = calcDefenseMultipliers(selected);
-  const weakness4x = [], weakness2x = [], resist05 = [], resist025 = [], immune = [];
+      // ===== Team Panel =====
+      function renderTeam() {
+        const team = teams[currentTeamIdx];
 
-  TYPES.forEach(t => {
-    const m = multipliers[t.id];
-    if (m === 0) immune.push(t.id);
-    else if (m === 4) weakness4x.push(t.id);
-    else if (m === 2) weakness2x.push(t.id);
-    else if (m === 0.5) resist05.push(t.id);
-    else if (m === 0.25) resist025.push(t.id);
-  });
+        // Team tabs
+        const tabsEl = document.getElementById("teamTabs");
+        tabsEl.innerHTML = "";
+        for (let i = 0; i < 3; i++) {
+          const btn = document.createElement("button");
+          btn.className = "team-tab" + (i === currentTeamIdx ? " active" : "");
+          btn.textContent =
+            `隊伍 ${i + 1}` +
+            (teams[i].length > 0 ? ` (${teams[i].length})` : "");
+          btn.onclick = () => {
+            currentTeamIdx = i;
+            teamSelected = [];
+            document.getElementById("memberNameInput").value = "";
+            renderTeam();
+          };
+          tabsEl.appendChild(btn);
+        }
 
-  document.getElementById('results').innerHTML =
-    makeCard('弱點', '🔥', 'weakness', [
-      { ids: weakness4x, label: '×4' },
-      { ids: weakness2x, label: '×2' },
-    ]) +
-    makeCard('抵抗', '🛡️', 'resist', [
-      { ids: resist025, label: '×¼' },
-      { ids: resist05, label: '×½' },
-    ]) +
-    makeCard('免疫', '🚫', 'immune', [
-      { ids: immune, label: '×0' },
-    ]);
-}
-
-document.getElementById('btnQuery').onclick = query;
-document.getElementById('btnClear').onclick = () => {
-  selected = [];
-  document.getElementById('results').innerHTML = '';
-  render();
-};
-
-// ===== Team Panel =====
-function renderTeam() {
-  const team = teams[currentTeamIdx];
-
-  // Team tabs
-  const tabsEl = document.getElementById('teamTabs');
-  tabsEl.innerHTML = '';
-  for (let i = 0; i < 3; i++) {
-    const btn = document.createElement('button');
-    btn.className = 'team-tab' + (i === currentTeamIdx ? ' active' : '');
-    btn.textContent = `隊伍 ${i + 1}` + (teams[i].length > 0 ? ` (${teams[i].length})` : '');
-    btn.onclick = () => { currentTeamIdx = i; teamSelected = []; document.getElementById('memberNameInput').value = ''; renderTeam(); };
-    tabsEl.appendChild(btn);
-  }
-
-  // Members
-  const membersEl = document.getElementById('teamMembers');
-  membersEl.innerHTML = '';
-  for (let i = 0; i < 4; i++) {
-    if (i < team.length) {
-      const member = team[i];
-      const div = document.createElement('div');
-      div.className = 'team-member';
-      const nameHtml = member.name
-        ? `<span class="member-name">${member.name}</span>`
-        : '';
-      div.innerHTML = `
+        // Members
+        const membersEl = document.getElementById("teamMembers");
+        membersEl.innerHTML = "";
+        for (let i = 0; i < 4; i++) {
+          if (i < team.length) {
+            const member = team[i];
+            const div = document.createElement("div");
+            div.className = "team-member";
+            const nameHtml = member.name
+              ? `<span class="member-name">${member.name}</span>`
+              : "";
+            div.innerHTML = `
         <div class="member-info">
           ${nameHtml}
           <div class="member-types">
-            ${member.types.map(id => `<span class="tag" style="background:${typeMap[id].color}">${typeMap[id].name}</span>`).join('')}
+            ${member.types.map((id) => `<span class="tag" style="background:${typeMap[id].color}">${typeMap[id].name}</span>`).join("")}
           </div>
         </div>
         <button class="remove-member" onclick="removeMember(${i})">&times;</button>
       `;
-      membersEl.appendChild(div);
-    } else {
-      const div = document.createElement('div');
-      div.className = 'team-member-empty';
-      div.textContent = `空位 #${i + 1}`;
-      membersEl.appendChild(div);
-    }
-  }
+            membersEl.appendChild(div);
+          } else {
+            const div = document.createElement("div");
+            div.className = "team-member-empty";
+            div.textContent = `空位 #${i + 1}`;
+            membersEl.appendChild(div);
+          }
+        }
 
-  // Hide add section if full
-  const isFull = team.length >= 4;
-  document.getElementById('teamAddSection').style.display = isFull ? 'none' : '';
+        // Hide add section if full
+        const isFull = team.length >= 4;
+        document.getElementById("teamAddSection").style.display = isFull
+          ? "none"
+          : "";
 
-  if (!isFull) {
-    const grid = document.getElementById('teamTypeGrid');
-    grid.innerHTML = '';
-    TYPES.forEach(t => {
-      const btn = document.createElement('button');
-      btn.className = 'type-btn';
-      if (teamSelected.includes(t.id)) btn.classList.add('selected');
-      else if (teamSelected.length >= 2) btn.classList.add('disabled');
-      btn.style.background = t.color;
-      btn.textContent = t.name;
-      btn.onclick = () => teamToggle(t.id);
-      grid.appendChild(btn);
-    });
-
-    const display = document.getElementById('teamSelectedDisplay');
-    if (teamSelected.length === 0) {
-      display.innerHTML = '<span class="placeholder">選擇新成員的屬性</span>';
-    } else {
-      display.innerHTML = teamSelected.map(id => {
-        const t = typeMap[id];
-        return `<span class="selected-tag" style="background:${t.color}">${t.name}<span class="remove" onclick="teamToggle('${id}')">&times;</span></span>`;
-      }).join('');
-    }
-    document.getElementById('btnAddMember').disabled = teamSelected.length === 0;
-  }
-
-  document.getElementById('btnAnalyze').disabled = team.length === 0;
-}
-
-function teamToggle(id) {
-  const i = teamSelected.indexOf(id);
-  if (i >= 0) teamSelected.splice(i, 1);
-  else if (teamSelected.length < 2) teamSelected.push(id);
-  renderTeam();
-}
-
-function addMember() {
-  if (teamSelected.length === 0) return;
-  const team = teams[currentTeamIdx];
-  if (team.length >= 4) return;
-  const nameInput = document.getElementById('memberNameInput');
-  const name = nameInput.value.trim();
-  team.push({ name, types: [...teamSelected] });
-  teamSelected = [];
-  nameInput.value = '';
-  saveTeams();
-  renderTeam();
-}
-
-function removeMember(idx) {
-  teams[currentTeamIdx].splice(idx, 1);
-  saveTeams();
-  document.getElementById('teamResults').innerHTML = '';
-  renderTeam();
-}
-
-function clearTeam() {
-  teams[currentTeamIdx] = [];
-  teamSelected = [];
-  document.getElementById('memberNameInput').value = '';
-  saveTeams();
-  document.getElementById('teamResults').innerHTML = '';
-  renderTeam();
-}
-
-function analyzeTeam() {
-  const team = teams[currentTeamIdx];
-  if (team.length === 0) return;
-
-  // Per-member analysis
-  const memberData = team.map((member, idx) => {
-    const mult = calcDefenseMultipliers(member.types);
-    const weaknesses = {}; // typeId -> multiplier
-    TYPES.forEach(t => {
-      if (mult[t.id] > 1) weaknesses[t.id] = mult[t.id];
-    });
-    return { member, mult, weaknesses, idx };
-  });
-
-  // Count how many members are weak to each type
-  const teamWeakCount = {};
-  TYPES.forEach(t => { teamWeakCount[t.id] = 0; });
-  memberData.forEach(m => {
-    Object.keys(m.weaknesses).forEach(id => teamWeakCount[id]++);
-  });
-
-  // Threat types sorted by danger level
-  const threatTypes = TYPES.map(t => t.id)
-    .filter(id => teamWeakCount[id] > 0)
-    .sort((a, b) => teamWeakCount[b] - teamWeakCount[a]);
-
-  let html = '';
-
-  // === Card 1: Per-member weakness summary ===
-  html += `<div class="card weakness"><h2>🔥 各成員弱點一覽</h2>`;
-  memberData.forEach(m => {
-    const label = getMemberLabel(m.member);
-    const weakIds = Object.keys(m.weaknesses);
-    const multLabel = v => v === 4 ? '×4' : '×2';
-    if (weakIds.length === 0) {
-      html += `<div style="margin-bottom:8px"><span style="color:#ffd43b;font-weight:600">${label}</span>
-        <span style="color:#51cf66;font-size:0.85rem;margin-left:6px">無弱點！</span></div>`;
-    } else {
-      const sorted = weakIds.sort((a, b) => m.weaknesses[b] - m.weaknesses[a]);
-      html += `<div style="margin-bottom:8px"><div style="color:#ffd43b;font-weight:600;margin-bottom:4px">${label}</div>
-        <div class="tags">${sorted.map(id => makeTagHtml(id, multLabel(m.weaknesses[id]))).join('')}</div></div>`;
-    }
-  });
-  html += `</div>`;
-
-  // === Card 2: Threat scenario — "When opponent sends out X type..." ===
-  if (threatTypes.length > 0) {
-    // Only show types that threaten 2+ members, or all if none reach 2
-    const majorThreats = threatTypes.filter(id => teamWeakCount[id] >= 2);
-    const minorThreats = threatTypes.filter(id => teamWeakCount[id] === 1);
-
-    html += `<div class="card advice"><h2>⚔️ 對戰情境分析</h2>`;
-
-    if (majorThreats.length > 0) {
-      html += `<div style="font-size:0.82rem;color:#ff6b6b;font-weight:600;margin-bottom:10px">危險！以下屬性威脅多隻隊員：</div>`;
-      majorThreats.forEach(threatId => {
-        const affectedMembers = memberData
-          .filter(m => m.weaknesses[threatId])
-          .map(m => {
-            const label = m.member.name || m.member.types.map(id => typeMap[id].name).join('/');
-            const mult = m.weaknesses[threatId];
-            return `${label}(${mult === 4 ? '×4' : '×2'})`;
+        if (!isFull) {
+          const grid = document.getElementById("teamTypeGrid");
+          grid.innerHTML = "";
+          TYPES.forEach((t) => {
+            const btn = document.createElement("button");
+            btn.className = "type-btn";
+            if (teamSelected.includes(t.id)) btn.classList.add("selected");
+            else if (teamSelected.length >= 2) btn.classList.add("disabled");
+            btn.style.background = t.color;
+            btn.textContent = t.name;
+            btn.onclick = () => teamToggle(t.id);
+            grid.appendChild(btn);
           });
 
-        // Find counter attack types: types that are SE against this threat type
-        const counters = TYPES.filter(ct => {
-          const off = OFFENSE[ct.id] || {};
-          return off[threatId] >= 2;
-        }).map(ct => ct.id);
+          const display = document.getElementById("teamSelectedDisplay");
+          if (teamSelected.length === 0) {
+            display.innerHTML =
+              '<span class="placeholder">選擇新成員的屬性</span>';
+          } else {
+            display.innerHTML = teamSelected
+              .map((id) => {
+                const t = typeMap[id];
+                return `<span class="selected-tag" style="background:${t.color}">${t.name}<span class="remove" onclick="teamToggle('${id}')">&times;</span></span>`;
+              })
+              .join("");
+          }
+          document.getElementById("btnAddMember").disabled =
+            teamSelected.length === 0;
+        }
 
-        html += `<div class="threat-scenario">
-          <div class="threat-header">對手派出 ${makeTagHtml(threatId, '')} 系寶可夢</div>
-          <div class="threat-affected">被威脅的隊員：${affectedMembers.join('、')}</div>
-          <div class="threat-counter">推薦反擊招式屬性：</div>
-          <div class="tags">${counters.map(id => makeTagHtml(id, '')).join('')}</div>
-        </div>`;
-      });
-    }
-
-    if (minorThreats.length > 0) {
-      html += `<div style="font-size:0.82rem;color:#aaa;margin-top:${majorThreats.length > 0 ? '12px' : '0'};margin-bottom:8px">以下屬性各威脅 1 隻隊員：</div>`;
-      html += `<div class="tags" style="margin-bottom:4px">${minorThreats.map(id => makeTagHtml(id, '')).join('')}</div>`;
-    }
-
-    html += `</div>`;
-  }
-
-  // === Card 3: Recommended types to have on your team ===
-  const counterCoverage = {};
-  TYPES.forEach(counterType => {
-    let score = 0;
-    threatTypes.forEach(threatId => {
-      const off = OFFENSE[counterType.id] || {};
-      if (off[threatId] >= 2) score += teamWeakCount[threatId]; // weighted by danger
-    });
-    counterCoverage[counterType.id] = score;
-  });
-
-  const topCounters = TYPES.map(t => t.id)
-    .filter(id => counterCoverage[id] > 0)
-    .sort((a, b) => counterCoverage[b] - counterCoverage[a])
-    .slice(0, 6);
-
-  if (topCounters.length > 0) {
-    html += `<div class="card advice"><h2>🎯 推薦攜帶的招式屬性</h2>
-      <div style="font-size:0.82rem;color:#aaa;margin-bottom:8px">確保隊伍中有這些屬性的招式，可以有效應對大部分威脅：</div>
-      <div class="tags">${topCounters.map(id => makeTagHtml(id, '')).join('')}</div>
-    </div>`;
-  }
-
-  document.getElementById('teamResults').innerHTML = html;
-}
-
-// ===== Opponent Matchup =====
-let opponentSelected = [];
-
-function showOpponentSection() {
-  const team = teams[currentTeamIdx];
-  const section = document.getElementById('opponentSection');
-  section.style.display = team.length > 0 ? '' : 'none';
-  if (team.length > 0) renderOpponent();
-}
-
-function renderOpponent() {
-  const grid = document.getElementById('opponentTypeGrid');
-  grid.innerHTML = '';
-  TYPES.forEach(t => {
-    const btn = document.createElement('button');
-    btn.className = 'type-btn';
-    if (opponentSelected.includes(t.id)) btn.classList.add('selected');
-    else if (opponentSelected.length >= 2) btn.classList.add('disabled');
-    btn.style.background = t.color;
-    btn.textContent = t.name;
-    btn.onclick = () => opponentToggle(t.id);
-    grid.appendChild(btn);
-  });
-
-  const display = document.getElementById('opponentSelectedDisplay');
-  if (opponentSelected.length === 0) {
-    display.innerHTML = '<span class="placeholder">點選對手的屬性</span>';
-  } else {
-    display.innerHTML = opponentSelected.map(id => {
-      const t = typeMap[id];
-      return `<span class="selected-tag" style="background:${t.color}">${t.name}<span class="remove" onclick="opponentToggle('${id}')">&times;</span></span>`;
-    }).join('');
-  }
-
-  if (opponentSelected.length > 0) {
-    renderMatchup();
-  } else {
-    document.getElementById('matchupResult').innerHTML = '';
-  }
-}
-
-function opponentToggle(id) {
-  const i = opponentSelected.indexOf(id);
-  if (i >= 0) opponentSelected.splice(i, 1);
-  else if (opponentSelected.length < 2) opponentSelected.push(id);
-  renderOpponent();
-}
-
-function renderMatchup() {
-  const team = teams[currentTeamIdx];
-  const oppTypes = opponentSelected;
-  const oppLabel = oppTypes.map(id => typeMap[id].name).join('/');
-
-  // For each team member, calculate:
-  // 1. How much damage opponent deals to member (defense matchup)
-  // 2. How much damage member deals to opponent (offense matchup — best of member's types)
-  const results = team.map(member => {
-    // Defense: opponent attacks member
-    const defMult = calcDefenseMultipliers(member.types);
-    // Opponent can use STAB moves of their types — pick the best one
-    let worstDamageTaken = 0;
-    oppTypes.forEach(oppType => {
-      if (defMult[oppType] > worstDamageTaken) worstDamageTaken = defMult[oppType];
-    });
-
-    // Offense: member attacks opponent
-    const oppDefMult = calcDefenseMultipliers(oppTypes);
-    let bestDamageDealt = 0;
-    let bestAtkType = null;
-    member.types.forEach(myType => {
-      if (oppDefMult[myType] > bestDamageDealt) {
-        bestDamageDealt = oppDefMult[myType];
-        bestAtkType = myType;
+        document.getElementById("btnAnalyze").disabled = team.length === 0;
       }
-    });
 
-    return { member, worstDamageTaken, bestDamageDealt, bestAtkType };
-  });
+      function teamToggle(id) {
+        const i = teamSelected.indexOf(id);
+        if (i >= 0) teamSelected.splice(i, 1);
+        else if (teamSelected.length < 2) teamSelected.push(id);
+        renderTeam();
+      }
 
-  // Sort: best matchups first (deal most damage, take least)
-  const sorted = [...results].sort((a, b) => {
-    // Prioritize: can deal SE damage AND doesn't take SE damage
-    const scoreA = a.bestDamageDealt - a.worstDamageTaken;
-    const scoreB = b.bestDamageDealt - b.worstDamageTaken;
-    return scoreB - scoreA;
-  });
+      function addMember() {
+        if (teamSelected.length === 0) return;
+        const team = teams[currentTeamIdx];
+        if (team.length >= 4) return;
+        const nameInput = document.getElementById("memberNameInput");
+        const name = nameInput.value.trim();
+        team.push({ name, types: [...teamSelected] });
+        teamSelected = [];
+        nameInput.value = "";
+        saveTeams();
+        renderTeam();
+      }
 
-  let html = '';
+      function removeMember(idx) {
+        teams[currentTeamIdx].splice(idx, 1);
+        saveTeams();
+        document.getElementById("teamResults").innerHTML = "";
+        renderTeam();
+      }
 
-  sorted.forEach((r, i) => {
-    const label = getMemberLabel(r.member);
-    let badge = '', badgeCls = '';
-    const taken = r.worstDamageTaken;
-    const dealt = r.bestDamageDealt;
+      function clearTeam() {
+        teams[currentTeamIdx] = [];
+        teamSelected = [];
+        document.getElementById("memberNameInput").value = "";
+        saveTeams();
+        document.getElementById("teamResults").innerHTML = "";
+        renderTeam();
+      }
 
-    if (taken === 0) {
-      badge = '免疫對手'; badgeCls = 'immune-badge';
-    } else if (dealt >= 2 && taken <= 1) {
-      badge = '最佳人選'; badgeCls = 'great';
-    } else if (dealt >= 2) {
-      badge = '可打但危險'; badgeCls = 'ok';
-    } else if (taken >= 2) {
-      badge = '避免上場'; badgeCls = 'bad';
-    } else if (taken < 1) {
-      badge = '能擋住'; badgeCls = 'great';
-    } else {
-      badge = '普通'; badgeCls = 'ok';
-    }
+      function analyzeTeam() {
+        const team = teams[currentTeamIdx];
+        if (team.length === 0) return;
 
-    let detailParts = [];
-    if (taken === 0) {
-      detailParts.push(`免疫對手的 ${oppLabel} 系攻擊`);
-    } else if (taken >= 2) {
-      detailParts.push(`被對手攻擊 <b style="color:#ff6b6b">×${taken}</b> 傷害`);
-    } else if (taken < 1) {
-      const takenLabel = taken === 0.5 ? '½' : taken === 0.25 ? '¼' : taken;
-      detailParts.push(`抵抗對手攻擊（×${takenLabel}）`);
-    }
+        // Per-member analysis
+        const memberData = team.map((member, idx) => {
+          const mult = calcDefenseMultipliers(member.types);
+          const weaknesses = {}; // typeId -> multiplier
+          TYPES.forEach((t) => {
+            if (mult[t.id] > 1) weaknesses[t.id] = mult[t.id];
+          });
+          return { member, mult, weaknesses, idx };
+        });
 
-    if (dealt >= 2 && r.bestAtkType) {
-      detailParts.push(`用 ${typeMap[r.bestAtkType].name} 系招式可造成 <b style="color:#51cf66">×${dealt}</b> 傷害`);
-    } else if (dealt === 0 && r.bestAtkType) {
-      detailParts.push(`自身屬性招式對對手無效`);
-    }
+        // Count how many members are weak to each type
+        const teamWeakCount = {};
+        TYPES.forEach((t) => {
+          teamWeakCount[t.id] = 0;
+        });
+        memberData.forEach((m) => {
+          Object.keys(m.weaknesses).forEach((id) => teamWeakCount[id]++);
+        });
 
-    html += `<div class="matchup-member">
+        // Threat types sorted by danger level
+        const threatTypes = TYPES.map((t) => t.id)
+          .filter((id) => teamWeakCount[id] > 0)
+          .sort((a, b) => teamWeakCount[b] - teamWeakCount[a]);
+
+        let html = "";
+
+        // === Card 1: Per-member weakness summary ===
+        html += `<div class="card weakness"><h2>🔥 各成員弱點一覽</h2>`;
+        memberData.forEach((m) => {
+          const label = getMemberLabel(m.member);
+          const weakIds = Object.keys(m.weaknesses);
+          const multLabel = (v) => (v === 4 ? "×4" : "×2");
+          if (weakIds.length === 0) {
+            html += `<div style="margin-bottom:8px"><span style="color:#ffd43b;font-weight:600">${label}</span>
+        <span style="color:#51cf66;font-size:0.85rem;margin-left:6px">無弱點！</span></div>`;
+          } else {
+            const sorted = weakIds.sort(
+              (a, b) => m.weaknesses[b] - m.weaknesses[a],
+            );
+            html += `<div style="margin-bottom:8px"><div style="color:#ffd43b;font-weight:600;margin-bottom:4px">${label}</div>
+        <div class="tags">${sorted.map((id) => makeTagHtml(id, multLabel(m.weaknesses[id]))).join("")}</div></div>`;
+          }
+        });
+        html += `</div>`;
+
+        // === Card 2: Threat scenario — "When opponent sends out X type..." ===
+        if (threatTypes.length > 0) {
+          // Only show types that threaten 2+ members, or all if none reach 2
+          const majorThreats = threatTypes.filter(
+            (id) => teamWeakCount[id] >= 2,
+          );
+          const minorThreats = threatTypes.filter(
+            (id) => teamWeakCount[id] === 1,
+          );
+
+          html += `<div class="card advice"><h2>⚔️ 對戰情境分析</h2>`;
+
+          if (majorThreats.length > 0) {
+            html += `<div style="font-size:0.82rem;color:#ff6b6b;font-weight:600;margin-bottom:10px">危險！以下屬性威脅多隻隊員：</div>`;
+            majorThreats.forEach((threatId) => {
+              const affectedMembers = memberData
+                .filter((m) => m.weaknesses[threatId])
+                .map((m) => {
+                  const label =
+                    m.member.name ||
+                    m.member.types.map((id) => typeMap[id].name).join("/");
+                  const mult = m.weaknesses[threatId];
+                  return `${label}(${mult === 4 ? "×4" : "×2"})`;
+                });
+
+              // Find counter attack types: types that are SE against this threat type
+              const counters = TYPES.filter((ct) => {
+                const off = OFFENSE[ct.id] || {};
+                return off[threatId] >= 2;
+              }).map((ct) => ct.id);
+
+              html += `<div class="threat-scenario">
+          <div class="threat-header">對手派出 ${makeTagHtml(threatId, "")} 系寶可夢</div>
+          <div class="threat-affected">被威脅的隊員：${affectedMembers.join("、")}</div>
+          <div class="threat-counter">推薦反擊招式屬性：</div>
+          <div class="tags">${counters.map((id) => makeTagHtml(id, "")).join("")}</div>
+        </div>`;
+            });
+          }
+
+          if (minorThreats.length > 0) {
+            html += `<div style="font-size:0.82rem;color:#aaa;margin-top:${majorThreats.length > 0 ? "12px" : "0"};margin-bottom:8px">以下屬性各威脅 1 隻隊員：</div>`;
+            html += `<div class="tags" style="margin-bottom:4px">${minorThreats.map((id) => makeTagHtml(id, "")).join("")}</div>`;
+          }
+
+          html += `</div>`;
+        }
+
+        // === Card 3: Recommended types to have on your team ===
+        const counterCoverage = {};
+        TYPES.forEach((counterType) => {
+          let score = 0;
+          threatTypes.forEach((threatId) => {
+            const off = OFFENSE[counterType.id] || {};
+            if (off[threatId] >= 2) score += teamWeakCount[threatId]; // weighted by danger
+          });
+          counterCoverage[counterType.id] = score;
+        });
+
+        const topCounters = TYPES.map((t) => t.id)
+          .filter((id) => counterCoverage[id] > 0)
+          .sort((a, b) => counterCoverage[b] - counterCoverage[a])
+          .slice(0, 6);
+
+        if (topCounters.length > 0) {
+          html += `<div class="card advice"><h2>🎯 推薦攜帶的招式屬性</h2>
+      <div style="font-size:0.82rem;color:#aaa;margin-bottom:8px">確保隊伍中有這些屬性的招式，可以有效應對大部分威脅：</div>
+      <div class="tags">${topCounters.map((id) => makeTagHtml(id, "")).join("")}</div>
+    </div>`;
+        }
+
+        document.getElementById("teamResults").innerHTML = html;
+      }
+
+      // ===== Opponent Matchup =====
+      let opponentSelected = [];
+
+      function showOpponentSection() {
+        const team = teams[currentTeamIdx];
+        const section = document.getElementById("opponentSection");
+        section.style.display = team.length > 0 ? "" : "none";
+        if (team.length > 0) renderOpponent();
+      }
+
+      function renderOpponent() {
+        const grid = document.getElementById("opponentTypeGrid");
+        grid.innerHTML = "";
+        TYPES.forEach((t) => {
+          const btn = document.createElement("button");
+          btn.className = "type-btn";
+          if (opponentSelected.includes(t.id)) btn.classList.add("selected");
+          else if (opponentSelected.length >= 2) btn.classList.add("disabled");
+          btn.style.background = t.color;
+          btn.textContent = t.name;
+          btn.onclick = () => opponentToggle(t.id);
+          grid.appendChild(btn);
+        });
+
+        const display = document.getElementById("opponentSelectedDisplay");
+        if (opponentSelected.length === 0) {
+          display.innerHTML = '<span class="placeholder">點選對手的屬性</span>';
+        } else {
+          display.innerHTML = opponentSelected
+            .map((id) => {
+              const t = typeMap[id];
+              return `<span class="selected-tag" style="background:${t.color}">${t.name}<span class="remove" onclick="opponentToggle('${id}')">&times;</span></span>`;
+            })
+            .join("");
+        }
+
+        if (opponentSelected.length > 0) {
+          renderMatchup();
+        } else {
+          document.getElementById("matchupResult").innerHTML = "";
+        }
+      }
+
+      function opponentToggle(id) {
+        const i = opponentSelected.indexOf(id);
+        if (i >= 0) opponentSelected.splice(i, 1);
+        else if (opponentSelected.length < 2) opponentSelected.push(id);
+        renderOpponent();
+      }
+
+      function renderMatchup() {
+        const team = teams[currentTeamIdx];
+        const oppTypes = opponentSelected;
+        const oppLabel = oppTypes.map((id) => typeMap[id].name).join("/");
+
+        // For each team member, calculate:
+        // 1. How much damage opponent deals to member (defense matchup)
+        // 2. How much damage member deals to opponent (offense matchup — best of member's types)
+        const results = team.map((member) => {
+          // Defense: opponent attacks member
+          const defMult = calcDefenseMultipliers(member.types);
+          // Opponent can use STAB moves of their types — pick the best one
+          let worstDamageTaken = 0;
+          oppTypes.forEach((oppType) => {
+            if (defMult[oppType] > worstDamageTaken)
+              worstDamageTaken = defMult[oppType];
+          });
+
+          // Offense: member attacks opponent
+          const oppDefMult = calcDefenseMultipliers(oppTypes);
+          let bestDamageDealt = 0;
+          let bestAtkType = null;
+          member.types.forEach((myType) => {
+            if (oppDefMult[myType] > bestDamageDealt) {
+              bestDamageDealt = oppDefMult[myType];
+              bestAtkType = myType;
+            }
+          });
+
+          return { member, worstDamageTaken, bestDamageDealt, bestAtkType };
+        });
+
+        // Sort: best matchups first (deal most damage, take least)
+        const sorted = [...results].sort((a, b) => {
+          // Prioritize: can deal SE damage AND doesn't take SE damage
+          const scoreA = a.bestDamageDealt - a.worstDamageTaken;
+          const scoreB = b.bestDamageDealt - b.worstDamageTaken;
+          return scoreB - scoreA;
+        });
+
+        let html = "";
+
+        sorted.forEach((r, i) => {
+          const label = getMemberLabel(r.member);
+          let badge = "",
+            badgeCls = "";
+          const taken = r.worstDamageTaken;
+          const dealt = r.bestDamageDealt;
+
+          if (taken === 0) {
+            badge = "免疫對手";
+            badgeCls = "immune-badge";
+          } else if (dealt >= 2 && taken <= 1) {
+            badge = "最佳人選";
+            badgeCls = "great";
+          } else if (dealt >= 2) {
+            badge = "可打但危險";
+            badgeCls = "ok";
+          } else if (taken >= 2) {
+            badge = "避免上場";
+            badgeCls = "bad";
+          } else if (taken < 1) {
+            badge = "能擋住";
+            badgeCls = "great";
+          } else {
+            badge = "普通";
+            badgeCls = "ok";
+          }
+
+          let detailParts = [];
+          if (taken === 0) {
+            detailParts.push(`免疫對手的 ${oppLabel} 系攻擊`);
+          } else if (taken >= 2) {
+            detailParts.push(
+              `被對手攻擊 <b style="color:#ff6b6b">×${taken}</b> 傷害`,
+            );
+          } else if (taken < 1) {
+            const takenLabel =
+              taken === 0.5 ? "½" : taken === 0.25 ? "¼" : taken;
+            detailParts.push(`抵抗對手攻擊（×${takenLabel}）`);
+          }
+
+          if (dealt >= 2 && r.bestAtkType) {
+            detailParts.push(
+              `用 ${typeMap[r.bestAtkType].name} 系招式可造成 <b style="color:#51cf66">×${dealt}</b> 傷害`,
+            );
+          } else if (dealt === 0 && r.bestAtkType) {
+            detailParts.push(`自身屬性招式對對手無效`);
+          }
+
+          html += `<div class="matchup-member">
       <div class="matchup-member-header">
         <span class="matchup-member-name">${label}</span>
         <span class="matchup-badge ${badgeCls}">${badge}</span>
       </div>
-      <div class="matchup-detail">${detailParts.join('<br>')}</div>
+      <div class="matchup-detail">${detailParts.join("<br>")}</div>
     </div>`;
-  });
+        });
 
-  // Find best STAB-independent counter types
-  const oppDefMult = calcDefenseMultipliers(oppTypes);
-  const seTypes = TYPES.filter(t => oppDefMult[t.id] >= 2).map(t => t.id);
+        // Find best STAB-independent counter types
+        const oppDefMult = calcDefenseMultipliers(oppTypes);
+        const seTypes = TYPES.filter((t) => oppDefMult[t.id] >= 2).map(
+          (t) => t.id,
+        );
 
-  if (seTypes.length > 0) {
-    html += `<div class="matchup-recommend">
+        if (seTypes.length > 0) {
+          html += `<div class="matchup-recommend">
       <div class="matchup-recommend-title">對付 ${oppLabel} 系的剋制招式：</div>
-      <div class="tags">${seTypes.map(id => makeTagHtml(id, `×${oppDefMult[id]}`)).join('')}</div>
+      <div class="tags">${seTypes.map((id) => makeTagHtml(id, `×${oppDefMult[id]}`)).join("")}</div>
     </div>`;
-  }
+        }
 
-  document.getElementById('matchupResult').innerHTML = html;
-}
+        document.getElementById("matchupResult").innerHTML = html;
+      }
 
-document.getElementById('btnAddMember').onclick = addMember;
-document.getElementById('btnTeamClearSel').onclick = () => { teamSelected = []; renderTeam(); };
-document.getElementById('btnClearTeam').onclick = clearTeam;
-document.getElementById('btnAnalyze').onclick = () => { analyzeTeam(); showOpponentSection(); };
-document.getElementById('btnClearOpponent').onclick = () => { opponentSelected = []; renderOpponent(); };
+      document.getElementById("btnAddMember").onclick = addMember;
+      document.getElementById("btnTeamClearSel").onclick = () => {
+        teamSelected = [];
+        renderTeam();
+      };
+      document.getElementById("btnClearTeam").onclick = clearTeam;
+      document.getElementById("btnAnalyze").onclick = () => {
+        analyzeTeam();
+        showOpponentSection();
+      };
+      document.getElementById("btnClearOpponent").onclick = () => {
+        opponentSelected = [];
+        renderOpponent();
+      };
 
-render();
+      render();
 
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js');
-}
-</script>
-</body>
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("./sw.js");
+      }
+    </script>
+  </body>
 </html>

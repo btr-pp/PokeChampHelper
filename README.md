@@ -48,25 +48,43 @@
 
 本工具支援 PWA，可以安裝到手機桌面像原生 App 一樣使用，離線也能運作。
 
-**手機（iOS Safari）：**
+### **❗ 重要：必須透過 HTTP(S) 伺服器存取**
 
-1. 用 Safari 開啟頁面
-2. 點選分享按鈕 → 「加入主畫面」
+PWA 功能（包括安裝提示、Service Worker）**只在 HTTPS 或 localhost 環境下工作**。直接用 `file://` 開啟 HTML 無法啟用 PWA。
 
-**手機（Android Chrome）：**
+### 本機測試
 
-1. 用 Chrome 開啟頁面
-2. 點選選單 → 「安裝應用程式」
+```bash
+# 安裝預設伺服器（如果還沒有）
+npm install -g serve
+
+# 進入專案目錄並啟動伺服器
+cd /path/to/poke-search
+serve .
+
+# 瀏覽器存取 http://localhost:3000
+```
+
+### 手機安裝
+
+**iOS Safari（iPhone/iPad）：**
+
+1. 用 Safari 打開網頁（透過 `https://` 網址）
+2. 點選下方分享按鈕 ⬆️
+3. 向下滑動，找「加入主畫面」
+4. 點擊並命名（預設為 "Pokex"）
+
+> **注意**：iOS 16.4+ 才支持 Web App。若未看到「加入主畫面」選項，請檢查是否透過 HTTPS 存取。
+
+**Android Chrome：**
+
+1. 用 Chrome 打開網頁
+2. 點選選單 ☰（右上角）
+3. 點擊「安裝應用程式」
 
 **桌面（Chrome / Edge）：**
 
-- 網址列右側會出現安裝圖示，點擊即可安裝
-
-> 注意：PWA 需要透過 HTTP 伺服器存取（`localhost` 或 `https`），直接開啟 `file://` 無法啟用 Service Worker。本機測試可用：
->
-> ```
-> npx serve .
-> ```
+- 網址列右側會出現安裝圖示（下載加 ➕），點擊即可安裝
 
 ## 使用方式
 
