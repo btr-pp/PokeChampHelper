@@ -11,27 +11,6 @@
       content="查詢寶可夢屬性弱點、建立隊伍並取得對戰建議"
     />
     <meta name="theme-color" content="#1a1a2e" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta
-      name="apple-mobile-web-app-status-bar-style"
-      content="black-translucent"
-    />
-    <meta name="apple-mobile-web-app-title" content="Pokex" />
-    <link rel="manifest" href="manifest.json" />
-    <link rel="icon" href="logo.png" />
-    <link rel="apple-touch-icon" href="icons/icon-192.png" />
-    <link
-      rel="icon"
-      type="image/png"
-      href="icons/icon-192.png"
-      sizes="192x192"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      href="icons/icon-512.png"
-      sizes="512x512"
-    />
     <title>Pokex — 寶可夢屬性相剋查詢</title>
     <style>
       * {
@@ -645,8 +624,9 @@
         </div>
 
         <div class="actions">
-          <button class="btn-query" id="btnQuery" disabled>查詢</button>
-          <button class="btn-clear" id="btnClear">清除</button>
+          <button class="btn-clear" id="btnClear" style="display: none">
+            清除
+          </button>
         </div>
 
         <div class="results" id="results"></div>
@@ -655,6 +635,23 @@
       <!-- Team Panel -->
       <div class="team-panel" id="teamPanel">
         <div class="team-tabs" id="teamTabs"></div>
+
+        <div style="display: flex; gap: 8px; margin-bottom: 16px">
+          <button
+            class="btn-clear"
+            id="btnExportTeam"
+            style="flex: 1; font-size: 0.85rem; min-height: 36px"
+          >
+            📋 複製隊伍
+          </button>
+          <button
+            class="btn-clear"
+            id="btnImportTeam"
+            style="flex: 1; font-size: 0.85rem; min-height: 36px"
+          >
+            📥 匯入隊伍
+          </button>
+        </div>
 
         <p class="section-label">隊伍成員（最多 4 隻）</p>
         <div class="team-members" id="teamMembers"></div>
@@ -676,6 +673,19 @@
 
           <div class="selected-display" id="teamSelectedDisplay">
             <span class="placeholder">尚未選擇屬性</span>
+          </div>
+
+          <div
+            id="teamMovesSection"
+            style="display: none"
+          >
+            <p class="section-label" style="margin-top: 14px">
+              選擇攻擊招式屬性（最多 4 個）
+            </p>
+            <div class="type-grid" id="teamMovesGrid"></div>
+            <div class="selected-display" id="teamMovesDisplay">
+              <span class="placeholder">選擇已學招式</span>
+            </div>
           </div>
 
           <div class="actions">
@@ -1017,9 +1027,10 @@
       // ===== State =====
       let selected = [];
       let teamSelected = [];
+      let teamMoves = [];
       let currentTab = "query";
       let currentTeamIdx = 0;
-      // teams: array of 3 teams, each member is { name: string, types: [typeId...] }
+      // teams: array of 3 teams, each member is { name: string, types: [typeId...], moves: [typeId...] }
       let teams = [[], [], []];
 
       function loadTeams() {
@@ -1027,11 +1038,16 @@
           const saved = localStorage.getItem("poke-teams");
           if (saved) {
             const parsed = JSON.parse(saved);
-            // Migrate old format (array of type ids) to new format (object with name + types)
+            // Migrate old format (array of type ids) to new format (object with name + types + moves)
             teams = parsed.map((team) =>
-              team.map((member) =>
-                Array.isArray(member) ? { name: "", types: member } : member,
-              ),
+              team.map((member) => {
+                if (Array.isArray(member)) {
+                  return { name: "", types: member, moves: [] };
+                } else if (!member.moves) {
+                  return { ...member, moves: [] };
+                }
+                return member;
+              }),
             );
           }
         } catch (e) {}
@@ -1041,11 +1057,66 @@
         localStorage.setItem("poke-teams", JSON.stringify(teams));
       }
 
+      function exportTeamJSON() {
+        const team = teams[currentTeamIdx];
+        if (team.length === 0) {
+          alert("隊伍為空！");
+          return;
+        }
+        const json = JSON.stringify(team, null, 2);
+        navigator.clipboard
+          .writeText(json)
+          .then(() => alert("✅ 隊伍已複製到剪貼簿！"))
+          .catch(() => {
+            const textarea = document.createElement("textarea");
+            textarea.value = json;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand("copy");
+            document.body.removeChild(textarea);
+            alert("✅ 隊伍已複製到剪貼簿！");
+          });
+      }
+
+      function importTeamJSON() {
+        const json = prompt("貼上隊伍 JSON 資料：");
+        if (!json) return;
+        try {
+          const imported = JSON.parse(json);
+          if (!Array.isArray(imported)) throw new Error("必須是陣列");
+          const validated = imported.map((m) => ({
+            name: m.name || "",
+            types: m.types || [],
+            moves: m.moves || [],
+          }));
+          teams[currentTeamIdx] = validated;
+          saveTeams();
+          teamSelected = [];
+          teamMoves = [];
+          opponentSelected = [];
+          document.getElementById("memberNameInput").value = "";
+          document.getElementById("teamResults").innerHTML = "";
+          document.getElementById("matchupResult").innerHTML = "";
+          renderTeam();
+          alert("✅ 隊伍已導入！");
+        } catch (e) {
+          alert("❌ JSON 格式錯誤：" + e.message);
+        }
+      }
+
       loadTeams();
 
       function getMemberLabel(member) {
         const typesStr = member.types.map((id) => typeMap[id].name).join("/");
-        return member.name ? `${member.name}（${typesStr}）` : typesStr;
+        const movesStr =
+          member.moves && member.moves.length > 0
+            ? " [招式: " +
+              member.moves.map((id) => typeMap[id].name).join("/") +
+              "]"
+            : "";
+        return member.name
+          ? `${member.name}（${typesStr}）${movesStr}`
+          : typesStr;
       }
 
       // ===== Tab switching =====
@@ -1078,13 +1149,16 @@
           else if (selected.length >= 2) btn.classList.add("disabled");
           btn.style.background = t.color;
           btn.textContent = t.name;
-          btn.onclick = () => toggle(t.id);
+          btn.onclick = () => {
+            toggle(t.id);
+          };
           grid.appendChild(btn);
         });
 
         const display = document.getElementById("selectedDisplay");
         if (selected.length === 0) {
           display.innerHTML = '<span class="placeholder">尚未選擇屬性</span>';
+          document.getElementById("results").innerHTML = "";
         } else {
           display.innerHTML = selected
             .map((id) => {
@@ -1092,8 +1166,10 @@
               return `<span class="selected-tag" style="background:${t.color}">${t.name}<span class="remove" onclick="toggle('${id}')">&times;</span></span>`;
             })
             .join("");
+          query();
         }
-        document.getElementById("btnQuery").disabled = selected.length === 0;
+        document.getElementById("btnClear").style.display =
+          selected.length > 0 ? "" : "none";
       }
 
       function toggle(id) {
@@ -1167,10 +1243,8 @@
           makeCard("免疫", "🚫", "immune", [{ ids: immune, label: "×0" }]);
       }
 
-      document.getElementById("btnQuery").onclick = query;
       document.getElementById("btnClear").onclick = () => {
         selected = [];
-        document.getElementById("results").innerHTML = "";
         render();
       };
 
@@ -1190,6 +1264,7 @@
           btn.onclick = () => {
             currentTeamIdx = i;
             teamSelected = [];
+            teamMoves = [];
             document.getElementById("memberNameInput").value = "";
             renderTeam();
           };
@@ -1259,16 +1334,61 @@
           }
           document.getElementById("btnAddMember").disabled =
             teamSelected.length === 0;
+
+          // Show/hide moves section
+          const movesSection = document.getElementById("teamMovesSection");
+          if (teamSelected.length > 0) {
+            movesSection.style.display = "";
+            renderTeamMoves();
+          } else {
+            movesSection.style.display = "none";
+            teamMoves = [];
+          }
         }
 
         document.getElementById("btnAnalyze").disabled = team.length === 0;
+      }
+
+      function renderTeamMoves() {
+        const grid = document.getElementById("teamMovesGrid");
+        grid.innerHTML = "";
+        TYPES.forEach((t) => {
+          const btn = document.createElement("button");
+          btn.className = "type-btn";
+          if (teamMoves.includes(t.id)) btn.classList.add("selected");
+          else if (teamMoves.length >= 4) btn.classList.add("disabled");
+          btn.style.background = t.color;
+          btn.textContent = t.name;
+          btn.onclick = () => teamMoveToggle(t.id);
+          grid.appendChild(btn);
+        });
+
+        const display = document.getElementById("teamMovesDisplay");
+        if (teamMoves.length === 0) {
+          display.innerHTML = '<span class="placeholder">選擇已學招式</span>';
+        } else {
+          display.innerHTML = teamMoves
+            .map((id) => {
+              const t = typeMap[id];
+              return `<span class="selected-tag" style="background:${t.color}">${t.name}<span class="remove" onclick="teamMoveToggle('${id}')">&times;</span></span>`;
+            })
+            .join("");
+        }
       }
 
       function teamToggle(id) {
         const i = teamSelected.indexOf(id);
         if (i >= 0) teamSelected.splice(i, 1);
         else if (teamSelected.length < 2) teamSelected.push(id);
+        teamMoves = [];
         renderTeam();
+      }
+
+      function teamMoveToggle(id) {
+        const i = teamMoves.indexOf(id);
+        if (i >= 0) teamMoves.splice(i, 1);
+        else if (teamMoves.length < 4) teamMoves.push(id);
+        renderTeamMoves();
       }
 
       function addMember() {
@@ -1277,8 +1397,9 @@
         if (team.length >= 4) return;
         const nameInput = document.getElementById("memberNameInput");
         const name = nameInput.value.trim();
-        team.push({ name, types: [...teamSelected] });
+        team.push({ name, types: [...teamSelected], moves: [...teamMoves] });
         teamSelected = [];
+        teamMoves = [];
         nameInput.value = "";
         saveTeams();
         renderTeam();
@@ -1294,6 +1415,7 @@
       function clearTeam() {
         teams[currentTeamIdx] = [];
         teamSelected = [];
+        teamMoves = [];
         document.getElementById("memberNameInput").value = "";
         saveTeams();
         document.getElementById("teamResults").innerHTML = "";
@@ -1591,6 +1713,7 @@
       document.getElementById("btnAddMember").onclick = addMember;
       document.getElementById("btnTeamClearSel").onclick = () => {
         teamSelected = [];
+        teamMoves = [];
         renderTeam();
       };
       document.getElementById("btnClearTeam").onclick = clearTeam;
@@ -1602,12 +1725,10 @@
         opponentSelected = [];
         renderOpponent();
       };
+      document.getElementById("btnExportTeam").onclick = exportTeamJSON;
+      document.getElementById("btnImportTeam").onclick = importTeamJSON;
 
       render();
-
-      if ("serviceWorker" in navigator) {
-        navigator.serviceWorker.register("./sw.js");
-      }
     </script>
   </body>
 </html>
