@@ -1,4 +1,4 @@
-const CACHE_NAME = 'poke-search-v1';
+const CACHE_NAME = 'poke-search-v2';
 const ASSETS = [
   './',
   './index.html',
@@ -6,6 +6,7 @@ const ASSETS = [
   './logo.png',
   './icons/icon-192.png',
   './icons/icon-512.png',
+  './data/champions-pokemon.js',
 ];
 
 self.addEventListener('install', (e) => {

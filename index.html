@@ -331,13 +331,11 @@
       }
 
       .team-member .member-name {
-        font-size: 0.9rem;
+        font-size: 1.05rem;
         font-weight: 600;
         color: #fff;
         white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        max-width: 100px;
+        flex-shrink: 0;
       }
 
       .team-member .member-types {
@@ -368,6 +366,102 @@
         justify-content: center;
         color: #445;
         font-size: 0.85rem;
+      }
+
+      /* Collapsible section */
+      .collapse-toggle {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+        margin-bottom: 10px;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .collapse-arrow {
+        font-size: 0.7rem;
+        color: #888;
+        transition: transform 0.2s;
+      }
+      .collapse-arrow.collapsed {
+        transform: rotate(-90deg);
+      }
+      #addSectionBody {
+        overflow: hidden;
+        transition: max-height 0.3s ease, opacity 0.2s ease;
+      }
+      #addSectionBody.collapsed,
+      #manualTypeBody.collapsed {
+        max-height: 0 !important;
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      /* Stats panel (expandable) */
+      .team-member { cursor: pointer; }
+      .member-stats-panel {
+        display: none;
+        width: 100%;
+        margin-top: 6px;
+        padding-top: 6px;
+        border-top: 1px solid #334;
+      }
+      .member-stats-panel.show { display: block; }
+      .stats-total {
+        font-size: 0.88rem;
+        color: #aaa;
+        margin-bottom: 4px;
+      }
+      .stat-row {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-bottom: 3px;
+        font-size: 0.82rem;
+      }
+      .stat-label {
+        width: 28px;
+        text-align: right;
+        color: #999;
+        flex-shrink: 0;
+      }
+      .stat-val {
+        width: 26px;
+        text-align: right;
+        color: #ddd;
+        font-weight: 600;
+        flex-shrink: 0;
+      }
+      .stat-bar {
+        flex: 1;
+        height: 10px;
+        background: #223;
+        border-radius: 4px;
+        overflow: hidden;
+      }
+      .stat-bar-fill {
+        height: 100%;
+        border-radius: 4px;
+        transition: width 0.3s ease;
+      }
+
+      .member-defense {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 3px;
+        margin-top: 4px;
+      }
+      .member-defense .def-label {
+        font-size: 0.78rem;
+        color: #888;
+        margin-right: 2px;
+      }
+      .member-defense .def-tag {
+        font-size: 0.75rem;
+        padding: 1px 4px;
+        border-radius: 3px;
+        color: #fff;
+        line-height: 1.3;
+        white-space: nowrap;
       }
 
       .team-actions {
@@ -446,6 +540,56 @@
       .name-input::placeholder {
         color: #667;
         font-weight: 400;
+      }
+
+      /* Autocomplete dropdown */
+      .autocomplete-list {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        z-index: 100;
+        background: #16213e;
+        border: 2px solid #445;
+        border-top: none;
+        border-radius: 0 0 12px 12px;
+        max-height: 240px;
+        overflow-y: auto;
+        display: none;
+      }
+      .autocomplete-list.show { display: block; }
+      .autocomplete-item {
+        padding: 10px 14px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.88rem;
+        border-bottom: 1px solid #223;
+      }
+      .autocomplete-item:last-child { border-bottom: none; }
+      .autocomplete-item:hover,
+      .autocomplete-item.active {
+        background: #0f3460;
+      }
+      .autocomplete-item .ac-name {
+        color: #fff;
+        font-weight: 600;
+      }
+      .autocomplete-item .ac-name-en {
+        color: #888;
+        font-size: 0.78rem;
+      }
+      .autocomplete-item .ac-types {
+        margin-left: auto;
+        display: flex;
+        gap: 4px;
+      }
+      .autocomplete-item .ac-type-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        display: inline-block;
       }
 
       /* Opponent matchup section */
@@ -660,17 +804,31 @@
         <div class="team-members" id="teamMembers"></div>
 
         <div id="teamAddSection">
-          <p class="section-label">新增成員</p>
+          <div class="collapse-toggle" id="toggleAddSection" onclick="toggleAddPanel()">
+            <span class="collapse-arrow" id="addSectionArrow">&#9660;</span>
+            <p class="section-label" style="margin-bottom:0;cursor:pointer">新增成員</p>
+          </div>
+          <div id="addSectionBody">
           <div class="name-input-wrapper">
-            <span class="name-icon">🏷️</span>
+            <span class="name-icon">🔍</span>
             <input
               type="text"
               class="name-input"
               id="memberNameInput"
-              placeholder="輸入寶可夢名稱（選填）"
-              maxlength="20"
+              placeholder="搜尋寶可夢（中文/英文/編號）"
+              maxlength="40"
+              autocomplete="off"
             />
+            <div class="autocomplete-list" id="autocompleteList"></div>
           </div>
+
+          <div class="actions">
+            <button class="btn-add-member" id="btnAddMember" disabled>
+              加入隊伍
+            </button>
+            <button class="btn-clear" id="btnTeamClearSel">清除選擇</button>
+          </div>
+
           <p class="section-label">選擇屬性（最多 2 個）</p>
           <div class="type-grid" id="teamTypeGrid"></div>
 
@@ -690,12 +848,6 @@
               <span class="placeholder">選擇已學招式</span>
             </div>
           </div>
-
-          <div class="actions">
-            <button class="btn-add-member" id="btnAddMember" disabled>
-              加入隊伍
-            </button>
-            <button class="btn-clear" id="btnTeamClearSel">清除選擇</button>
           </div>
         </div>
 
@@ -713,13 +865,31 @@
         <div
           class="opponent-section"
           id="opponentSection"
-          style="display: none"
         >
           <h3>🎯 即時對手分析</h3>
-          <p class="section-label">選擇當前對手的屬性（最多 2 個）</p>
-          <div class="type-grid" id="opponentTypeGrid"></div>
-          <div class="opponent-selected" id="opponentSelectedDisplay">
-            <span class="placeholder">點選對手的屬性</span>
+          <p class="section-label">搜尋對手寶可夢</p>
+          <div class="name-input-wrapper">
+            <span class="name-icon">🔍</span>
+            <input
+              type="text"
+              class="name-input"
+              id="opponentNameInput"
+              placeholder="搜尋對手（中文/英文/編號）"
+              maxlength="40"
+              autocomplete="off"
+            />
+            <div class="autocomplete-list" id="opponentAutocompleteList"></div>
+          </div>
+          <div id="opponentCard" style="display:none"></div>
+          <div class="collapse-toggle" onclick="toggleManualType()">
+            <span class="collapse-arrow collapsed" id="manualTypeArrow">&#9660;</span>
+            <p class="section-label" style="margin-bottom:0;cursor:pointer">或手動選擇屬性（最多 2 個）</p>
+          </div>
+          <div id="manualTypeBody" class="collapsed" style="overflow:hidden;transition:max-height 0.3s ease,opacity 0.2s ease">
+            <div class="type-grid" id="opponentTypeGrid"></div>
+            <div class="opponent-selected" id="opponentSelectedDisplay">
+              <span class="placeholder">點選對手的屬性</span>
+            </div>
           </div>
           <button class="btn-clear-opponent" id="btnClearOpponent">
             清除對手
@@ -729,6 +899,7 @@
       </div>
     </div>
 
+    <script src="data/champions-pokemon.js"></script>
     <script>
       const TYPES = [
         { id: "normal", name: "一般", color: "#A8A77A" },
@@ -1041,7 +1212,6 @@
           const saved = localStorage.getItem("poke-teams");
           if (saved) {
             const parsed = JSON.parse(saved);
-            // Migrate old format (array of type ids) to new format (object with name + types + moves)
             teams = parsed.map((team) =>
               team.map((member) => {
                 if (Array.isArray(member)) {
@@ -1055,6 +1225,7 @@
           }
         } catch (e) {}
       }
+
 
       function saveTeams() {
         localStorage.setItem("poke-teams", JSON.stringify(teams));
@@ -1087,11 +1258,23 @@
         try {
           const imported = JSON.parse(json);
           if (!Array.isArray(imported)) throw new Error("必須是陣列");
-          const validated = imported.map((m) => ({
-            name: m.name || "",
-            types: m.types || [],
-            moves: m.moves || [],
-          }));
+          const validTypeIds = TYPES.map((t) => t.id);
+          const validated = imported.map((m) => {
+            const entry = {
+              name: m.name || "",
+              types: (m.types || []).filter((t) => validTypeIds.includes(t)),
+              moves: (m.moves || []).filter((t) => validTypeIds.includes(t)),
+            };
+            if (m.stats) entry.stats = m.stats;
+            // Try to restore stats from Champions data if missing
+            if (!entry.stats && entry.name && typeof CHAMPIONS_DATA !== "undefined") {
+              const match = CHAMPIONS_DATA.pokemon.find((p) =>
+                p.nameTW === entry.name || p.name.toLowerCase() === entry.name.toLowerCase()
+              );
+              if (match) entry.stats = match.stats;
+            }
+            return entry;
+          });
           teams[currentTeamIdx] = validated;
           saveTeams();
           teamSelected = [];
@@ -1123,6 +1306,29 @@
       }
 
       // ===== Tab switching =====
+      // ===== Collapsible Add Section =====
+      let addSectionCollapsed = false;
+
+      function toggleStats(idx) {
+        const panel = document.getElementById("statsPanel" + idx);
+        if (panel) panel.classList.toggle("show");
+      }
+
+      function toggleManualType() {
+        const body = document.getElementById("manualTypeBody");
+        const arrow = document.getElementById("manualTypeArrow");
+        body.classList.toggle("collapsed");
+        arrow.classList.toggle("collapsed");
+      }
+
+      function toggleAddPanel() {
+        addSectionCollapsed = !addSectionCollapsed;
+        const body = document.getElementById("addSectionBody");
+        const arrow = document.getElementById("addSectionArrow");
+        body.classList.toggle("collapsed", addSectionCollapsed);
+        arrow.classList.toggle("collapsed", addSectionCollapsed);
+      }
+
       function switchTab(tab) {
         currentTab = tab;
         document.querySelectorAll(".tab-btn").forEach((btn, i) => {
@@ -1285,14 +1491,56 @@
             const nameHtml = member.name
               ? `<span class="member-name">${member.name}</span>`
               : "";
+
+            // Calculate defense multipliers
+            const mult = calcDefenseMultipliers(member.types);
+            const weak4x = [], weak2x = [], resist05 = [], resist025 = [], immune = [];
+            TYPES.forEach((t) => {
+              const m = mult[t.id];
+              if (m === 0) immune.push(t.id);
+              else if (m >= 4) weak4x.push(t.id);
+              else if (m >= 2) weak2x.push(t.id);
+              else if (m <= 0.25) resist025.push(t.id);
+              else if (m <= 0.5) resist05.push(t.id);
+            });
+
+            const defTag = (id, label) => `<span class="def-tag" style="background:${typeMap[id].color}">${typeMap[id].name}${label}</span>`;
+            let defHtml = "";
+            if (weak4x.length + weak2x.length > 0) {
+              defHtml += `<div class="member-defense"><span class="def-label">弱</span>${weak4x.map(id => defTag(id, "x4")).join("")}${weak2x.map(id => defTag(id, "x2")).join("")}</div>`;
+            }
+            if (resist025.length + resist05.length > 0) {
+              defHtml += `<div class="member-defense"><span class="def-label">抗</span>${resist025.map(id => defTag(id, "x¼")).join("")}${resist05.map(id => defTag(id, "x½")).join("")}</div>`;
+            }
+            if (immune.length > 0) {
+              defHtml += `<div class="member-defense"><span class="def-label">免</span>${immune.map(id => defTag(id, "x0")).join("")}</div>`;
+            }
+
+            // Stats panel HTML
+            let statsHtml = "";
+            if (member.stats) {
+              const s = member.stats;
+              const statColor = (v) => v >= 100 ? "#51cf66" : v >= 60 ? "#ffd43b" : "#ff6b6b";
+              const statBar = (label, val) =>
+                `<div class="stat-row"><span class="stat-label">${label}</span><span class="stat-val">${val}</span><div class="stat-bar"><div class="stat-bar-fill" style="width:${Math.min(val / 255 * 100, 100).toFixed(1)}%;background:${statColor(val)}"></div></div></div>`;
+              statsHtml = `<div class="member-stats-panel" id="statsPanel${i}">
+                <div class="stats-total">種族值 ${s.total}</div>
+                ${statBar("HP", s.hp)}${statBar("攻擊", s.atk)}${statBar("防禦", s.def)}${statBar("特攻", s.spa)}${statBar("特防", s.spd)}${statBar("速度", s.spe)}
+              </div>`;
+            }
+
             div.innerHTML = `
-        <div class="member-info">
-          ${nameHtml}
-          <div class="member-types">
-            ${member.types.map((id) => `<span class="tag" style="background:${typeMap[id].color}">${typeMap[id].name}</span>`).join("")}
+        <div class="member-info" style="flex-direction:column;align-items:flex-start;gap:4px;flex:1;min-width:0" onclick="toggleStats(${i})">
+          <div style="display:flex;align-items:center;gap:8px;width:100%">
+            ${nameHtml}
+            <div class="member-types" style="margin-left:auto">
+              ${member.types.map((id) => `<span class="tag" style="background:${typeMap[id].color}">${typeMap[id].name}</span>`).join("")}
+            </div>
           </div>
+          ${defHtml}
+          ${statsHtml}
         </div>
-        <button class="remove-member" onclick="removeMember(${i})">&times;</button>
+        <button class="remove-member" onclick="event.stopPropagation();removeMember(${i})">&times;</button>
       `;
             membersEl.appendChild(div);
           } else {
@@ -1350,6 +1598,7 @@
         }
 
         document.getElementById("btnAnalyze").disabled = team.length === 0;
+        showOpponentSection();
       }
 
       function renderTeamMoves() {
@@ -1400,9 +1649,12 @@
         if (team.length >= 4) return;
         const nameInput = document.getElementById("memberNameInput");
         const name = nameInput.value.trim();
-        team.push({ name, types: [...teamSelected], moves: [...teamMoves] });
+        const memberData = { name, types: [...teamSelected], moves: [...teamMoves] };
+        if (pendingStats) memberData.stats = pendingStats;
+        team.push(memberData);
         teamSelected = [];
         teamMoves = [];
+        pendingStats = null;
         nameInput.value = "";
         saveTeams();
         renderTeam();
@@ -1455,71 +1707,13 @@
 
         let html = "";
 
-        // === Card 1: Per-member weakness summary ===
-        html += `<div class="card weakness"><h2>🔥 各成員弱點一覽</h2>`;
-        memberData.forEach((m) => {
-          const label = getMemberLabel(m.member);
-          const weakIds = Object.keys(m.weaknesses);
-          const multLabel = (v) => (v === 4 ? "×4" : "×2");
-          if (weakIds.length === 0) {
-            html += `<div style="margin-bottom:8px"><span style="color:#ffd43b;font-weight:600">${label}</span>
-        <span style="color:#51cf66;font-size:0.85rem;margin-left:6px">無弱點！</span></div>`;
-          } else {
-            const sorted = weakIds.sort(
-              (a, b) => m.weaknesses[b] - m.weaknesses[a],
-            );
-            html += `<div style="margin-bottom:8px"><div style="color:#ffd43b;font-weight:600;margin-bottom:4px">${label}</div>
-        <div class="tags">${sorted.map((id) => makeTagHtml(id, multLabel(m.weaknesses[id]))).join("")}</div></div>`;
-          }
-        });
-        html += `</div>`;
-
-        // === Card 2: Threat scenario — "When opponent sends out X type..." ===
-        if (threatTypes.length > 0) {
-          // Only show types that threaten 2+ members, or all if none reach 2
-          const majorThreats = threatTypes.filter(
-            (id) => teamWeakCount[id] >= 2,
-          );
-          const minorThreats = threatTypes.filter(
-            (id) => teamWeakCount[id] === 1,
-          );
-
-          html += `<div class="card advice"><h2>⚔️ 對戰情境分析</h2>`;
-
-          if (majorThreats.length > 0) {
-            html += `<div style="font-size:0.82rem;color:#ff6b6b;font-weight:600;margin-bottom:10px">危險！以下屬性威脅多隻隊員：</div>`;
-            majorThreats.forEach((threatId) => {
-              const affectedMembers = memberData
-                .filter((m) => m.weaknesses[threatId])
-                .map((m) => {
-                  const label =
-                    m.member.name ||
-                    m.member.types.map((id) => typeMap[id].name).join("/");
-                  const mult = m.weaknesses[threatId];
-                  return `${label}(${mult === 4 ? "×4" : "×2"})`;
-                });
-
-              // Find counter attack types: types that are SE against this threat type
-              const counters = TYPES.filter((ct) => {
-                const off = OFFENSE[ct.id] || {};
-                return off[threatId] >= 2;
-              }).map((ct) => ct.id);
-
-              html += `<div class="threat-scenario">
-          <div class="threat-header">對手派出 ${makeTagHtml(threatId, "")} 系寶可夢</div>
-          <div class="threat-affected">被威脅的隊員：${affectedMembers.join("、")}</div>
-          <div class="threat-counter">推薦反擊招式屬性：</div>
-          <div class="tags">${counters.map((id) => makeTagHtml(id, "")).join("")}</div>
-        </div>`;
-            });
-          }
-
-          if (minorThreats.length > 0) {
-            html += `<div style="font-size:0.82rem;color:#aaa;margin-top:${majorThreats.length > 0 ? "12px" : "0"};margin-bottom:8px">以下屬性各威脅 1 隻隊員：</div>`;
-            html += `<div class="tags" style="margin-bottom:4px">${minorThreats.map((id) => makeTagHtml(id, "")).join("")}</div>`;
-          }
-
-          html += `</div>`;
+        // === Card 1: Threat summary (compact) ===
+        const majorThreats = threatTypes.filter((id) => teamWeakCount[id] >= 2);
+        if (majorThreats.length > 0) {
+          html += `<div class="card advice"><h2>⚠️ 共同弱點</h2>
+            <div style="font-size:0.85rem;color:#ff6b6b;margin-bottom:6px">以下屬性威脅 2 隻以上隊員：</div>
+            <div class="tags">${majorThreats.map((id) => makeTagHtml(id, `${teamWeakCount[id]}隻`)).join("")}</div>
+          </div>`;
         }
 
         // === Card 3: Recommended types to have on your team ===
@@ -1545,6 +1739,42 @@
     </div>`;
         }
 
+        // === Card 4: Attack coverage blind spots ===
+        const uncovered = []; // types no member can hit SE
+        const partiallyCovered = []; // types only 1 member can hit SE
+
+        TYPES.forEach((defType) => {
+          let coverCount = 0;
+          team.forEach((member) => {
+            // Use moves if set, otherwise fallback to own types (STAB)
+            const atkTypes = member.moves && member.moves.length > 0 ? member.moves : member.types;
+            const canHitSE = atkTypes.some((atkId) => {
+              const off = OFFENSE[atkId] || {};
+              return off[defType.id] >= 2;
+            });
+            if (canHitSE) coverCount++;
+          });
+          if (coverCount === 0) uncovered.push(defType.id);
+          else if (coverCount === 1) partiallyCovered.push(defType.id);
+        });
+
+        if (uncovered.length > 0 || partiallyCovered.length > 0) {
+          html += `<div class="card weakness"><h2>🚨 攻擊覆蓋盲點</h2>`;
+          if (uncovered.length > 0) {
+            html += `<div style="font-size:0.85rem;color:#ff6b6b;font-weight:600;margin-bottom:6px">無法應對的屬性（沒有隊員能打出超效傷害）：</div>`;
+            html += `<div class="tags" style="margin-bottom:10px">${uncovered.map((id) => makeTagHtml(id, "")).join("")}</div>`;
+          }
+          if (partiallyCovered.length > 0) {
+            html += `<div style="font-size:0.85rem;color:#ffd43b;margin-bottom:6px">僅 1 位隊員能應對的屬性（覆蓋薄弱）：</div>`;
+            html += `<div class="tags">${partiallyCovered.map((id) => makeTagHtml(id, "")).join("")}</div>`;
+          }
+          html += `</div>`;
+        } else {
+          html += `<div class="card resist"><h2>✅ 攻擊覆蓋完整</h2>
+            <div style="font-size:0.85rem;color:#51cf66">隊伍的招式屬性能超效應對全部 18 種屬性！</div>
+          </div>`;
+        }
+
         document.getElementById("teamResults").innerHTML = html;
       }
 
@@ -1555,7 +1785,6 @@
         const team = teams[currentTeamIdx];
         const section = document.getElementById("opponentSection");
         section.style.display = team.length > 0 ? "" : "none";
-        if (team.length > 0) renderOpponent();
       }
 
       function renderOpponent() {
@@ -1722,15 +1951,299 @@
       document.getElementById("btnClearTeam").onclick = clearTeam;
       document.getElementById("btnAnalyze").onclick = () => {
         analyzeTeam();
-        showOpponentSection();
       };
       document.getElementById("btnClearOpponent").onclick = () => {
         opponentSelected = [];
+        document.getElementById("opponentNameInput").value = "";
+        document.getElementById("opponentCard").style.display = "none";
         renderOpponent();
       };
+
+      // ===== Opponent Search & Card =====
+      let oppAcActiveIdx = -1;
+
+      function renderOpponentAutocomplete() {
+        const input = document.getElementById("opponentNameInput");
+        const list = document.getElementById("opponentAutocompleteList");
+        const query = input.value.trim();
+        if (!query || searchList.length === 0) { list.classList.remove("show"); return; }
+        const results = searchPokemon(query);
+        if (results.length === 0) { list.classList.remove("show"); return; }
+        oppAcActiveIdx = -1;
+        list.innerHTML = results.map((p, i) => {
+          const typeDots = p.types.map(t =>
+            `<span class="ac-type-dot" style="background:${typeMap[t] ? typeMap[t].color : '#666'}"></span>`
+          ).join("");
+          return `<div class="autocomplete-item" data-idx="${i}">
+            <span class="ac-name">${p.nameTW || p.name}</span>
+            <span class="ac-name-en">#${p.id} ${p.name}</span>
+            <span class="ac-types">${typeDots}</span>
+          </div>`;
+        }).join("");
+        list.classList.add("show");
+        list.querySelectorAll(".autocomplete-item").forEach((el) => {
+          el.addEventListener("mousedown", (e) => {
+            e.preventDefault();
+            selectOpponentPokemon(results[parseInt(el.dataset.idx, 10)]);
+          });
+        });
+      }
+
+      function selectOpponentPokemon(p) {
+        const input = document.getElementById("opponentNameInput");
+        const list = document.getElementById("opponentAutocompleteList");
+        input.value = p.nameTW || p.name;
+        list.classList.remove("show");
+
+        // Set opponent types
+        opponentSelected = p.types.slice(0, 2);
+
+        // Render opponent card (like team member card)
+        renderOpponentCard(p);
+        renderOpponent();
+      }
+
+      function renderOpponentCard(p) {
+        const card = document.getElementById("opponentCard");
+        const types = p.types;
+        const mult = calcDefenseMultipliers(types);
+        const weak4x = [], weak2x = [], resist05 = [], resist025 = [], immune = [];
+        TYPES.forEach((t) => {
+          const m = mult[t.id];
+          if (m === 0) immune.push(t.id);
+          else if (m >= 4) weak4x.push(t.id);
+          else if (m >= 2) weak2x.push(t.id);
+          else if (m <= 0.25) resist025.push(t.id);
+          else if (m <= 0.5) resist05.push(t.id);
+        });
+
+        const defTag = (id, label) => `<span class="def-tag" style="background:${typeMap[id].color}">${typeMap[id].name}${label}</span>`;
+        let defHtml = "";
+        if (weak4x.length + weak2x.length > 0) {
+          defHtml += `<div class="member-defense"><span class="def-label">弱</span>${weak4x.map(id => defTag(id, "x4")).join("")}${weak2x.map(id => defTag(id, "x2")).join("")}</div>`;
+        }
+        if (resist025.length + resist05.length > 0) {
+          defHtml += `<div class="member-defense"><span class="def-label">抗</span>${resist025.map(id => defTag(id, "x¼")).join("")}${resist05.map(id => defTag(id, "x½")).join("")}</div>`;
+        }
+        if (immune.length > 0) {
+          defHtml += `<div class="member-defense"><span class="def-label">免</span>${immune.map(id => defTag(id, "x0")).join("")}</div>`;
+        }
+
+        let statsHtml = "";
+        if (p.stats) {
+          const s = p.stats;
+          const statColor = (v) => v >= 100 ? "#51cf66" : v >= 60 ? "#ffd43b" : "#ff6b6b";
+          const statBar = (label, val) =>
+            `<div class="stat-row"><span class="stat-label">${label}</span><span class="stat-val">${val}</span><div class="stat-bar"><div class="stat-bar-fill" style="width:${Math.min(val / 255 * 100, 100).toFixed(1)}%;background:${statColor(val)}"></div></div></div>`;
+          statsHtml = `<div class="member-stats-panel show">
+            <div class="stats-total">種族值 ${s.total}</div>
+            ${statBar("HP", s.hp)}${statBar("攻擊", s.atk)}${statBar("防禦", s.def)}${statBar("特攻", s.spa)}${statBar("特防", s.spd)}${statBar("速度", s.spe)}
+          </div>`;
+        }
+
+        card.style.display = "";
+        card.innerHTML = `<div class="team-member" style="cursor:default;margin-bottom:12px">
+          <div class="member-info" style="flex-direction:column;align-items:flex-start;gap:4px;flex:1;min-width:0">
+            <div style="display:flex;align-items:center;gap:8px;width:100%">
+              <span class="member-name">${p.nameTW || p.name}</span>
+              <div class="member-types" style="margin-left:auto">
+                ${types.map((id) => `<span class="tag" style="background:${typeMap[id].color}">${typeMap[id].name}</span>`).join("")}
+              </div>
+            </div>
+            ${defHtml}
+            ${statsHtml}
+          </div>
+        </div>`;
+      }
+
+      document.getElementById("opponentNameInput").addEventListener("input", renderOpponentAutocomplete);
+      document.getElementById("opponentNameInput").addEventListener("focus", renderOpponentAutocomplete);
+      document.getElementById("opponentNameInput").addEventListener("blur", () => {
+        setTimeout(() => document.getElementById("opponentAutocompleteList").classList.remove("show"), 150);
+      });
+      document.getElementById("opponentNameInput").addEventListener("keydown", (e) => {
+        const list = document.getElementById("opponentAutocompleteList");
+        const items = list.querySelectorAll(".autocomplete-item");
+        if (!list.classList.contains("show") || items.length === 0) return;
+        if (e.key === "ArrowDown") {
+          e.preventDefault();
+          oppAcActiveIdx = Math.min(oppAcActiveIdx + 1, items.length - 1);
+          items.forEach((el, i) => el.classList.toggle("active", i === oppAcActiveIdx));
+          items[oppAcActiveIdx].scrollIntoView({ block: "nearest" });
+        } else if (e.key === "ArrowUp") {
+          e.preventDefault();
+          oppAcActiveIdx = Math.max(oppAcActiveIdx - 1, 0);
+          items.forEach((el, i) => el.classList.toggle("active", i === oppAcActiveIdx));
+          items[oppAcActiveIdx].scrollIntoView({ block: "nearest" });
+        } else if (e.key === "Enter") {
+          e.preventDefault();
+          if (oppAcActiveIdx >= 0) items[oppAcActiveIdx].dispatchEvent(new MouseEvent("mousedown"));
+          else if (items.length > 0) items[0].dispatchEvent(new MouseEvent("mousedown"));
+        } else if (e.key === "Escape") {
+          list.classList.remove("show");
+        }
+      });
       document.getElementById("btnExportTeam").onclick = exportTeamJSON;
       document.getElementById("btnImportTeam").onclick = importTeamJSON;
 
+      // ===== Champions Pokemon Data & Autocomplete =====
+      let championsData = [];
+      // Build flat search list (base + forms)
+      let searchList = [];
+
+      function loadChampionsData() {
+        if (typeof CHAMPIONS_DATA !== "undefined" && CHAMPIONS_DATA.pokemon) {
+          championsData = CHAMPIONS_DATA.pokemon;
+          buildSearchList();
+          console.log("Champions data loaded:", championsData.length, "pokemon");
+        } else {
+          console.warn("Champions data not available");
+        }
+      }
+
+      function buildSearchList() {
+        searchList = [];
+        for (const p of championsData) {
+          searchList.push({
+            id: p.id,
+            name: p.name,
+            nameTW: p.nameTW,
+            types: p.types,
+            moveTypes: p.moveTypes,
+            stats: p.stats || null,
+            label: p.nameTW ? `${p.nameTW}（${p.name}）` : p.name,
+          });
+          if (p.forms) {
+            for (const f of p.forms) {
+              searchList.push({
+                id: p.id,
+                name: f.name,
+                nameTW: p.nameTW ? `${p.nameTW}（${f.name}）` : f.name,
+                types: f.types,
+                moveTypes: f.moveTypes || p.moveTypes,
+                stats: f.stats || p.stats || null,
+                label: p.nameTW ? `${p.nameTW}（${f.name}）` : f.name,
+              });
+            }
+          }
+        }
+      }
+
+      function searchPokemon(query) {
+        if (!query) return [];
+        const q = query.toLowerCase();
+        const numQuery = parseInt(q, 10);
+        return searchList.filter((p) => {
+          if (!isNaN(numQuery) && p.id === numQuery) return true;
+          if (p.name.toLowerCase().includes(q)) return true;
+          if (p.nameTW && p.nameTW.includes(q)) return true;
+          return false;
+        }).slice(0, 8);
+      }
+
+      let acActiveIdx = -1;
+
+      function renderAutocomplete() {
+        const input = document.getElementById("memberNameInput");
+        const list = document.getElementById("autocompleteList");
+        const query = input.value.trim();
+
+        if (!query || searchList.length === 0) {
+          list.classList.remove("show");
+          return;
+        }
+
+        const results = searchPokemon(query);
+        if (results.length === 0) {
+          list.classList.remove("show");
+          return;
+        }
+
+        acActiveIdx = -1;
+        list.innerHTML = results.map((p, i) => {
+          const typeDots = p.types.map(t =>
+            `<span class="ac-type-dot" style="background:${typeMap[t] ? typeMap[t].color : '#666'}"></span>`
+          ).join("");
+          return `<div class="autocomplete-item" data-idx="${i}">
+            <span class="ac-name">${p.nameTW || p.name}</span>
+            <span class="ac-name-en">#${p.id} ${p.name}</span>
+            <span class="ac-types">${typeDots}</span>
+          </div>`;
+        }).join("");
+
+        list.classList.add("show");
+
+        // Click handlers
+        list.querySelectorAll(".autocomplete-item").forEach((el) => {
+          el.addEventListener("mousedown", (e) => {
+            e.preventDefault();
+            const idx = parseInt(el.dataset.idx, 10);
+            selectPokemon(results[idx]);
+          });
+        });
+      }
+
+      let pendingStats = null;
+
+      function selectPokemon(p) {
+        const input = document.getElementById("memberNameInput");
+        const list = document.getElementById("autocompleteList");
+
+        input.value = p.nameTW || p.name;
+        list.classList.remove("show");
+
+        // Auto-fill types
+        teamSelected = p.types.slice(0, 2);
+
+        // Auto-fill move types (up to 4)
+        teamMoves = (p.moveTypes || []).slice(0, 4);
+
+        // Store stats for when member is added
+        pendingStats = p.stats || null;
+
+        renderTeam();
+        if (teamSelected.length > 0) {
+          document.getElementById("teamMovesSection").style.display = "";
+          renderTeamMoves();
+        }
+      }
+
+      // Input event listeners
+      document.getElementById("memberNameInput").addEventListener("input", renderAutocomplete);
+      document.getElementById("memberNameInput").addEventListener("focus", renderAutocomplete);
+      document.getElementById("memberNameInput").addEventListener("blur", () => {
+        setTimeout(() => {
+          document.getElementById("autocompleteList").classList.remove("show");
+        }, 150);
+      });
+      document.getElementById("memberNameInput").addEventListener("keydown", (e) => {
+        const list = document.getElementById("autocompleteList");
+        const items = list.querySelectorAll(".autocomplete-item");
+        if (!list.classList.contains("show") || items.length === 0) return;
+
+        if (e.key === "ArrowDown") {
+          e.preventDefault();
+          acActiveIdx = Math.min(acActiveIdx + 1, items.length - 1);
+          items.forEach((el, i) => el.classList.toggle("active", i === acActiveIdx));
+          items[acActiveIdx].scrollIntoView({ block: "nearest" });
+        } else if (e.key === "ArrowUp") {
+          e.preventDefault();
+          acActiveIdx = Math.max(acActiveIdx - 1, 0);
+          items.forEach((el, i) => el.classList.toggle("active", i === acActiveIdx));
+          items[acActiveIdx].scrollIntoView({ block: "nearest" });
+        } else if (e.key === "Enter") {
+          e.preventDefault();
+          if (acActiveIdx >= 0 && acActiveIdx < items.length) {
+            items[acActiveIdx].dispatchEvent(new MouseEvent("mousedown"));
+          } else if (items.length > 0) {
+            items[0].dispatchEvent(new MouseEvent("mousedown"));
+          }
+        } else if (e.key === "Escape") {
+          list.classList.remove("show");
+        }
+      });
+
+      loadChampionsData();
       render();
     </script>
   </body>
