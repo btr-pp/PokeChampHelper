@@ -164,7 +164,8 @@
         box-shadow: 0 0 12px rgba(255, 255, 255, 0.3);
       }
       .type-btn.disabled {
-        opacity: 0.35;
+        opacity: 0.15;
+        filter: grayscale(0.6);
         pointer-events: none;
       }
 
@@ -555,6 +556,70 @@
       .battle-selection-hint .count {
         color: var(--accent-gold);
         font-weight: 700;
+      }
+
+      /* Moves editor in stats panel */
+      .moves-editor {
+        margin-top: 10px;
+        padding-top: 8px;
+        border-top: 1px solid #334;
+      }
+      .moves-editor-label {
+        font-size: 0.78rem;
+        color: #aaa;
+        margin-bottom: 6px;
+      }
+      .moves-editor .moves-grid {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 4px;
+      }
+      .moves-editor .moves-grid button {
+        font-size: 0.7rem;
+        font-weight: 600;
+        padding: 4px 0;
+        border: 1.5px solid transparent;
+        border-radius: 5px;
+        color: #fff;
+        cursor: pointer;
+        opacity: 0.45;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .moves-editor .moves-grid button.selected {
+        opacity: 1;
+        border-color: #fff;
+      }
+      .moves-editor .moves-grid button.disabled {
+        opacity: 0.12;
+        filter: grayscale(0.7);
+        cursor: not-allowed;
+      }
+
+      /* Mega toggle */
+      .mega-btns {
+        display: flex;
+        gap: 4px;
+        margin-top: 4px;
+      }
+      .mega-toggle {
+        font-size: 0.7rem;
+        font-weight: 700;
+        padding: 2px 8px;
+        border: 1.5px solid #9b59b6;
+        border-radius: 6px;
+        background: transparent;
+        color: #bb86fc;
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .mega-toggle.active {
+        background: linear-gradient(135deg, #9b59b6, #6c3483);
+        color: #fff;
+        border-color: #bb86fc;
+      }
+      .team-member.mega-active {
+        border: 2px solid #bb86fc;
+        box-shadow: 0 0 8px rgba(187, 134, 252, 0.3);
       }
 
       .team-actions {
@@ -1301,6 +1366,7 @@
       // teams: array of 3 teams, each member is { name: string, types: [typeId...], moves: [typeId...] }
       let teams = [[], [], []];
       let battleSelection = []; // indices of members selected for battle (max 3)
+      let megaSelection = {}; // { memberIdx: formIdx } — which member is Mega and which form
 
       function loadTeams() {
         try {
@@ -1407,6 +1473,45 @@
       function toggleStats(idx) {
         const panel = document.getElementById("statsPanel" + idx);
         if (panel) panel.classList.toggle("show");
+      }
+
+      function getLearnableMoves(member) {
+        if (!championsData.length || !member.name) return null;
+        const match = championsData.find((p) =>
+          p.nameTW === member.name || p.name.toLowerCase() === member.name.toLowerCase()
+        );
+        if (!match) {
+          // Check forms too
+          for (const p of championsData) {
+            if (p.forms && p.forms.some((f) => f.name === member.name || (p.nameTW && `${p.nameTW}（${f.name}）` === member.name))) {
+              const form = p.forms.find((f) => f.name === member.name);
+              return (form && form.moveTypes) || p.moveTypes || null;
+            }
+          }
+          return null;
+        }
+        return match.moveTypes || null;
+      }
+
+      function toggleMemberMove(memberIdx, typeId) {
+        const member = teams[currentTeamIdx][memberIdx];
+        if (!member) return;
+        if (!member.moves) member.moves = [];
+        const i = member.moves.indexOf(typeId);
+        if (i >= 0) {
+          member.moves.splice(i, 1);
+        } else {
+          // Check if learnable
+          const learnable = getLearnableMoves(member);
+          if (learnable && !learnable.includes(typeId)) return; // Not learnable
+          if (member.moves.length >= 4) return; // Already 4 moves
+          member.moves.push(typeId);
+        }
+        saveTeams();
+        renderTeam();
+        // Keep the panel open after re-render
+        const panel = document.getElementById("statsPanel" + memberIdx);
+        if (panel) panel.classList.add("show");
       }
 
       function toggleManualType() {
@@ -1570,6 +1675,7 @@
             teamSelected = [];
             teamMoves = [];
             battleSelection = [];
+            megaSelection = {};
             document.getElementById("memberNameInput").value = "";
             renderTeam();
           };
@@ -1581,11 +1687,18 @@
         membersEl.innerHTML = "";
         for (let i = 0; i < 6; i++) {
           if (i < team.length) {
-            const member = team[i];
+            const baseMember = team[i];
+            // Apply Mega form if active
+            const isMega = megaSelection[i] !== undefined;
+            const member = isMega ? applyMega(baseMember, i) : baseMember;
+
             const div = document.createElement("div");
-            div.className = "team-member";
-            const nameHtml = member.name
-              ? `<span class="member-name">${member.name}</span>`
+            div.className = "team-member" + (isMega ? " mega-active" : "");
+            const displayName = isMega && member.megaName
+              ? `${baseMember.name} → ${member.megaName}`
+              : baseMember.name;
+            const nameHtml = displayName
+              ? `<span class="member-name">${displayName}</span>`
               : "";
 
             // Calculate defense multipliers
@@ -1612,6 +1725,35 @@
               defHtml += `<div class="member-defense"><span class="def-label">免</span>${immune.map(id => defTag(id, "x0")).join("")}</div>`;
             }
 
+            // Mega buttons
+            const megaForms = findMegaForms(baseMember);
+            let megaHtml = "";
+            if (megaForms.length > 0) {
+              const btns = megaForms.map((f, fi) => {
+                const isActive = megaSelection[i] === fi;
+                const label = megaForms.length > 1 ? f.name.replace("Mega ", "M-") : "Mega";
+                return `<button class="mega-toggle${isActive ? " active" : ""}" onclick="event.stopPropagation();toggleMega(${i},${fi})" title="每場限 1 隻 Mega 進化">${label}</button>`;
+              }).join("");
+              megaHtml = `<div class="mega-btns">${btns}</div>`;
+            }
+
+            // Moves editor (always shown in expanded panel)
+            const currentMoves = baseMember.moves || [];
+            const learnableMoves = getLearnableMoves(baseMember); // null = unknown (allow all)
+            const moveBtns = TYPES.map((t) => {
+              const isSel = currentMoves.includes(t.id);
+              const canLearn = !learnableMoves || learnableMoves.includes(t.id);
+              let cls = "";
+              if (isSel) cls = "selected";
+              else if (!canLearn) cls = "disabled";
+              else if (currentMoves.length >= 4) cls = "disabled";
+              return `<button class="${cls}" style="background:${t.color}" onclick="event.stopPropagation();toggleMemberMove(${i},'${t.id}')">${t.name}</button>`;
+            }).join("");
+            const movesEditorHtml = `<div class="moves-editor">
+              <div class="moves-editor-label">攜帶招式屬性（${currentMoves.length} / 4）${learnableMoves ? "　學不到的已鎖定" : ""}</div>
+              <div class="moves-grid">${moveBtns}</div>
+            </div>`;
+
             // Stats panel HTML
             let statsHtml = "";
             if (member.stats) {
@@ -1622,7 +1764,10 @@
               statsHtml = `<div class="member-stats-panel" id="statsPanel${i}">
                 <div class="stats-total">種族值 ${s.total}</div>
                 ${statBar("HP", s.hp)}${statBar("攻擊", s.atk)}${statBar("防禦", s.def)}${statBar("特攻", s.spa)}${statBar("特防", s.spd)}${statBar("速度", s.spe)}
+                ${movesEditorHtml}
               </div>`;
+            } else {
+              statsHtml = `<div class="member-stats-panel" id="statsPanel${i}">${movesEditorHtml}</div>`;
             }
 
             const bsIdx = battleSelection.indexOf(i);
@@ -1639,6 +1784,7 @@
               ${member.types.map((id) => `<span class="tag" style="background:${typeMap[id].color}">${typeMap[id].name}</span>`).join("")}
             </div>
           </div>
+          ${megaHtml}
           ${defHtml}
           ${statsHtml}
         </div>
@@ -1715,14 +1861,20 @@
       function renderTeamMoves() {
         const grid = document.getElementById("teamMovesGrid");
         grid.innerHTML = "";
+        const learnable = pendingMoveTypes; // null = no limit (manually added Pokemon)
         TYPES.forEach((t) => {
           const btn = document.createElement("button");
           btn.className = "type-btn";
+          const canLearn = !learnable || learnable.includes(t.id);
           if (teamMoves.includes(t.id)) btn.classList.add("selected");
+          else if (!canLearn) btn.classList.add("disabled");
           else if (teamMoves.length >= 4) btn.classList.add("disabled");
           btn.style.background = t.color;
           btn.textContent = t.name;
-          btn.onclick = () => teamMoveToggle(t.id);
+          btn.onclick = () => {
+            if (!canLearn && !teamMoves.includes(t.id)) return;
+            teamMoveToggle(t.id);
+          };
           grid.appendChild(btn);
         });
 
@@ -1766,6 +1918,7 @@
         teamSelected = [];
         teamMoves = [];
         pendingStats = null;
+        pendingMoveTypes = null;
         nameInput.value = "";
         saveTeams();
         renderTeam();
@@ -1797,18 +1950,58 @@
         teamSelected = [];
         teamMoves = [];
         battleSelection = [];
+        megaSelection = {};
         document.getElementById("memberNameInput").value = "";
         saveTeams();
         document.getElementById("teamResults").innerHTML = "";
         renderTeam();
       }
 
+      // ===== Mega Evolution =====
+      function findMegaForms(member) {
+        if (!championsData.length || !member.name) return [];
+        const match = championsData.find((p) =>
+          p.nameTW === member.name || p.name.toLowerCase() === member.name.toLowerCase()
+        );
+        if (!match || !match.forms) return [];
+        return match.forms.filter((f) => f.name.startsWith("Mega"));
+      }
+
+      function applyMega(member, memberIdx) {
+        if (megaSelection[memberIdx] === undefined) return member;
+        const forms = findMegaForms(member);
+        const form = forms[megaSelection[memberIdx]];
+        if (!form) return member;
+        return {
+          ...member,
+          types: form.types,
+          stats: form.stats || member.stats,
+          moves: form.moveTypes ? form.moveTypes.slice(0, 4) : member.moves,
+          megaName: form.name,
+        };
+      }
+
+      function toggleMega(memberIdx, formIdx) {
+        if (megaSelection[memberIdx] === formIdx) {
+          // Toggle off
+          delete megaSelection[memberIdx];
+        } else {
+          // Only 1 Mega per battle — clear others first
+          megaSelection = {};
+          megaSelection[memberIdx] = formIdx;
+        }
+        renderTeam();
+      }
+
       function getActiveTeam() {
         const team = teams[currentTeamIdx];
+        let active;
         if (team.length > 3 && battleSelection.length === 3) {
-          return battleSelection.map((i) => team[i]);
+          active = battleSelection.map((i) => ({ member: team[i], idx: i }));
+        } else {
+          active = team.map((m, i) => ({ member: m, idx: i }));
         }
-        return team;
+        return active.map(({ member, idx }) => applyMega(member, idx));
       }
 
       function analyzeTeam() {
@@ -2376,6 +2569,7 @@
       }
 
       let pendingStats = null;
+      let pendingMoveTypes = null; // learnable move types of the Pokemon being added
 
       function selectPokemon(p) {
         const input = document.getElementById("memberNameInput");
@@ -2390,8 +2584,9 @@
         // Auto-fill move types (up to 4)
         teamMoves = (p.moveTypes || []).slice(0, 4);
 
-        // Store stats for when member is added
+        // Store stats + learnable moves for when member is added
         pendingStats = p.stats || null;
+        pendingMoveTypes = p.moveTypes || null;
 
         renderTeam();
         if (teamSelected.length > 0) {
