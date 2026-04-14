@@ -504,6 +504,59 @@
         white-space: nowrap;
       }
 
+      /* Battle Selection (6 pick 3) */
+      .team-member.battle-selected {
+        border: 2px solid var(--accent-gold);
+        box-shadow: 0 0 8px rgba(255, 212, 59, 0.2);
+      }
+      .battle-order {
+        background: var(--accent-gold);
+        color: var(--bg-primary);
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 0.8rem;
+        flex-shrink: 0;
+      }
+      .battle-toggle {
+        width: 32px;
+        height: 32px;
+        border: 2px solid var(--border-primary);
+        border-radius: 8px;
+        background: transparent;
+        cursor: pointer;
+        color: var(--text-muted);
+        font-size: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        -webkit-tap-highlight-color: transparent;
+        transition: all 0.15s;
+        flex-shrink: 0;
+      }
+      .battle-toggle.selected {
+        border-color: var(--accent-gold);
+        background: rgba(255, 212, 59, 0.15);
+        color: var(--accent-gold);
+      }
+      .battle-toggle:disabled {
+        opacity: 0.3;
+        pointer-events: none;
+      }
+      .battle-selection-hint {
+        font-size: 0.82rem;
+        color: var(--text-muted);
+        margin-bottom: 10px;
+      }
+      .battle-selection-hint .count {
+        color: var(--accent-gold);
+        font-weight: 700;
+      }
+
       .team-actions {
         display: flex;
         gap: 10px;
@@ -840,8 +893,9 @@
           </button>
         </div>
 
-        <p class="section-label">隊伍成員（最多 4 隻）</p>
+        <p class="section-label">隊伍成員（最多 6 隻）</p>
         <div class="team-members" id="teamMembers"></div>
+        <div class="battle-selection-hint" id="battleSelectionHint" style="display:none"></div>
 
         <div id="teamAddSection">
           <div class="collapse-toggle" id="toggleAddSection" onclick="toggleAddPanel()">
@@ -1246,6 +1300,7 @@
       let currentTeamIdx = 0;
       // teams: array of 3 teams, each member is { name: string, types: [typeId...], moves: [typeId...] }
       let teams = [[], [], []];
+      let battleSelection = []; // indices of members selected for battle (max 3)
 
       function loadTeams() {
         try {
@@ -1514,6 +1569,7 @@
             currentTeamIdx = i;
             teamSelected = [];
             teamMoves = [];
+            battleSelection = [];
             document.getElementById("memberNameInput").value = "";
             renderTeam();
           };
@@ -1523,7 +1579,7 @@
         // Members
         const membersEl = document.getElementById("teamMembers");
         membersEl.innerHTML = "";
-        for (let i = 0; i < 4; i++) {
+        for (let i = 0; i < 6; i++) {
           if (i < team.length) {
             const member = team[i];
             const div = document.createElement("div");
@@ -1569,7 +1625,13 @@
               </div>`;
             }
 
+            const bsIdx = battleSelection.indexOf(i);
+            const isSelected = bsIdx >= 0;
+            const showBattle = team.length > 3;
+            if (isSelected) div.classList.add("battle-selected");
+
             div.innerHTML = `
+        ${showBattle ? `<button class="battle-toggle${isSelected ? " selected" : ""}" onclick="event.stopPropagation();toggleBattleSelect(${i})"${!isSelected && battleSelection.length >= 3 ? " disabled" : ""}>${isSelected ? `<span class="battle-order">${bsIdx + 1}</span>` : "☐"}</button>` : ""}
         <div class="member-info" style="flex-direction:column;align-items:flex-start;gap:4px;flex:1;min-width:0" onclick="toggleStats(${i})">
           <div style="display:flex;align-items:center;gap:8px;width:100%">
             ${nameHtml}
@@ -1591,8 +1653,17 @@
           }
         }
 
+        // Battle selection hint (show when team > 3)
+        const battleHintEl = document.getElementById("battleSelectionHint");
+        if (team.length > 3) {
+          battleHintEl.style.display = "";
+          battleHintEl.innerHTML = `⚔️ 對戰選角：<span class="count">${battleSelection.length} / 3</span>　選出 3 隻上場`;
+        } else {
+          battleHintEl.style.display = "none";
+        }
+
         // Hide add section if full
-        const isFull = team.length >= 4;
+        const isFull = team.length >= 6;
         document.getElementById("teamAddSection").style.display = isFull
           ? "none"
           : "";
@@ -1686,7 +1757,7 @@
       function addMember() {
         if (teamSelected.length === 0) return;
         const team = teams[currentTeamIdx];
-        if (team.length >= 4) return;
+        if (team.length >= 6) return;
         const nameInput = document.getElementById("memberNameInput");
         const name = nameInput.value.trim();
         const memberData = { name, types: [...teamSelected], moves: [...teamMoves] };
@@ -1700,8 +1771,22 @@
         renderTeam();
       }
 
+      function toggleBattleSelect(idx) {
+        const pos = battleSelection.indexOf(idx);
+        if (pos >= 0) {
+          battleSelection.splice(pos, 1);
+        } else if (battleSelection.length < 3) {
+          battleSelection.push(idx);
+        }
+        renderTeam();
+      }
+
       function removeMember(idx) {
         teams[currentTeamIdx].splice(idx, 1);
+        // Clean up battleSelection: remove idx and adjust indices > idx
+        battleSelection = battleSelection
+          .filter((i) => i !== idx)
+          .map((i) => (i > idx ? i - 1 : i));
         saveTeams();
         document.getElementById("teamResults").innerHTML = "";
         renderTeam();
@@ -1711,14 +1796,23 @@
         teams[currentTeamIdx] = [];
         teamSelected = [];
         teamMoves = [];
+        battleSelection = [];
         document.getElementById("memberNameInput").value = "";
         saveTeams();
         document.getElementById("teamResults").innerHTML = "";
         renderTeam();
       }
 
-      function analyzeTeam() {
+      function getActiveTeam() {
         const team = teams[currentTeamIdx];
+        if (team.length > 3 && battleSelection.length === 3) {
+          return battleSelection.map((i) => team[i]);
+        }
+        return team;
+      }
+
+      function analyzeTeam() {
+        const team = getActiveTeam();
         if (team.length === 0) return;
 
         // Per-member analysis
@@ -1926,7 +2020,7 @@
       }
 
       function renderMatchup() {
-        const team = teams[currentTeamIdx];
+        const team = getActiveTeam();
         const oppTypes = opponentSelected;
         const oppLabel = oppTypes.map((id) => typeMap[id].name).join("/");
 
