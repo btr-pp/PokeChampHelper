@@ -921,7 +921,23 @@
 
       <!-- Query Panel -->
       <div class="query-panel active" id="queryPanel">
-        <p class="section-label">選擇屬性（最多 2 個）</p>
+        <p class="section-label">搜尋寶可夢（自動帶入屬性）</p>
+        <div class="name-input-wrapper">
+          <span class="name-icon">🔍</span>
+          <input
+            type="text"
+            class="name-input"
+            id="queryNameInput"
+            placeholder="搜尋寶可夢（中文/英文/編號）"
+            maxlength="40"
+            autocomplete="off"
+          />
+          <div class="autocomplete-list" id="queryAutocompleteList"></div>
+        </div>
+
+        <div id="queryPokemonCard" style="display:none"></div>
+
+        <p class="section-label">或手動選擇屬性（最多 2 個）</p>
         <div class="type-grid" id="typeGrid"></div>
 
         <div class="selected-display" id="selectedDisplay">
@@ -1654,6 +1670,10 @@
 
       document.getElementById("btnClear").onclick = () => {
         selected = [];
+        const qInput = document.getElementById("queryNameInput");
+        if (qInput) qInput.value = "";
+        const qCard = document.getElementById("queryPokemonCard");
+        if (qCard) { qCard.style.display = "none"; qCard.innerHTML = ""; }
         render();
       };
 
@@ -2343,6 +2363,101 @@
         document.getElementById("opponentCard").style.display = "none";
         renderOpponent();
       };
+
+      // ===== Query Panel Search =====
+      let queryAcActiveIdx = -1;
+
+      function renderQueryAutocomplete() {
+        const input = document.getElementById("queryNameInput");
+        const list = document.getElementById("queryAutocompleteList");
+        const query = input.value.trim();
+        if (!query || searchList.length === 0) { list.classList.remove("show"); return; }
+        const results = searchPokemon(query);
+        if (results.length === 0) { list.classList.remove("show"); return; }
+        queryAcActiveIdx = -1;
+        list.innerHTML = results.map((p, i) => {
+          const typeDots = p.types.map(t =>
+            `<span class="ac-type-dot" style="background:${typeMap[t] ? typeMap[t].color : '#666'}"></span>`
+          ).join("");
+          return `<div class="autocomplete-item" data-idx="${i}">
+            <span class="ac-name">${p.nameTW || p.name}</span>
+            <span class="ac-name-en">#${p.id} ${p.name}</span>
+            <span class="ac-types">${typeDots}</span>
+          </div>`;
+        }).join("");
+        list.classList.add("show");
+        list.querySelectorAll(".autocomplete-item").forEach((el) => {
+          el.addEventListener("mousedown", (e) => {
+            e.preventDefault();
+            selectQueryPokemon(results[parseInt(el.dataset.idx, 10)]);
+          });
+        });
+      }
+
+      function selectQueryPokemon(p) {
+        const input = document.getElementById("queryNameInput");
+        const list = document.getElementById("queryAutocompleteList");
+        input.value = p.nameTW || p.name;
+        list.classList.remove("show");
+        selected = p.types.slice(0, 2);
+        renderQueryPokemonCard(p);
+        render();
+      }
+
+      function renderQueryPokemonCard(p) {
+        const card = document.getElementById("queryPokemonCard");
+        let statsHtml = "";
+        if (p.stats) {
+          const s = p.stats;
+          const statColor = (v) => v >= 100 ? "#51cf66" : v >= 60 ? "#ffd43b" : "#ff6b6b";
+          const statBar = (label, val) =>
+            `<div class="stat-row"><span class="stat-label">${label}</span><span class="stat-val">${val}</span><div class="stat-bar"><div class="stat-bar-fill" style="width:${Math.min(val / 255 * 100, 100).toFixed(1)}%;background:${statColor(val)}"></div></div></div>`;
+          statsHtml = `<div class="member-stats-panel show">
+            <div class="stats-total">種族值 ${s.total}</div>
+            ${statBar("HP", s.hp)}${statBar("攻擊", s.atk)}${statBar("防禦", s.def)}${statBar("特攻", s.spa)}${statBar("特防", s.spd)}${statBar("速度", s.spe)}
+          </div>`;
+        }
+        card.style.display = "";
+        card.innerHTML = `<div class="team-member" style="cursor:default;margin-bottom:12px">
+          <div class="member-info" style="flex-direction:column;align-items:flex-start;gap:4px;flex:1;min-width:0">
+            <div style="display:flex;align-items:center;gap:8px;width:100%">
+              <span class="member-name">${p.nameTW || p.name}</span>
+              <div class="member-types" style="margin-left:auto">
+                ${p.types.map((id) => `<span class="tag" style="background:${typeMap[id].color}">${typeMap[id].name}</span>`).join("")}
+              </div>
+            </div>
+            ${statsHtml}
+          </div>
+        </div>`;
+      }
+
+      document.getElementById("queryNameInput").addEventListener("input", renderQueryAutocomplete);
+      document.getElementById("queryNameInput").addEventListener("focus", renderQueryAutocomplete);
+      document.getElementById("queryNameInput").addEventListener("blur", () => {
+        setTimeout(() => document.getElementById("queryAutocompleteList").classList.remove("show"), 150);
+      });
+      document.getElementById("queryNameInput").addEventListener("keydown", (e) => {
+        const list = document.getElementById("queryAutocompleteList");
+        const items = list.querySelectorAll(".autocomplete-item");
+        if (!list.classList.contains("show") || items.length === 0) return;
+        if (e.key === "ArrowDown") {
+          e.preventDefault();
+          queryAcActiveIdx = Math.min(queryAcActiveIdx + 1, items.length - 1);
+          items.forEach((el, i) => el.classList.toggle("active", i === queryAcActiveIdx));
+          items[queryAcActiveIdx].scrollIntoView({ block: "nearest" });
+        } else if (e.key === "ArrowUp") {
+          e.preventDefault();
+          queryAcActiveIdx = Math.max(queryAcActiveIdx - 1, 0);
+          items.forEach((el, i) => el.classList.toggle("active", i === queryAcActiveIdx));
+          items[queryAcActiveIdx].scrollIntoView({ block: "nearest" });
+        } else if (e.key === "Enter") {
+          e.preventDefault();
+          if (queryAcActiveIdx >= 0) items[queryAcActiveIdx].dispatchEvent(new MouseEvent("mousedown"));
+          else if (items.length > 0) items[0].dispatchEvent(new MouseEvent("mousedown"));
+        } else if (e.key === "Escape") {
+          list.classList.remove("show");
+        }
+      });
 
       // ===== Opponent Search & Card =====
       let oppAcActiveIdx = -1;
