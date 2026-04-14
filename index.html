@@ -16,6 +16,46 @@
     <meta http-equiv="Expires" content="0" />
     <title>Pokex — 寶可夢屬性相剋查詢</title>
     <style>
+      :root {
+        /* Backgrounds */
+        --bg-primary: #1a1a2e;
+        --bg-secondary: #16213e;
+        --bg-card: #0f3460;
+        --bg-muted: #333;
+        --bg-disabled: #555;
+
+        /* Borders */
+        --border-primary: #334;
+        --border-secondary: #223;
+        --border-input: #445;
+
+        /* Text */
+        --text-white: #fff;
+        --text-primary: #e0e0e0;
+        --text-secondary: #ccc;
+        --text-muted: #aaa;
+        --text-subtle: #888;
+        --text-tab-inactive: #8899aa;
+        --text-placeholder: #667;
+        --text-dim: #445;
+        --text-empty: #555;
+
+        /* Accents */
+        --accent-red: #e63946;
+        --accent-gold: #ffd43b;
+        --accent-green: #2d6a4f;
+
+        /* Semantic */
+        --color-weakness: #ff6b6b;
+        --color-weakness-light: #ff9999;
+        --color-resist: #51cf66;
+        --color-immune: #adb5bd;
+
+        /* Badge Backgrounds */
+        --badge-ok-bg: #5c4d1a;
+        --badge-bad-bg: #6b2020;
+      }
+
       * {
         margin: 0;
         padding: 0;
@@ -26,8 +66,8 @@
         font-family:
           -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
           "Helvetica Neue", Arial, sans-serif;
-        background: #1a1a2e;
-        color: #e0e0e0;
+        background: var(--bg-primary);
+        color: var(--text-primary);
         font-size: 16px;
         min-height: 100vh;
       }
@@ -42,19 +82,19 @@
         text-align: center;
         font-size: 1.4rem;
         margin-bottom: 6px;
-        color: #fff;
+        color: var(--text-white);
       }
 
       .subtitle {
         text-align: center;
         font-size: 0.85rem;
-        color: #888;
+        color: var(--text-subtle);
         margin-bottom: 20px;
       }
 
       .section-label {
         font-size: 0.9rem;
-        color: #aaa;
+        color: var(--text-muted);
         margin-bottom: 10px;
       }
 
@@ -63,7 +103,7 @@
         display: flex;
         gap: 4px;
         margin-bottom: 20px;
-        background: #0f3460;
+        background: var(--bg-card);
         border-radius: 12px;
         padding: 4px;
       }
@@ -77,14 +117,14 @@
         font-weight: 600;
         cursor: pointer;
         background: transparent;
-        color: #8899aa;
+        color: var(--text-tab-inactive);
         transition: all 0.2s;
         -webkit-tap-highlight-color: transparent;
       }
 
       .tab-btn.active {
-        background: #e63946;
-        color: #fff;
+        background: var(--accent-red);
+        color: var(--text-white);
       }
 
       /* Type Grid */
@@ -109,7 +149,7 @@
           transform 0.1s,
           border-color 0.15s,
           opacity 0.15s;
-        color: #fff;
+        color: var(--text-white);
         text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
         -webkit-tap-highlight-color: transparent;
         user-select: none;
@@ -119,7 +159,7 @@
         transform: scale(0.95);
       }
       .type-btn.selected {
-        border-color: #fff;
+        border-color: var(--text-white);
         transform: scale(1.05);
         box-shadow: 0 0 12px rgba(255, 255, 255, 0.3);
       }
@@ -138,7 +178,7 @@
       }
 
       .selected-display .placeholder {
-        color: #666;
+        color: var(--text-placeholder);
         font-size: 0.9rem;
       }
 
@@ -150,7 +190,7 @@
         border-radius: 20px;
         font-size: 0.9rem;
         font-weight: 600;
-        color: #fff;
+        color: var(--text-white);
         text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
       }
 
@@ -184,23 +224,23 @@
       }
 
       .btn-query {
-        background: #e63946;
-        color: #fff;
+        background: var(--accent-red);
+        color: var(--text-white);
       }
       .btn-query:disabled {
-        background: #555;
+        background: var(--bg-disabled);
         cursor: default;
       }
       .btn-clear {
-        background: #333;
-        color: #ccc;
+        background: var(--bg-muted);
+        color: var(--text-secondary);
       }
       .btn-add-member {
-        background: #2d6a4f;
-        color: #fff;
+        background: var(--accent-green);
+        color: var(--text-white);
       }
       .btn-add-member:disabled {
-        background: #555;
+        background: var(--bg-disabled);
         cursor: default;
       }
 
@@ -213,7 +253,7 @@
       .card {
         border-radius: 12px;
         padding: 16px;
-        background: #16213e;
+        background: var(--bg-secondary);
       }
 
       .card h2 {
@@ -225,16 +265,16 @@
       }
 
       .card.weakness h2 {
-        color: #ff6b6b;
+        color: var(--color-weakness);
       }
       .card.resist h2 {
-        color: #51cf66;
+        color: var(--color-resist);
       }
       .card.immune h2 {
-        color: #adb5bd;
+        color: var(--color-immune);
       }
       .card.advice h2 {
-        color: #ffd43b;
+        color: var(--accent-gold);
       }
 
       .card .tags {
@@ -250,7 +290,7 @@
         border-radius: 6px;
         font-size: 0.85rem;
         font-weight: 600;
-        color: #fff;
+        color: var(--text-white);
         text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
       }
 
@@ -261,7 +301,7 @@
       }
 
       .card .empty {
-        color: #555;
+        color: var(--text-empty);
         font-size: 0.9rem;
       }
 
@@ -288,10 +328,10 @@
       .team-tab {
         flex: 1;
         min-height: 40px;
-        border: 2px solid #334;
+        border: 2px solid var(--border-primary);
         border-radius: 10px;
         background: transparent;
-        color: #aaa;
+        color: var(--text-muted);
         font-size: 0.85rem;
         font-weight: 600;
         cursor: pointer;
@@ -300,8 +340,8 @@
       }
 
       .team-tab.active {
-        border-color: #ffd43b;
-        color: #ffd43b;
+        border-color: var(--accent-gold);
+        color: var(--accent-gold);
         background: rgba(255, 212, 59, 0.1);
       }
 
@@ -316,7 +356,7 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        background: #16213e;
+        background: var(--bg-secondary);
         border-radius: 10px;
         padding: 10px 14px;
         min-height: 44px;
@@ -333,7 +373,7 @@
       .team-member .member-name {
         font-size: 1.05rem;
         font-weight: 600;
-        color: #fff;
+        color: var(--text-white);
         white-space: nowrap;
         flex-shrink: 0;
       }
@@ -347,7 +387,7 @@
       .team-member .remove-member {
         background: none;
         border: none;
-        color: #e63946;
+        color: var(--accent-red);
         font-size: 1.3rem;
         cursor: pointer;
         padding: 0 4px;
@@ -356,15 +396,15 @@
       }
 
       .team-member-empty {
-        background: #16213e;
-        border: 2px dashed #334;
+        background: var(--bg-secondary);
+        border: 2px dashed var(--border-primary);
         border-radius: 10px;
         padding: 10px 14px;
         min-height: 44px;
         display: flex;
         align-items: center;
         justify-content: center;
-        color: #445;
+        color: var(--text-dim);
         font-size: 0.85rem;
       }
 
@@ -478,12 +518,12 @@
         font-size: 1rem;
         font-weight: 700;
         cursor: pointer;
-        background: #ffd43b;
-        color: #1a1a2e;
+        background: var(--accent-gold);
+        color: var(--bg-primary);
       }
       .btn-analyze:disabled {
-        background: #555;
-        color: #888;
+        background: var(--bg-disabled);
+        color: var(--text-subtle);
         cursor: default;
       }
 
@@ -495,8 +535,8 @@
         font-size: 1rem;
         font-weight: 700;
         cursor: pointer;
-        background: #333;
-        color: #ccc;
+        background: var(--bg-muted);
+        color: var(--text-secondary);
       }
 
       .team-results {
@@ -522,10 +562,10 @@
       .name-input {
         width: 100%;
         padding: 12px 14px 12px 40px;
-        border: 2px solid #445;
+        border: 2px solid var(--border-input);
         border-radius: 12px;
-        background: #0f3460;
-        color: #fff;
+        background: var(--bg-card);
+        color: var(--text-white);
         font-size: 16px;
         font-weight: 600;
         outline: none;
@@ -534,11 +574,11 @@
           box-shadow 0.2s;
       }
       .name-input:focus {
-        border-color: #ffd43b;
+        border-color: var(--accent-gold);
         box-shadow: 0 0 0 3px rgba(255, 212, 59, 0.15);
       }
       .name-input::placeholder {
-        color: #667;
+        color: var(--text-placeholder);
         font-weight: 400;
       }
 
@@ -596,12 +636,12 @@
       .opponent-section {
         margin-top: 20px;
         padding-top: 16px;
-        border-top: 1px solid #223;
+        border-top: 1px solid var(--border-secondary);
       }
 
       .opponent-section h3 {
         font-size: 0.95rem;
-        color: #ff6b6b;
+        color: var(--color-weakness);
         margin-bottom: 12px;
         display: flex;
         align-items: center;
@@ -618,7 +658,7 @@
       }
 
       .opponent-selected .placeholder {
-        color: #556;
+        color: var(--text-placeholder);
         font-size: 0.85rem;
       }
 
@@ -630,8 +670,8 @@
         font-size: 0.85rem;
         font-weight: 600;
         cursor: pointer;
-        background: #333;
-        color: #aaa;
+        background: var(--bg-muted);
+        color: var(--text-muted);
         margin-bottom: 14px;
       }
 
@@ -657,7 +697,7 @@
       .matchup-member-name {
         font-weight: 600;
         font-size: 0.9rem;
-        color: #fff;
+        color: var(--text-white);
       }
 
       .matchup-badge {
@@ -668,25 +708,25 @@
       }
 
       .matchup-badge.great {
-        background: #2d6a4f;
-        color: #51cf66;
+        background: var(--accent-green);
+        color: var(--color-resist);
       }
       .matchup-badge.ok {
-        background: #5c4d1a;
-        color: #ffd43b;
+        background: var(--badge-ok-bg);
+        color: var(--accent-gold);
       }
       .matchup-badge.bad {
-        background: #6b2020;
-        color: #ff6b6b;
+        background: var(--badge-bad-bg);
+        color: var(--color-weakness);
       }
       .matchup-badge.immune-badge {
-        background: #333;
-        color: #adb5bd;
+        background: var(--bg-muted);
+        color: var(--color-immune);
       }
 
       .matchup-detail {
         font-size: 0.82rem;
-        color: #aaa;
+        color: var(--text-muted);
         line-height: 1.6;
       }
 
@@ -695,13 +735,13 @@
         padding: 10px 12px;
         background: rgba(255, 212, 59, 0.08);
         border-radius: 8px;
-        border-left: 3px solid #ffd43b;
+        border-left: 3px solid var(--accent-gold);
       }
 
       .matchup-recommend-title {
         font-size: 0.82rem;
         font-weight: 600;
-        color: #ffd43b;
+        color: var(--accent-gold);
         margin-bottom: 6px;
       }
 
@@ -731,20 +771,20 @@
 
       .threat-affected {
         font-size: 0.82rem;
-        color: #ff9999;
+        color: var(--color-weakness-light);
         margin-bottom: 6px;
         line-height: 1.5;
       }
 
       .threat-counter {
         font-size: 0.82rem;
-        color: #aaa;
+        color: var(--text-muted);
         margin-bottom: 4px;
       }
 
       .divider {
         border: none;
-        border-top: 1px solid #223;
+        border-top: 1px solid var(--border-secondary);
         margin: 8px 0;
       }
     </style>
@@ -1707,13 +1747,71 @@
 
         let html = "";
 
-        // === Card 1: Threat summary (compact) ===
-        const majorThreats = threatTypes.filter((id) => teamWeakCount[id] >= 2);
-        if (majorThreats.length > 0) {
-          html += `<div class="card advice"><h2>⚠️ 共同弱點</h2>
-            <div style="font-size:0.85rem;color:#ff6b6b;margin-bottom:6px">以下屬性威脅 2 隻以上隊員：</div>
-            <div class="tags">${majorThreats.map((id) => makeTagHtml(id, `${teamWeakCount[id]}隻`)).join("")}</div>
-          </div>`;
+        // === Card 1: Per-member weakness summary ===
+        html += `<div class="card weakness"><h2>🔥 各成員弱點一覽</h2>`;
+        memberData.forEach((m) => {
+          const label = getMemberLabel(m.member);
+          const weakIds = Object.keys(m.weaknesses);
+          const multLabel = (v) => (v === 4 ? "×4" : "×2");
+          if (weakIds.length === 0) {
+            html += `<div style="margin-bottom:8px"><span style="color:var(--accent-gold);font-weight:600">${label}</span>
+        <span style="color:var(--color-resist);font-size:0.85rem;margin-left:6px">無弱點！</span></div>`;
+          } else {
+            const sorted = weakIds.sort(
+              (a, b) => m.weaknesses[b] - m.weaknesses[a],
+            );
+            html += `<div style="margin-bottom:8px"><div style="color:var(--accent-gold);font-weight:600;margin-bottom:4px">${label}</div>
+        <div class="tags">${sorted.map((id) => makeTagHtml(id, multLabel(m.weaknesses[id]))).join("")}</div></div>`;
+          }
+        });
+        html += `</div>`;
+
+        // === Card 2: Threat scenario — "When opponent sends out X type..." ===
+        if (threatTypes.length > 0) {
+          // Only show types that threaten 2+ members, or all if none reach 2
+          const majorThreats = threatTypes.filter(
+            (id) => teamWeakCount[id] >= 2,
+          );
+          const minorThreats = threatTypes.filter(
+            (id) => teamWeakCount[id] === 1,
+          );
+
+          html += `<div class="card advice"><h2>⚔️ 對戰情境分析</h2>`;
+
+          if (majorThreats.length > 0) {
+            html += `<div style="font-size:0.82rem;color:var(--color-weakness);font-weight:600;margin-bottom:10px">危險！以下屬性威脅多隻隊員：</div>`;
+            majorThreats.forEach((threatId) => {
+              const affectedMembers = memberData
+                .filter((m) => m.weaknesses[threatId])
+                .map((m) => {
+                  const label =
+                    m.member.name ||
+                    m.member.types.map((id) => typeMap[id].name).join("/");
+                  const mult = m.weaknesses[threatId];
+                  return `${label}(${mult === 4 ? "×4" : "×2"})`;
+                });
+
+              // Find counter attack types: types that are SE against this threat type
+              const counters = TYPES.filter((ct) => {
+                const off = OFFENSE[ct.id] || {};
+                return off[threatId] >= 2;
+              }).map((ct) => ct.id);
+
+              html += `<div class="threat-scenario">
+          <div class="threat-header">對手派出 ${makeTagHtml(threatId, "")} 系寶可夢</div>
+          <div class="threat-affected">被威脅的隊員：${affectedMembers.join("、")}</div>
+          <div class="threat-counter">推薦反擊招式屬性：</div>
+          <div class="tags">${counters.map((id) => makeTagHtml(id, "")).join("")}</div>
+        </div>`;
+            });
+          }
+
+          if (minorThreats.length > 0) {
+            html += `<div style="font-size:0.82rem;color:var(--text-muted);margin-top:${majorThreats.length > 0 ? "12px" : "0"};margin-bottom:8px">以下屬性各威脅 1 隻隊員：</div>`;
+            html += `<div class="tags" style="margin-bottom:4px">${minorThreats.map((id) => makeTagHtml(id, "")).join("")}</div>`;
+          }
+
+          html += `</div>`;
         }
 
         // === Card 3: Recommended types to have on your team ===
@@ -1734,7 +1832,7 @@
 
         if (topCounters.length > 0) {
           html += `<div class="card advice"><h2>🎯 推薦攜帶的招式屬性</h2>
-      <div style="font-size:0.82rem;color:#aaa;margin-bottom:8px">確保隊伍中有這些屬性的招式，可以有效應對大部分威脅：</div>
+      <div style="font-size:0.82rem;color:var(--text-muted);margin-bottom:8px">確保隊伍中有這些屬性的招式，可以有效應對大部分威脅：</div>
       <div class="tags">${topCounters.map((id) => makeTagHtml(id, "")).join("")}</div>
     </div>`;
         }
@@ -1901,7 +1999,7 @@
             detailParts.push(`免疫對手的 ${oppLabel} 系攻擊`);
           } else if (taken >= 2) {
             detailParts.push(
-              `被對手攻擊 <b style="color:#ff6b6b">×${taken}</b> 傷害`,
+              `被對手攻擊 <b style="color:var(--color-weakness)">×${taken}</b> 傷害`,
             );
           } else if (taken < 1) {
             const takenLabel =
@@ -1911,7 +2009,7 @@
 
           if (dealt >= 2 && r.bestAtkType) {
             detailParts.push(
-              `用 ${typeMap[r.bestAtkType].name} 系招式可造成 <b style="color:#51cf66">×${dealt}</b> 傷害`,
+              `用 ${typeMap[r.bestAtkType].name} 系招式可造成 <b style="color:var(--color-resist)">×${dealt}</b> 傷害`,
             );
           } else if (dealt === 0 && r.bestAtkType) {
             detailParts.push(`自身屬性招式對對手無效`);
