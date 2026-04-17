@@ -595,6 +595,25 @@
         cursor: not-allowed;
       }
 
+      /* Drag handle for reordering */
+      .drag-handle {
+        font-size: 1.4rem;
+        color: #556;
+        padding: 0 8px;
+        cursor: grab;
+        user-select: none;
+        touch-action: none;
+        -webkit-tap-highlight-color: transparent;
+        flex-shrink: 0;
+      }
+      .drag-handle:active { cursor: grabbing; color: var(--accent-gold); }
+      .team-member.dragging {
+        opacity: 0.4;
+      }
+      .team-member.drag-over {
+        border-top: 3px solid var(--accent-gold);
+      }
+
       /* Mega toggle */
       .mega-btns {
         display: flex;
@@ -1795,8 +1814,10 @@
             const showBattle = team.length > 3;
             if (isSelected) div.classList.add("battle-selected");
 
+            div.dataset.idx = i;
             div.innerHTML = `
         ${showBattle ? `<button class="battle-toggle${isSelected ? " selected" : ""}" onclick="event.stopPropagation();toggleBattleSelect(${i})"${!isSelected && battleSelection.length >= 3 ? " disabled" : ""}>${isSelected ? `<span class="battle-order">${bsIdx + 1}</span>` : "☐"}</button>` : ""}
+        <span class="drag-handle" data-drag-handle="${i}" title="拖曳調整順序">⋮⋮</span>
         <div class="member-info" style="flex-direction:column;align-items:flex-start;gap:4px;flex:1;min-width:0" onclick="toggleStats(${i})">
           <div style="display:flex;align-items:center;gap:8px;width:100%">
             ${nameHtml}
@@ -1876,6 +1897,91 @@
 
         document.getElementById("btnAnalyze").disabled = team.length === 0;
         showOpponentSection();
+        setupDragHandlers();
+      }
+
+      // ===== Drag & Drop reordering =====
+      let dragState = null;
+
+      function reorderMember(fromIdx, toIdx) {
+        if (fromIdx === toIdx) return;
+        const team = teams[currentTeamIdx];
+        if (fromIdx < 0 || fromIdx >= team.length || toIdx < 0 || toIdx >= team.length) return;
+
+        // Build index remap: oldIdx -> newIdx
+        const order = team.map((_, i) => i);
+        const [moved] = order.splice(fromIdx, 1);
+        order.splice(toIdx, 0, moved);
+        const remap = {};
+        order.forEach((oldIdx, newIdx) => { remap[oldIdx] = newIdx; });
+
+        // Reorder team array
+        teams[currentTeamIdx] = order.map((i) => team[i]);
+
+        // Remap battleSelection indices
+        battleSelection = battleSelection.map((i) => remap[i]).filter((i) => i !== undefined);
+
+        // Remap megaSelection
+        const newMega = {};
+        Object.keys(megaSelection).forEach((k) => {
+          const newKey = remap[parseInt(k, 10)];
+          if (newKey !== undefined) newMega[newKey] = megaSelection[k];
+        });
+        megaSelection = newMega;
+
+        saveTeams();
+        renderTeam();
+      }
+
+      function setupDragHandlers() {
+        const container = document.getElementById("teamMembers");
+        if (!container || container._dragSetup) return;
+        container._dragSetup = true;
+
+        container.addEventListener("pointerdown", (e) => {
+          const handle = e.target.closest("[data-drag-handle]");
+          if (!handle) return;
+          e.preventDefault();
+          const card = handle.closest(".team-member");
+          if (!card) return;
+          dragState = {
+            fromIdx: parseInt(card.dataset.idx, 10),
+            startY: e.clientY,
+            card,
+            pointerId: e.pointerId,
+          };
+          card.classList.add("dragging");
+          handle.setPointerCapture(e.pointerId);
+        });
+
+        container.addEventListener("pointermove", (e) => {
+          if (!dragState) return;
+          // Find which card we're hovering over
+          const cards = container.querySelectorAll(".team-member");
+          let target = null;
+          cards.forEach((c) => {
+            c.classList.remove("drag-over");
+            const rect = c.getBoundingClientRect();
+            if (e.clientY >= rect.top && e.clientY <= rect.bottom && c !== dragState.card) {
+              target = c;
+            }
+          });
+          if (target) target.classList.add("drag-over");
+          dragState.targetIdx = target ? parseInt(target.dataset.idx, 10) : null;
+        });
+
+        const endDrag = () => {
+          if (!dragState) return;
+          const { fromIdx, targetIdx, card } = dragState;
+          card.classList.remove("dragging");
+          container.querySelectorAll(".team-member").forEach((c) => c.classList.remove("drag-over"));
+          dragState = null;
+          if (targetIdx !== null && targetIdx !== undefined) {
+            reorderMember(fromIdx, targetIdx);
+          }
+        };
+        container.addEventListener("pointerup", endDrag);
+        container.addEventListener("pointercancel", endDrag);
       }
 
       function renderTeamMoves() {
