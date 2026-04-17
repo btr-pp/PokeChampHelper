@@ -2291,6 +2291,7 @@
 
       // ===== Opponent Matchup =====
       let opponentSelected = [];
+      let opponentStats = null;
 
       function showOpponentSection() {
         const team = teams[currentTeamIdx];
@@ -2335,6 +2336,7 @@
         const i = opponentSelected.indexOf(id);
         if (i >= 0) opponentSelected.splice(i, 1);
         else if (opponentSelected.length < 2) opponentSelected.push(id);
+        opponentStats = null;
         renderOpponent();
       }
 
@@ -2367,15 +2369,26 @@
             }
           });
 
-          return { member, worstDamageTaken, bestDamageDealt, bestAtkType };
+          // Speed comparison
+          const mySpe = member.stats ? member.stats.spe : null;
+          const oppSpe = opponentStats ? opponentStats.spe : null;
+          let speedResult = null;
+          if (mySpe !== null && oppSpe !== null) {
+            if (mySpe > oppSpe) speedResult = 'faster';
+            else if (mySpe < oppSpe) speedResult = 'slower';
+            else speedResult = 'tie';
+          }
+
+          return { member, worstDamageTaken, bestDamageDealt, bestAtkType, mySpe, oppSpe, speedResult };
         });
 
         // Sort: best matchups first (deal most damage, take least)
         const sorted = [...results].sort((a, b) => {
-          // Prioritize: can deal SE damage AND doesn't take SE damage
           const scoreA = a.bestDamageDealt - a.worstDamageTaken;
           const scoreB = b.bestDamageDealt - b.worstDamageTaken;
-          return scoreB - scoreA;
+          if (scoreB !== scoreA) return scoreB - scoreA;
+          // Tiebreak: faster speed first
+          return (b.mySpe || 0) - (a.mySpe || 0);
         });
 
         let html = "";
@@ -2428,6 +2441,14 @@
             detailParts.push(`自身屬性招式對對手無效`);
           }
 
+          if (r.speedResult === 'faster') {
+            detailParts.push(`速度 <b style="color:var(--color-resist)">${r.mySpe}</b> > ${r.oppSpe}　<b style="color:var(--color-resist)">先手</b>`);
+          } else if (r.speedResult === 'slower') {
+            detailParts.push(`速度 <b style="color:var(--color-weakness)">${r.mySpe}</b> < ${r.oppSpe}　<b style="color:var(--color-weakness)">後手</b>`);
+          } else if (r.speedResult === 'tie') {
+            detailParts.push(`速度 <b style="color:var(--accent-gold)">${r.mySpe}</b> = ${r.oppSpe}　<b style="color:var(--accent-gold)">同速</b>`);
+          }
+
           html += `<div class="matchup-member">
       <div class="matchup-member-header">
         <span class="matchup-member-name">${label}</span>
@@ -2465,6 +2486,7 @@
       };
       document.getElementById("btnClearOpponent").onclick = () => {
         opponentSelected = [];
+        opponentStats = null;
         document.getElementById("opponentNameInput").value = "";
         document.getElementById("opponentCard").style.display = "none";
         renderOpponent();
@@ -2601,8 +2623,9 @@
         input.value = p.nameTW || p.name;
         list.classList.remove("show");
 
-        // Set opponent types
+        // Set opponent types and stats
         opponentSelected = p.types.slice(0, 2);
+        opponentStats = p.stats || null;
 
         // Render opponent card (like team member card)
         renderOpponentCard(p);
