@@ -930,6 +930,166 @@
         border-top: 1px solid var(--border-secondary);
         margin: 8px 0;
       }
+
+      /* ===== Help FAB + Modal ===== */
+      .help-fab {
+        position: fixed;
+        right: calc(16px + env(safe-area-inset-right));
+        bottom: calc(16px + env(safe-area-inset-bottom));
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        border: 1px solid var(--border-primary);
+        background: var(--bg-card);
+        color: var(--text-white);
+        font-size: 22px;
+        cursor: pointer;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+        z-index: 900;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.15s ease, background 0.15s ease;
+      }
+      .help-fab:hover,
+      .help-fab:focus {
+        background: var(--bg-secondary);
+        transform: translateY(-2px);
+        outline: none;
+      }
+      .help-fab:active {
+        transform: translateY(0);
+      }
+
+      .help-modal-backdrop {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.65);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+        padding: 16px;
+      }
+      .help-modal {
+        background: var(--bg-card);
+        border: 1px solid var(--border-primary);
+        border-radius: 12px;
+        width: min(720px, 100%);
+        max-height: min(90vh, 800px);
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+      }
+      .help-modal-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 18px;
+        border-bottom: 1px solid var(--border-primary);
+        color: var(--accent-gold);
+        font-weight: 700;
+        font-size: 1rem;
+        flex-shrink: 0;
+      }
+      .help-modal-close {
+        background: transparent;
+        border: none;
+        color: var(--text-secondary);
+        font-size: 1.6rem;
+        line-height: 1;
+        cursor: pointer;
+        padding: 0 6px;
+      }
+      .help-modal-close:hover {
+        color: var(--text-white);
+      }
+      .help-modal-body {
+        padding: 16px 18px 20px;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        color: var(--text-primary);
+        font-size: 0.9rem;
+        line-height: 1.65;
+      }
+      .help-modal-body h1,
+      .help-modal-body h2,
+      .help-modal-body h3,
+      .help-modal-body h4 {
+        color: var(--text-white);
+        margin: 16px 0 8px;
+        line-height: 1.3;
+      }
+      .help-modal-body h1 { font-size: 1.25rem; }
+      .help-modal-body h2 { font-size: 1.1rem; color: var(--accent-gold); border-bottom: 1px solid var(--border-secondary); padding-bottom: 4px; }
+      .help-modal-body h3 { font-size: 1rem; }
+      .help-modal-body p { margin: 8px 0; }
+      .help-modal-body ul,
+      .help-modal-body ol { padding-left: 22px; margin: 8px 0; }
+      .help-modal-body li { margin: 3px 0; }
+      .help-modal-body a { color: #7cb4ff; }
+      .help-modal-body code {
+        background: var(--bg-primary);
+        padding: 1px 6px;
+        border-radius: 4px;
+        font-size: 0.85em;
+      }
+      .help-modal-body pre {
+        background: var(--bg-primary);
+        border: 1px solid var(--border-secondary);
+        padding: 10px 12px;
+        border-radius: 6px;
+        overflow-x: auto;
+        font-size: 0.82rem;
+        margin: 10px 0;
+      }
+      .help-modal-body pre code {
+        background: transparent;
+        padding: 0;
+      }
+      .help-modal-body blockquote {
+        border-left: 3px solid var(--accent-gold);
+        padding: 4px 12px;
+        margin: 10px 0;
+        color: var(--text-secondary);
+        background: rgba(255, 212, 59, 0.06);
+      }
+      .help-modal-body table {
+        border-collapse: collapse;
+        width: 100%;
+        margin: 10px 0;
+        font-size: 0.85rem;
+      }
+      .help-modal-body th,
+      .help-modal-body td {
+        border: 1px solid var(--border-primary);
+        padding: 6px 10px;
+        text-align: left;
+      }
+      .help-modal-body th {
+        background: var(--bg-primary);
+        color: var(--text-white);
+      }
+      .help-modal-body hr {
+        border: none;
+        border-top: 1px solid var(--border-secondary);
+        margin: 16px 0;
+      }
+
+      @media (max-width: 640px) {
+        .help-fab {
+          width: 46px;
+          height: 46px;
+          font-size: 20px;
+        }
+        .help-modal-backdrop { padding: 0; }
+        .help-modal {
+          width: 100%;
+          max-height: 100vh;
+          height: 100vh;
+          border-radius: 0;
+        }
+      }
     </style>
   </head>
   <body>
@@ -1099,7 +1259,19 @@
       </div>
     </div>
 
+    <button class="help-fab" id="helpFab" aria-label="開啟使用說明書" title="使用說明">📖</button>
+    <div class="help-modal-backdrop" id="helpBackdrop" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
+      <div class="help-modal">
+        <div class="help-modal-header">
+          <span id="helpTitle">📖 使用者說明書</span>
+          <button class="help-modal-close" id="helpClose" aria-label="關閉">&times;</button>
+        </div>
+        <div class="help-modal-body" id="helpBody">載入中…</div>
+      </div>
+    </div>
+
     <script src="data/champions-pokemon.js"></script>
+    <script src="vendor/marked.min.js"></script>
     <script>
       const TYPES = [
         { id: "normal", name: "一般", color: "#A8A77A" },
@@ -2882,6 +3054,52 @@
 
       loadChampionsData();
       render();
+
+      // ===== 使用者說明書 Modal =====
+      const GITHUB_GUIDE_URL =
+        "https://github.com/btr-pp/PokeChampHelper/blob/main/%E4%BD%BF%E7%94%A8%E8%80%85%E8%AA%AA%E6%98%8E%E6%9B%B8.md";
+      let guideLoaded = false;
+
+      async function openHelpModal() {
+        const backdrop = document.getElementById("helpBackdrop");
+        const body = document.getElementById("helpBody");
+        backdrop.style.display = "flex";
+        document.body.style.overflow = "hidden";
+        if (guideLoaded) return;
+        try {
+          const res = await fetch("./使用者說明書.md");
+          if (!res.ok) throw new Error("HTTP " + res.status);
+          const md = await res.text();
+          if (typeof marked === "undefined") throw new Error("marked 未載入");
+          body.innerHTML = marked.parse(md);
+          guideLoaded = true;
+        } catch (e) {
+          body.innerHTML =
+            '<p>無法直接載入說明書（可能是用 <code>file://</code> 直接開啟，或離線且尚未快取）。</p>' +
+            '<p>請點此在 GitHub 上閱讀：<br>' +
+            '<a href="' + GITHUB_GUIDE_URL + '" target="_blank" rel="noopener">📖 使用者說明書 (GitHub)</a></p>' +
+            '<p style="color:var(--text-muted);font-size:0.8rem">錯誤：' + e.message + '</p>';
+        }
+      }
+
+      function closeHelpModal() {
+        document.getElementById("helpBackdrop").style.display = "none";
+        document.body.style.overflow = "";
+      }
+
+      document.getElementById("helpFab").onclick = openHelpModal;
+      document.getElementById("helpClose").onclick = closeHelpModal;
+      document.getElementById("helpBackdrop").addEventListener("click", (e) => {
+        if (e.target.id === "helpBackdrop") closeHelpModal();
+      });
+      document.addEventListener("keydown", (e) => {
+        if (
+          e.key === "Escape" &&
+          document.getElementById("helpBackdrop").style.display === "flex"
+        ) {
+          closeHelpModal();
+        }
+      });
 
       // ===== PWA: Service Worker 註冊（漸進式增強，不支援的瀏覽器會跳過）=====
       if ("serviceWorker" in navigator && location.protocol !== "file:") {
