@@ -2470,6 +2470,8 @@
       // ===== Opponent Matchup =====
       let opponentSelected = [];
       let opponentStats = null;
+      let opponentBasePokemon = null; // 對手選到的原始寶可夢（含 forms 資訊）
+      let opponentMegaFormIdx = null; // 對手目前啟用第幾個 Mega form，null = 未進化
 
       function showOpponentSection() {
         const team = teams[currentTeamIdx];
@@ -2514,7 +2516,11 @@
         const i = opponentSelected.indexOf(id);
         if (i >= 0) opponentSelected.splice(i, 1);
         else if (opponentSelected.length < 2) opponentSelected.push(id);
+        // 手動指定屬性後，原 Pokemon 上下文（含 Mega）失效
         opponentStats = null;
+        opponentBasePokemon = null;
+        opponentMegaFormIdx = null;
+        renderOpponentCard();
         renderOpponent();
       }
 
@@ -2665,6 +2671,8 @@
       document.getElementById("btnClearOpponent").onclick = () => {
         opponentSelected = [];
         opponentStats = null;
+        opponentBasePokemon = null;
+        opponentMegaFormIdx = null;
         document.getElementById("opponentNameInput").value = "";
         document.getElementById("opponentCard").style.display = "none";
         renderOpponent();
@@ -2804,15 +2812,50 @@
         // Set opponent types and stats
         opponentSelected = p.types.slice(0, 2);
         opponentStats = p.stats || null;
+        opponentBasePokemon = p;
+        opponentMegaFormIdx = null;
 
         // Render opponent card (like team member card)
-        renderOpponentCard(p);
+        renderOpponentCard();
         renderOpponent();
       }
 
-      function renderOpponentCard(p) {
+      function toggleOpponentMega(formIdx) {
+        if (!opponentBasePokemon) return;
+        const forms = findMegaForms(opponentBasePokemon);
+        const f = forms[formIdx];
+        if (!f) return;
+        if (opponentMegaFormIdx === formIdx) {
+          // 取消 Mega，回到基本型態
+          opponentMegaFormIdx = null;
+          opponentSelected = opponentBasePokemon.types.slice(0, 2);
+          opponentStats = opponentBasePokemon.stats || null;
+        } else {
+          opponentMegaFormIdx = formIdx;
+          opponentSelected = f.types.slice(0, 2);
+          opponentStats = f.stats || opponentBasePokemon.stats || null;
+        }
+        renderOpponentCard();
+        renderOpponent();
+      }
+
+      function renderOpponentCard() {
         const card = document.getElementById("opponentCard");
-        const types = p.types;
+        const p = opponentBasePokemon;
+        if (!p) {
+          card.style.display = "none";
+          card.innerHTML = "";
+          return;
+        }
+
+        // 依 Mega 狀態決定要顯示的屬性／種族值／名稱
+        const megaForms = findMegaForms(p);
+        const activeForm = opponentMegaFormIdx !== null ? megaForms[opponentMegaFormIdx] : null;
+        const types = activeForm ? activeForm.types : p.types;
+        const stats = activeForm ? (activeForm.stats || p.stats) : p.stats;
+        const baseName = p.nameTW || p.name;
+        const displayName = activeForm ? `${baseName} → ${activeForm.name}` : baseName;
+
         const mult = calcDefenseMultipliers(types);
         const weak4x = [], weak2x = [], resist05 = [], resist025 = [], immune = [];
         TYPES.forEach((t) => {
@@ -2836,9 +2879,20 @@
           defHtml += `<div class="member-defense"><span class="def-label">免</span>${immune.map(id => defTag(id, "x0")).join("")}</div>`;
         }
 
+        // Mega 按鈕（沿用隊伍成員的樣式）
+        let megaHtml = "";
+        if (megaForms.length > 0) {
+          const btns = megaForms.map((f, fi) => {
+            const isActive = opponentMegaFormIdx === fi;
+            const label = megaForms.length > 1 ? f.name.replace("Mega ", "M-") : "Mega";
+            return `<button class="mega-toggle${isActive ? " active" : ""}" onclick="toggleOpponentMega(${fi})" title="切換對手的 Mega 進化">${label}</button>`;
+          }).join("");
+          megaHtml = `<div class="mega-btns" style="margin-top:6px">${btns}</div>`;
+        }
+
         let statsHtml = "";
-        if (p.stats) {
-          const s = p.stats;
+        if (stats) {
+          const s = stats;
           const statColor = (v) => v >= 100 ? "#51cf66" : v >= 60 ? "#ffd43b" : "#ff6b6b";
           const statBar = (label, val) =>
             `<div class="stat-row"><span class="stat-label">${label}</span><span class="stat-val">${val}</span><div class="stat-bar"><div class="stat-bar-fill" style="width:${Math.min(val / 255 * 100, 100).toFixed(1)}%;background:${statColor(val)}"></div></div></div>`;
@@ -2849,14 +2903,15 @@
         }
 
         card.style.display = "";
-        card.innerHTML = `<div class="team-member" style="cursor:default;margin-bottom:12px">
+        card.innerHTML = `<div class="team-member${activeForm ? " mega-active" : ""}" style="cursor:default;margin-bottom:12px">
           <div class="member-info" style="flex-direction:column;align-items:flex-start;gap:4px;flex:1;min-width:0">
             <div style="display:flex;align-items:center;gap:8px;width:100%">
-              <span class="member-name">${p.nameTW || p.name}</span>
+              <span class="member-name">${displayName}</span>
               <div class="member-types" style="margin-left:auto">
                 ${types.map((id) => `<span class="tag" style="background:${typeMap[id].color}">${typeMap[id].name}</span>`).join("")}
               </div>
             </div>
+            ${megaHtml}
             ${defHtml}
             ${statsHtml}
           </div>
