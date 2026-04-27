@@ -3658,6 +3658,131 @@
         "flying",
         "grass"
       ],
+      "forms": [
+        {
+          "name": "Heat Rotom",
+          "types": [
+            "electric",
+            "fire"
+          ],
+          "moveTypes": [
+            "electric",
+            "fire",
+            "dark",
+            "normal",
+            "psychic",
+            "ice",
+            "grass"
+          ],
+          "stats": {
+            "total": 520,
+            "hp": 50,
+            "atk": 65,
+            "def": 107,
+            "spa": 105,
+            "spd": 107,
+            "spe": 86
+          }
+        },
+        {
+          "name": "Wash Rotom",
+          "types": [
+            "electric",
+            "water"
+          ],
+          "moveTypes": [
+            "electric",
+            "water",
+            "dark",
+            "normal",
+            "psychic",
+            "ice",
+            "grass"
+          ],
+          "stats": {
+            "total": 520,
+            "hp": 50,
+            "atk": 65,
+            "def": 107,
+            "spa": 105,
+            "spd": 107,
+            "spe": 86
+          }
+        },
+        {
+          "name": "Frost Rotom",
+          "types": [
+            "electric",
+            "ice"
+          ],
+          "moveTypes": [
+            "electric",
+            "ice",
+            "dark",
+            "normal",
+            "psychic",
+            "grass"
+          ],
+          "stats": {
+            "total": 520,
+            "hp": 50,
+            "atk": 65,
+            "def": 107,
+            "spa": 105,
+            "spd": 107,
+            "spe": 86
+          }
+        },
+        {
+          "name": "Fan Rotom",
+          "types": [
+            "electric",
+            "flying"
+          ],
+          "moveTypes": [
+            "electric",
+            "flying",
+            "dark",
+            "normal",
+            "psychic",
+            "ice",
+            "grass"
+          ],
+          "stats": {
+            "total": 520,
+            "hp": 50,
+            "atk": 65,
+            "def": 107,
+            "spa": 105,
+            "spd": 107,
+            "spe": 86
+          }
+        },
+        {
+          "name": "Mow Rotom",
+          "types": [
+            "electric",
+            "grass"
+          ],
+          "moveTypes": [
+            "electric",
+            "grass",
+            "dark",
+            "normal",
+            "psychic",
+            "ice"
+          ],
+          "stats": {
+            "total": 520,
+            "hp": 50,
+            "atk": 65,
+            "def": 107,
+            "spa": 105,
+            "spd": 107,
+            "spe": 86
+          }
+        }
+      ],
       "stats": {
         "total": 440,
         "hp": 50,
