@@ -931,6 +931,57 @@
         margin: 8px 0;
       }
 
+      /* ===== Ability Chips ===== */
+      .ability-row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 4px;
+        margin-top: 6px;
+      }
+      .ability-label {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        margin-right: 2px;
+      }
+      .ability-chip {
+        background: var(--bg-muted);
+        color: var(--text-secondary);
+        border: 1px solid var(--border-input);
+        padding: 3px 8px;
+        border-radius: 12px;
+        font-size: 0.78rem;
+        cursor: pointer;
+        transition: all 0.15s ease;
+        line-height: 1.2;
+      }
+      .ability-chip:hover {
+        background: var(--bg-secondary);
+        color: var(--text-white);
+      }
+      .ability-chip.active {
+        background: var(--accent-gold);
+        color: var(--bg-primary);
+        border-color: var(--accent-gold);
+        font-weight: 600;
+      }
+      .ability-chip.affects-calc::before {
+        content: "✦ ";
+        color: var(--color-resist);
+      }
+      .ability-chip.active.affects-calc::before {
+        color: var(--bg-primary);
+      }
+      .ability-desc {
+        font-size: 0.78rem;
+        color: var(--text-muted);
+        margin-top: 4px;
+        line-height: 1.5;
+        padding-left: 4px;
+        border-left: 2px solid var(--border-secondary);
+        margin-left: 2px;
+      }
+
       /* ===== Help FAB + Modal ===== */
       .help-fab {
         position: fixed;
@@ -1271,6 +1322,7 @@
     </div>
 
     <script src="data/champions-pokemon.js"></script>
+    <script src="data/abilities.js"></script>
     <script src="vendor/marked.min.js"></script>
     <script>
       const TYPES = [
@@ -1801,7 +1853,31 @@
         render();
       }
 
-      function calcDefenseMultipliers(typeIds) {
+      // 影響「被攻擊倍率」的特性（屬性免疫／減免／加倍）
+      // 其他純戰鬥輔助特性（攻擊強化、天氣等）不在此表內。
+      const ABILITY_EFFECTS = {
+        "levitate":         { mul: { ground: 0 } },
+        "flash-fire":       { mul: { fire: 0 } },
+        "water-absorb":     { mul: { water: 0 } },
+        "volt-absorb":      { mul: { electric: 0 } },
+        "lightning-rod":    { mul: { electric: 0 } },
+        "storm-drain":      { mul: { water: 0 } },
+        "motor-drive":      { mul: { electric: 0 } },
+        "sap-sipper":       { mul: { grass: 0 } },
+        "earth-eater":      { mul: { ground: 0 } },
+        "well-baked-body":  { mul: { fire: 0 } },
+        "thick-fat":        { mul: { fire: 0.5, ice: 0.5 } },
+        "heatproof":        { mul: { fire: 0.5 } },
+        "purifying-salt":   { mul: { ghost: 0.5 } },
+        "dry-skin":         { mul: { water: 0, fire: 1.25 } },
+        "fluffy":           { mul: { fire: 2 } },
+        "wonder-guard":     { onlySE: true },
+        "filter":           { reduceSE: 0.75 },
+        "solid-rock":       { reduceSE: 0.75 },
+        "prism-armor":      { reduceSE: 0.75 },
+      };
+
+      function calcDefenseMultipliers(typeIds, abilityId) {
         const multipliers = {};
         TYPES.forEach((atk) => {
           let mult = 1;
@@ -1811,6 +1887,20 @@
           });
           multipliers[atk.id] = mult;
         });
+        const eff = abilityId && ABILITY_EFFECTS[abilityId];
+        if (eff) {
+          if (eff.mul) {
+            for (const tid in eff.mul) {
+              multipliers[tid] = (multipliers[tid] !== undefined ? multipliers[tid] : 1) * eff.mul[tid];
+            }
+          }
+          if (eff.reduceSE) {
+            for (const tid in multipliers) if (multipliers[tid] >= 2) multipliers[tid] *= eff.reduceSE;
+          }
+          if (eff.onlySE) {
+            for (const tid in multipliers) if (multipliers[tid] < 2) multipliers[tid] = 0;
+          }
+        }
         return multipliers;
       }
 
@@ -1919,7 +2009,7 @@
               : "";
 
             // Calculate defense multipliers
-            const mult = calcDefenseMultipliers(member.types);
+            const mult = calcDefenseMultipliers(member.types, getActiveAbility(member));
             const weak4x = [], weak2x = [], resist05 = [], resist025 = [], immune = [];
             TYPES.forEach((t) => {
               const m = mult[t.id];
@@ -1992,6 +2082,8 @@
             const showBattle = team.length > 3;
             if (isSelected) div.classList.add("battle-selected");
 
+            const abilityHtml = renderAbilityChips(member, "team:" + i);
+
             div.dataset.idx = i;
             div.innerHTML = `
         ${showBattle ? `<button class="battle-toggle${isSelected ? " selected" : ""}" onclick="event.stopPropagation();toggleBattleSelect(${i})"${!isSelected && battleSelection.length >= 3 ? " disabled" : ""}>${isSelected ? `<span class="battle-order">${bsIdx + 1}</span>` : "☐"}</button>` : ""}
@@ -2004,6 +2096,7 @@
             </div>
           </div>
           ${megaHtml}
+          ${abilityHtml}
           ${defHtml}
           ${statsHtml}
         </div>
@@ -2218,11 +2311,13 @@
         const name = nameInput.value.trim();
         const memberData = { name, types: [...teamSelected], moves: [...teamMoves] };
         if (pendingStats) memberData.stats = pendingStats;
+        if (pendingAbility) memberData.ability = pendingAbility;
         team.push(memberData);
         teamSelected = [];
         teamMoves = [];
         pendingStats = null;
         pendingMoveTypes = null;
+        pendingAbility = null;
         nameInput.value = "";
         saveTeams();
         renderTeam();
@@ -2276,11 +2371,15 @@
         const forms = findMegaForms(member);
         const form = forms[megaSelection[memberIdx]];
         if (!form) return member;
+        // Mega 後切換特性：用 form 的 abilities 列表，並 reset member.ability 為該列表預設
+        const megaAbilities = form.abilities || member.abilities || [];
         return {
           ...member,
           types: form.types,
           stats: form.stats || member.stats,
           moves: form.moveTypes ? form.moveTypes.slice(0, 4) : member.moves,
+          abilities: megaAbilities,
+          ability: pickDefaultAbility(megaAbilities),
           megaName: form.name,
         };
       }
@@ -2314,7 +2413,7 @@
 
         // Per-member analysis
         const memberData = team.map((member, idx) => {
-          const mult = calcDefenseMultipliers(member.types);
+          const mult = calcDefenseMultipliers(member.types, getActiveAbility(member));
           const weaknesses = {}; // typeId -> multiplier
           TYPES.forEach((t) => {
             if (mult[t.id] > 1) weaknesses[t.id] = mult[t.id];
@@ -2472,6 +2571,7 @@
       let opponentStats = null;
       let opponentBasePokemon = null; // 對手選到的原始寶可夢（含 forms 資訊）
       let opponentMegaFormIdx = null; // 對手目前啟用第幾個 Mega form，null = 未進化
+      let opponentSelectedAbility = null; // 對手目前啟用的特性 id
 
       function showOpponentSection() {
         const team = teams[currentTeamIdx];
@@ -2516,10 +2616,11 @@
         const i = opponentSelected.indexOf(id);
         if (i >= 0) opponentSelected.splice(i, 1);
         else if (opponentSelected.length < 2) opponentSelected.push(id);
-        // 手動指定屬性後，原 Pokemon 上下文（含 Mega）失效
+        // 手動指定屬性後，原 Pokemon 上下文（含 Mega、特性）失效
         opponentStats = null;
         opponentBasePokemon = null;
         opponentMegaFormIdx = null;
+        opponentSelectedAbility = null;
         renderOpponentCard();
         renderOpponent();
       }
@@ -2533,8 +2634,8 @@
         // 1. How much damage opponent deals to member (defense matchup)
         // 2. How much damage member deals to opponent (offense matchup — best of member's types)
         const results = team.map((member) => {
-          // Defense: opponent attacks member
-          const defMult = calcDefenseMultipliers(member.types);
+          // Defense: opponent attacks member（套用成員特性）
+          const defMult = calcDefenseMultipliers(member.types, getActiveAbility(member));
           // Opponent can use STAB moves of their types — pick the best one
           let worstDamageTaken = 0;
           oppTypes.forEach((oppType) => {
@@ -2542,8 +2643,8 @@
               worstDamageTaken = defMult[oppType];
           });
 
-          // Offense: member attacks opponent
-          const oppDefMult = calcDefenseMultipliers(oppTypes);
+          // Offense: member attacks opponent（套用對手特性）
+          const oppDefMult = calcDefenseMultipliers(oppTypes, opponentSelectedAbility);
           let bestDamageDealt = 0;
           let bestAtkType = null;
           member.types.forEach((myType) => {
@@ -2642,8 +2743,8 @@
     </div>`;
         });
 
-        // Find best STAB-independent counter types
-        const oppDefMult = calcDefenseMultipliers(oppTypes);
+        // Find best STAB-independent counter types（同樣套用對手特性）
+        const oppDefMult = calcDefenseMultipliers(oppTypes, opponentSelectedAbility);
         const seTypes = TYPES.filter((t) => oppDefMult[t.id] >= 2).map(
           (t) => t.id,
         );
@@ -2673,6 +2774,7 @@
         opponentStats = null;
         opponentBasePokemon = null;
         opponentMegaFormIdx = null;
+        opponentSelectedAbility = null;
         document.getElementById("opponentNameInput").value = "";
         document.getElementById("opponentCard").style.display = "none";
         renderOpponent();
@@ -2814,6 +2916,7 @@
         opponentStats = p.stats || null;
         opponentBasePokemon = p;
         opponentMegaFormIdx = null;
+        opponentSelectedAbility = pickDefaultAbility(p.abilities || []);
 
         // Render opponent card (like team member card)
         renderOpponentCard();
@@ -2830,10 +2933,12 @@
           opponentMegaFormIdx = null;
           opponentSelected = opponentBasePokemon.types.slice(0, 2);
           opponentStats = opponentBasePokemon.stats || null;
+          opponentSelectedAbility = pickDefaultAbility(opponentBasePokemon.abilities || []);
         } else {
           opponentMegaFormIdx = formIdx;
           opponentSelected = f.types.slice(0, 2);
           opponentStats = f.stats || opponentBasePokemon.stats || null;
+          opponentSelectedAbility = pickDefaultAbility(f.abilities || opponentBasePokemon.abilities || []);
         }
         renderOpponentCard();
         renderOpponent();
@@ -2856,7 +2961,7 @@
         const baseName = p.nameTW || p.name;
         const displayName = activeForm ? `${baseName} → ${activeForm.name}` : baseName;
 
-        const mult = calcDefenseMultipliers(types);
+        const mult = calcDefenseMultipliers(types, opponentSelectedAbility);
         const weak4x = [], weak2x = [], resist05 = [], resist025 = [], immune = [];
         TYPES.forEach((t) => {
           const m = mult[t.id];
@@ -2902,6 +3007,17 @@
           </div>`;
         }
 
+        // 特性 chip — 用 form 的 abilities（若 Mega），否則用 p.abilities
+        const abilitiesList = (activeForm && activeForm.abilities) || p.abilities || [];
+        // 若特性切換不在當前可選清單，重設為預設
+        if (opponentSelectedAbility && !abilitiesList.find((a) => a.id === opponentSelectedAbility)) {
+          opponentSelectedAbility = pickDefaultAbility(abilitiesList);
+        }
+        const abilityHtml = renderAbilityChips(
+          { abilities: abilitiesList, ability: opponentSelectedAbility },
+          "opponent"
+        );
+
         card.style.display = "";
         card.innerHTML = `<div class="team-member${activeForm ? " mega-active" : ""}" style="cursor:default;margin-bottom:12px">
           <div class="member-info" style="flex-direction:column;align-items:flex-start;gap:4px;flex:1;min-width:0">
@@ -2912,6 +3028,7 @@
               </div>
             </div>
             ${megaHtml}
+            ${abilityHtml}
             ${defHtml}
             ${statsHtml}
           </div>
@@ -2950,6 +3067,7 @@
 
       // ===== Champions Pokemon Data & Autocomplete =====
       let championsData = [];
+      let abilitiesData = {};
       // Build flat search list (base + forms)
       let searchList = [];
 
@@ -2960,6 +3078,10 @@
           console.log("Champions data loaded:", championsData.length, "pokemon");
         } else {
           console.warn("Champions data not available");
+        }
+        if (typeof ABILITIES_DATA !== "undefined") {
+          abilitiesData = ABILITIES_DATA;
+          console.log("Abilities data loaded:", Object.keys(abilitiesData).length);
         }
       }
 
@@ -2973,6 +3095,7 @@
             types: p.types,
             moveTypes: p.moveTypes,
             stats: p.stats || null,
+            abilities: p.abilities || [],
             label: p.nameTW ? `${p.nameTW}（${p.name}）` : p.name,
           });
           if (p.forms) {
@@ -2984,10 +3107,82 @@
                 types: f.types,
                 moveTypes: f.moveTypes || p.moveTypes,
                 stats: f.stats || p.stats || null,
+                abilities: f.abilities || p.abilities || [],
                 label: p.nameTW ? `${p.nameTW}（${f.name}）` : f.name,
               });
             }
           }
+        }
+      }
+
+      // ===== 特性查詢輔助 =====
+      function getAbilityNameTW(id) {
+        return (abilitiesData[id] && abilitiesData[id].nameTW) || id;
+      }
+      function getAbilityDescTW(id) {
+        return (abilitiesData[id] && abilitiesData[id].descTW) || "";
+      }
+      function pickDefaultAbility(abilities) {
+        if (!abilities || abilities.length === 0) return null;
+        const visible = abilities.find((a) => !a.isHidden);
+        return (visible || abilities[0]).id;
+      }
+      // 根據成員名稱（必要時透過 forms）查到 abilities 陣列
+      function lookupAbilitiesByName(name) {
+        if (!name || !championsData.length) return [];
+        const direct = championsData.find(
+          (p) => p.nameTW === name || p.name.toLowerCase() === name.toLowerCase()
+        );
+        if (direct) return direct.abilities || [];
+        for (const p of championsData) {
+          if (!p.forms) continue;
+          const f = p.forms.find(
+            (f) => f.name === name || (p.nameTW && `${p.nameTW}（${f.name}）` === name)
+          );
+          if (f) return f.abilities || p.abilities || [];
+        }
+        return [];
+      }
+      function getMemberAbilities(member) {
+        if (Array.isArray(member.abilities) && member.abilities.length > 0) return member.abilities;
+        return lookupAbilitiesByName(member.name);
+      }
+      function getActiveAbility(member) {
+        const list = getMemberAbilities(member);
+        if (list.length === 0) return null;
+        const ids = list.map((a) => a.id);
+        if (member.ability && ids.includes(member.ability)) return member.ability;
+        return pickDefaultAbility(list);
+      }
+      // 渲染特性 chip 列（context = "team:<idx>" 或 "opponent"）
+      function renderAbilityChips(member, context) {
+        const list = getMemberAbilities(member);
+        if (list.length === 0) return "";
+        const active = getActiveAbility(member);
+        const chips = list.map((a) => {
+          const label = getAbilityNameTW(a.id) + (a.isHidden ? "（隱）" : "");
+          const cls = ["ability-chip"];
+          if (a.id === active) cls.push("active");
+          if (ABILITY_EFFECTS[a.id]) cls.push("affects-calc");
+          return `<button class="${cls.join(" ")}" onclick="event.stopPropagation();selectAbility('${context}','${a.id}')" title="${getAbilityDescTW(a.id).replace(/"/g, "&quot;")}">${label}</button>`;
+        }).join("");
+        const desc = active ? getAbilityDescTW(active) : "";
+        return `<div class="ability-row"><span class="ability-label">特性</span>${chips}</div>${desc ? `<div class="ability-desc">${desc}</div>` : ""}`;
+      }
+      function selectAbility(context, abilityId) {
+        if (context.startsWith("team:")) {
+          const idx = parseInt(context.slice(5), 10);
+          const team = teams[currentTeamIdx];
+          if (!team[idx]) return;
+          team[idx].ability = abilityId;
+          saveTeams();
+          renderTeam();
+          // 若對手已選定，重新計算 matchup
+          if (opponentSelected.length > 0) renderMatchup();
+        } else if (context === "opponent") {
+          opponentSelectedAbility = abilityId;
+          renderOpponentCard();
+          renderOpponent();
         }
       }
 
@@ -3047,6 +3242,7 @@
 
       let pendingStats = null;
       let pendingMoveTypes = null; // learnable move types of the Pokemon being added
+      let pendingAbility = null; // 預設特性 id（由搜尋帶入）
 
       function selectPokemon(p) {
         const input = document.getElementById("memberNameInput");
@@ -3064,6 +3260,7 @@
         // Store stats + learnable moves for when member is added
         pendingStats = p.stats || null;
         pendingMoveTypes = p.moveTypes || null;
+        pendingAbility = pickDefaultAbility(p.abilities || []);
 
         renderTeam();
         if (teamSelected.length > 0) {

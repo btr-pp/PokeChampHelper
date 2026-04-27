@@ -1,4 +1,4 @@
-const CACHE_NAME = 'poke-search-v4';
+const CACHE_NAME = 'poke-search-v5';
 const ASSETS = [
   './',
   './index.html',
@@ -7,6 +7,7 @@ const ASSETS = [
   './icons/icon-192.png',
   './icons/icon-512.png',
   './data/champions-pokemon.js',
+  './data/abilities.js',
   './vendor/marked.min.js',
   './使用者說明書.md',
 ];

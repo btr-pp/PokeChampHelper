@@ -30,6 +30,13 @@
             "grass",
             "dark",
             "dragon"
+          ],
+          "abilities": [
+            {
+              "id": "thick-fat",
+              "isHidden": false,
+              "slot": 1
+            }
           ]
         }
       ],
@@ -41,7 +48,19 @@
         "spa": 100,
         "spd": 100,
         "spe": 80
-      }
+      },
+      "abilities": [
+        {
+          "id": "overgrow",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "chlorophyll",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 6,
@@ -67,7 +86,7 @@
       ],
       "forms": [
         {
-          "name": "Mega Charizard",
+          "name": "Mega Charizard X",
           "types": [
             "fire",
             "dragon"
@@ -85,10 +104,17 @@
             "ghost",
             "grass",
             "electric"
+          ],
+          "abilities": [
+            {
+              "id": "tough-claws",
+              "isHidden": false,
+              "slot": 1
+            }
           ]
         },
         {
-          "name": "Mega Charizard",
+          "name": "Mega Charizard Y",
           "types": [
             "fire",
             "flying"
@@ -106,6 +132,13 @@
             "ghost",
             "grass",
             "electric"
+          ],
+          "abilities": [
+            {
+              "id": "drought",
+              "isHidden": false,
+              "slot": 1
+            }
           ]
         }
       ],
@@ -117,7 +150,19 @@
         "spa": 109,
         "spd": 85,
         "spe": 100
-      }
+      },
+      "abilities": [
+        {
+          "id": "blaze",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "solar-power",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 9,
@@ -155,6 +200,13 @@
             "steel",
             "psychic",
             "rock"
+          ],
+          "abilities": [
+            {
+              "id": "mega-launcher",
+              "isHidden": false,
+              "slot": 1
+            }
           ]
         }
       ],
@@ -166,7 +218,19 @@
         "spa": 85,
         "spd": 105,
         "spe": 78
-      }
+      },
+      "abilities": [
+        {
+          "id": "torrent",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "rain-dish",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 15,
@@ -204,6 +268,13 @@
             "ground",
             "electric",
             "grass"
+          ],
+          "abilities": [
+            {
+              "id": "adaptability",
+              "isHidden": false,
+              "slot": 1
+            }
           ]
         }
       ],
@@ -215,7 +286,19 @@
         "spa": 45,
         "spd": 80,
         "spe": 75
-      }
+      },
+      "abilities": [
+        {
+          "id": "swarm",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "sniper",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 18,
@@ -247,6 +330,13 @@
             "steel",
             "dark",
             "bug"
+          ],
+          "abilities": [
+            {
+              "id": "no-guard",
+              "isHidden": false,
+              "slot": 1
+            }
           ]
         }
       ],
@@ -258,7 +348,24 @@
         "spa": 70,
         "spd": 70,
         "spe": 101
-      }
+      },
+      "abilities": [
+        {
+          "id": "keen-eye",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "tangled-feet",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "big-pecks",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 24,
@@ -290,7 +397,24 @@
         "spa": 65,
         "spd": 79,
         "spe": 80
-      }
+      },
+      "abilities": [
+        {
+          "id": "intimidate",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "shed-skin",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "unnerve",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 25,
@@ -318,7 +442,19 @@
         "spa": 50,
         "spd": 50,
         "spe": 90
-      }
+      },
+      "abilities": [
+        {
+          "id": "static",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "lightning-rod",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 26,
@@ -357,7 +493,8 @@
             "steel",
             "water",
             "psychic"
-          ]
+          ],
+          "abilities": []
         }
       ],
       "stats": {
@@ -368,7 +505,19 @@
         "spa": 90,
         "spd": 80,
         "spe": 110
-      }
+      },
+      "abilities": [
+        {
+          "id": "static",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "lightning-rod",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 36,
@@ -417,6 +566,13 @@
             "rock",
             "steel",
             "ghost"
+          ],
+          "abilities": [
+            {
+              "id": "magic-bounce",
+              "isHidden": false,
+              "slot": 1
+            }
           ]
         }
       ],
@@ -428,7 +584,24 @@
         "spa": 95,
         "spd": 90,
         "spe": 60
-      }
+      },
+      "abilities": [
+        {
+          "id": "cute-charm",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "magic-guard",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "unaware",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 38,
@@ -469,7 +642,8 @@
             "ice",
             "water",
             "fairy"
-          ]
+          ],
+          "abilities": []
         }
       ],
       "stats": {
@@ -480,7 +654,19 @@
         "spa": 81,
         "spd": 100,
         "spe": 100
-      }
+      },
+      "abilities": [
+        {
+          "id": "flash-fire",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "drought",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 59,
@@ -525,7 +711,8 @@
             "grass",
             "electric",
             "rock"
-          ]
+          ],
+          "abilities": []
         }
       ],
       "stats": {
@@ -536,7 +723,24 @@
         "spa": 100,
         "spd": 80,
         "spe": 95
-      }
+      },
+      "abilities": [
+        {
+          "id": "intimidate",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "flash-fire",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "justified",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 65,
@@ -576,6 +780,13 @@
             "steel",
             "ghost",
             "electric"
+          ],
+          "abilities": [
+            {
+              "id": "trace",
+              "isHidden": false,
+              "slot": 1
+            }
           ]
         }
       ],
@@ -587,7 +798,24 @@
         "spa": 135,
         "spd": 95,
         "spe": 120
-      }
+      },
+      "abilities": [
+        {
+          "id": "synchronize",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "inner-focus",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "magic-guard",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 68,
@@ -616,7 +844,24 @@
         "spa": 65,
         "spd": 85,
         "spe": 55
-      }
+      },
+      "abilities": [
+        {
+          "id": "guts",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "no-guard",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "steadfast",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 71,
@@ -646,6 +891,13 @@
             "bug",
             "grass",
             "dark"
+          ],
+          "abilities": [
+            {
+              "id": "innards-out",
+              "isHidden": false,
+              "slot": 1
+            }
           ]
         }
       ],
@@ -657,7 +909,19 @@
         "spa": 100,
         "spd": 70,
         "spe": 70
-      }
+      },
+      "abilities": [
+        {
+          "id": "chlorophyll",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "gluttony",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 80,
@@ -703,6 +967,13 @@
             "steel",
             "ghost",
             "rock"
+          ],
+          "abilities": [
+            {
+              "id": "shell-armor",
+              "isHidden": false,
+              "slot": 1
+            }
           ]
         },
         {
@@ -725,7 +996,8 @@
             "steel",
             "ghost",
             "rock"
-          ]
+          ],
+          "abilities": []
         }
       ],
       "stats": {
@@ -736,7 +1008,24 @@
         "spa": 100,
         "spd": 80,
         "spe": 30
-      }
+      },
+      "abilities": [
+        {
+          "id": "oblivious",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "own-tempo",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "regenerator",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 94,
@@ -780,6 +1069,13 @@
             "psychic",
             "bug",
             "electric"
+          ],
+          "abilities": [
+            {
+              "id": "shadow-tag",
+              "isHidden": false,
+              "slot": 1
+            }
           ]
         }
       ],
@@ -791,7 +1087,14 @@
         "spa": 130,
         "spd": 75,
         "spe": 110
-      }
+      },
+      "abilities": [
+        {
+          "id": "cursed-body",
+          "isHidden": false,
+          "slot": 1
+        }
+      ]
     },
     {
       "id": 115,
@@ -835,6 +1138,13 @@
             "ghost",
             "grass",
             "electric"
+          ],
+          "abilities": [
+            {
+              "id": "parental-bond",
+              "isHidden": false,
+              "slot": 1
+            }
           ]
         }
       ],
@@ -846,7 +1156,24 @@
         "spa": 40,
         "spd": 80,
         "spe": 90
-      }
+      },
+      "abilities": [
+        {
+          "id": "early-bird",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "scrappy",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "inner-focus",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 121,
@@ -884,6 +1211,13 @@
             "psychic",
             "steel",
             "grass"
+          ],
+          "abilities": [
+            {
+              "id": "huge-power",
+              "isHidden": false,
+              "slot": 1
+            }
           ]
         }
       ],
@@ -895,7 +1229,24 @@
         "spa": 100,
         "spd": 85,
         "spe": 115
-      }
+      },
+      "abilities": [
+        {
+          "id": "illuminate",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "natural-cure",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "analytic",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 127,
@@ -930,6 +1281,13 @@
             "ground",
             "steel",
             "rock"
+          ],
+          "abilities": [
+            {
+              "id": "aerilate",
+              "isHidden": false,
+              "slot": 1
+            }
           ]
         }
       ],
@@ -941,7 +1299,24 @@
         "spa": 55,
         "spd": 70,
         "spe": 85
-      }
+      },
+      "abilities": [
+        {
+          "id": "hyper-cutter",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "mold-breaker",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "moxie",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 128,
@@ -989,7 +1364,8 @@
             "water",
             "electric",
             "psychic"
-          ]
+          ],
+          "abilities": []
         }
       ],
       "stats": {
@@ -1000,7 +1376,24 @@
         "spa": 40,
         "spd": 70,
         "spe": 110
-      }
+      },
+      "abilities": [
+        {
+          "id": "intimidate",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "anger-point",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "sheer-force",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 130,
@@ -1044,6 +1437,13 @@
             "grass",
             "rock",
             "electric"
+          ],
+          "abilities": [
+            {
+              "id": "mold-breaker",
+              "isHidden": false,
+              "slot": 1
+            }
           ]
         }
       ],
@@ -1055,7 +1455,19 @@
         "spa": 60,
         "spd": 100,
         "spe": 81
-      }
+      },
+      "abilities": [
+        {
+          "id": "intimidate",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "moxie",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 132,
@@ -1075,7 +1487,19 @@
         "spa": 48,
         "spd": 48,
         "spe": 48
-      }
+      },
+      "abilities": [
+        {
+          "id": "limber",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "imposter",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 134,
@@ -1104,7 +1528,19 @@
         "spa": 110,
         "spd": 95,
         "spe": 65
-      }
+      },
+      "abilities": [
+        {
+          "id": "water-absorb",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "hydration",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 135,
@@ -1132,7 +1568,19 @@
         "spa": 110,
         "spd": 95,
         "spe": 130
-      }
+      },
+      "abilities": [
+        {
+          "id": "volt-absorb",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "quick-feet",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 136,
@@ -1160,7 +1608,19 @@
         "spa": 95,
         "spd": 110,
         "spe": 65
-      }
+      },
+      "abilities": [
+        {
+          "id": "flash-fire",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "guts",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 142,
@@ -1202,6 +1662,13 @@
             "steel",
             "psychic",
             "electric"
+          ],
+          "abilities": [
+            {
+              "id": "tough-claws",
+              "isHidden": false,
+              "slot": 1
+            }
           ]
         }
       ],
@@ -1213,7 +1680,24 @@
         "spa": 60,
         "spd": 75,
         "spe": 130
-      }
+      },
+      "abilities": [
+        {
+          "id": "rock-head",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "pressure",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "unnerve",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 143,
@@ -1247,7 +1731,24 @@
         "spa": 65,
         "spd": 110,
         "spe": 30
-      }
+      },
+      "abilities": [
+        {
+          "id": "immunity",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "thick-fat",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "gluttony",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 149,
@@ -1291,6 +1792,13 @@
             "steel",
             "rock",
             "electric"
+          ],
+          "abilities": [
+            {
+              "id": "multiscale",
+              "isHidden": false,
+              "slot": 1
+            }
           ]
         }
       ],
@@ -1302,7 +1810,19 @@
         "spa": 100,
         "spd": 100,
         "spe": 80
-      }
+      },
+      "abilities": [
+        {
+          "id": "inner-focus",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "multiscale",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 154,
@@ -1343,6 +1863,13 @@
             "dark",
             "bug",
             "psychic"
+          ],
+          "abilities": [
+            {
+              "id": "mega-sol",
+              "isHidden": false,
+              "slot": 1
+            }
           ]
         }
       ],
@@ -1354,7 +1881,19 @@
         "spa": 83,
         "spd": 100,
         "spe": 80
-      }
+      },
+      "abilities": [
+        {
+          "id": "overgrow",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "leaf-guard",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 157,
@@ -1399,7 +1938,8 @@
             "ghost",
             "grass",
             "electric"
-          ]
+          ],
+          "abilities": []
         }
       ],
       "stats": {
@@ -1410,7 +1950,19 @@
         "spa": 109,
         "spd": 85,
         "spe": 100
-      }
+      },
+      "abilities": [
+        {
+          "id": "blaze",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "flash-fire",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 160,
@@ -1455,6 +2007,13 @@
             "psychic",
             "ghost",
             "grass"
+          ],
+          "abilities": [
+            {
+              "id": "dragonize",
+              "isHidden": false,
+              "slot": 1
+            }
           ]
         }
       ],
@@ -1466,7 +2025,19 @@
         "spa": 79,
         "spd": 83,
         "spe": 78
-      }
+      },
+      "abilities": [
+        {
+          "id": "torrent",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "sheer-force",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 168,
@@ -1497,7 +2068,24 @@
         "spa": 60,
         "spd": 70,
         "spe": 40
-      }
+      },
+      "abilities": [
+        {
+          "id": "swarm",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "insomnia",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "sniper",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 181,
@@ -1540,6 +2128,13 @@
             "steel",
             "rock",
             "grass"
+          ],
+          "abilities": [
+            {
+              "id": "mold-breaker",
+              "isHidden": false,
+              "slot": 1
+            }
           ]
         }
       ],
@@ -1551,7 +2146,19 @@
         "spa": 115,
         "spd": 90,
         "spe": 55
-      }
+      },
+      "abilities": [
+        {
+          "id": "static",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "plus",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 184,
@@ -1582,7 +2189,24 @@
         "spa": 60,
         "spd": 80,
         "spe": 50
-      }
+      },
+      "abilities": [
+        {
+          "id": "thick-fat",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "huge-power",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "sap-sipper",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 186,
@@ -1609,7 +2233,24 @@
         "spa": 90,
         "spd": 100,
         "spe": 70
-      }
+      },
+      "abilities": [
+        {
+          "id": "water-absorb",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "damp",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "drizzle",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 196,
@@ -1636,7 +2277,19 @@
         "spa": 130,
         "spd": 95,
         "spe": 110
-      }
+      },
+      "abilities": [
+        {
+          "id": "synchronize",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "magic-bounce",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 197,
@@ -1662,7 +2315,19 @@
         "spa": 60,
         "spd": 130,
         "spe": 65
-      }
+      },
+      "abilities": [
+        {
+          "id": "synchronize",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "inner-focus",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 199,
@@ -1710,7 +2375,8 @@
             "rock",
             "ghost",
             "electric"
-          ]
+          ],
+          "abilities": []
         }
       ],
       "stats": {
@@ -1721,7 +2387,24 @@
         "spa": 100,
         "spd": 110,
         "spe": 30
-      }
+      },
+      "abilities": [
+        {
+          "id": "oblivious",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "own-tempo",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "regenerator",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 205,
@@ -1752,7 +2435,19 @@
         "spa": 60,
         "spd": 60,
         "spe": 40
-      }
+      },
+      "abilities": [
+        {
+          "id": "sturdy",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "overcoat",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 208,
@@ -1794,6 +2489,13 @@
             "ice",
             "psychic",
             "electric"
+          ],
+          "abilities": [
+            {
+              "id": "sand-force",
+              "isHidden": false,
+              "slot": 1
+            }
           ]
         }
       ],
@@ -1805,7 +2507,24 @@
         "spa": 55,
         "spd": 65,
         "spe": 30
-      }
+      },
+      "abilities": [
+        {
+          "id": "rock-head",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "sturdy",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "sheer-force",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 212,
@@ -1841,6 +2560,13 @@
             "normal",
             "psychic",
             "grass"
+          ],
+          "abilities": [
+            {
+              "id": "technician",
+              "isHidden": false,
+              "slot": 1
+            }
           ]
         }
       ],
@@ -1852,7 +2578,24 @@
         "spa": 55,
         "spd": 80,
         "spe": 65
-      }
+      },
+      "abilities": [
+        {
+          "id": "swarm",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "technician",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "light-metal",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 214,
@@ -1892,6 +2635,13 @@
             "rock",
             "ghost",
             "steel"
+          ],
+          "abilities": [
+            {
+              "id": "skill-link",
+              "isHidden": false,
+              "slot": 1
+            }
           ]
         }
       ],
@@ -1903,7 +2653,24 @@
         "spa": 40,
         "spd": 95,
         "spe": 85
-      }
+      },
+      "abilities": [
+        {
+          "id": "swarm",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "guts",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "moxie",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 227,
@@ -1941,6 +2708,13 @@
             "ice",
             "rock",
             "bug"
+          ],
+          "abilities": [
+            {
+              "id": "stalwart",
+              "isHidden": false,
+              "slot": 1
+            }
           ]
         }
       ],
@@ -1952,7 +2726,24 @@
         "spa": 40,
         "spd": 70,
         "spe": 70
-      }
+      },
+      "abilities": [
+        {
+          "id": "keen-eye",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "sturdy",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "weak-armor",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 229,
@@ -1994,6 +2785,13 @@
             "poison",
             "grass",
             "electric"
+          ],
+          "abilities": [
+            {
+              "id": "solar-power",
+              "isHidden": false,
+              "slot": 1
+            }
           ]
         }
       ],
@@ -2005,7 +2803,24 @@
         "spa": 110,
         "spd": 80,
         "spe": 95
-      }
+      },
+      "abilities": [
+        {
+          "id": "early-bird",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "flash-fire",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "unnerve",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 248,
@@ -2051,6 +2866,13 @@
             "water",
             "ghost",
             "electric"
+          ],
+          "abilities": [
+            {
+              "id": "sand-stream",
+              "isHidden": false,
+              "slot": 1
+            }
           ]
         }
       ],
@@ -2062,7 +2884,19 @@
         "spa": 95,
         "spd": 100,
         "spe": 61
-      }
+      },
+      "abilities": [
+        {
+          "id": "sand-stream",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "unnerve",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 279,
@@ -2091,7 +2925,24 @@
         "spa": 95,
         "spd": 70,
         "spe": 65
-      }
+      },
+      "abilities": [
+        {
+          "id": "keen-eye",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "drizzle",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "rain-dish",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 282,
@@ -2131,6 +2982,13 @@
             "dark",
             "ice",
             "ghost"
+          ],
+          "abilities": [
+            {
+              "id": "pixilate",
+              "isHidden": false,
+              "slot": 1
+            }
           ]
         }
       ],
@@ -2142,7 +3000,24 @@
         "spa": 125,
         "spd": 115,
         "spe": 80
-      }
+      },
+      "abilities": [
+        {
+          "id": "synchronize",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "trace",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "telepathy",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 302,
@@ -2194,6 +3069,13 @@
             "psychic",
             "bug",
             "electric"
+          ],
+          "abilities": [
+            {
+              "id": "magic-bounce",
+              "isHidden": false,
+              "slot": 1
+            }
           ]
         }
       ],
@@ -2205,7 +3087,24 @@
         "spa": 65,
         "spd": 65,
         "spe": 50
-      }
+      },
+      "abilities": [
+        {
+          "id": "keen-eye",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "stall",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "prankster",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 306,
@@ -2250,6 +3149,13 @@
             "ghost",
             "grass",
             "electric"
+          ],
+          "abilities": [
+            {
+              "id": "filter",
+              "isHidden": false,
+              "slot": 1
+            }
           ]
         }
       ],
@@ -2261,7 +3167,24 @@
         "spa": 60,
         "spd": 60,
         "spe": 50
-      }
+      },
+      "abilities": [
+        {
+          "id": "sturdy",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "rock-head",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "heavy-metal",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 308,
@@ -2307,6 +3230,13 @@
             "poison",
             "rock",
             "electric"
+          ],
+          "abilities": [
+            {
+              "id": "pure-power",
+              "isHidden": false,
+              "slot": 1
+            }
           ]
         }
       ],
@@ -2318,7 +3248,19 @@
         "spa": 60,
         "spd": 75,
         "spe": 80
-      }
+      },
+      "abilities": [
+        {
+          "id": "pure-power",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "telepathy",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 310,
@@ -2354,6 +3296,13 @@
             "bug",
             "psychic",
             "grass"
+          ],
+          "abilities": [
+            {
+              "id": "intimidate",
+              "isHidden": false,
+              "slot": 1
+            }
           ]
         }
       ],
@@ -2365,7 +3314,24 @@
         "spa": 105,
         "spd": 60,
         "spe": 105
-      }
+      },
+      "abilities": [
+        {
+          "id": "static",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "lightning-rod",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "minus",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 319,
@@ -2407,6 +3373,13 @@
             "poison",
             "psychic",
             "dragon"
+          ],
+          "abilities": [
+            {
+              "id": "strong-jaw",
+              "isHidden": false,
+              "slot": 1
+            }
           ]
         }
       ],
@@ -2418,7 +3391,19 @@
         "spa": 95,
         "spd": 40,
         "spe": 95
-      }
+      },
+      "abilities": [
+        {
+          "id": "rough-skin",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "speed-boost",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 323,
@@ -2456,6 +3441,13 @@
             "dark",
             "grass",
             "psychic"
+          ],
+          "abilities": [
+            {
+              "id": "sheer-force",
+              "isHidden": false,
+              "slot": 1
+            }
           ]
         }
       ],
@@ -2467,7 +3459,24 @@
         "spa": 105,
         "spd": 75,
         "spe": 40
-      }
+      },
+      "abilities": [
+        {
+          "id": "magma-armor",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "solid-rock",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "anger-point",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 324,
@@ -2495,7 +3504,24 @@
         "spa": 85,
         "spd": 70,
         "spe": 20
-      }
+      },
+      "abilities": [
+        {
+          "id": "white-smoke",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "drought",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "shell-armor",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 334,
@@ -2535,6 +3561,13 @@
             "grass",
             "steel",
             "dark"
+          ],
+          "abilities": [
+            {
+              "id": "pixilate",
+              "isHidden": false,
+              "slot": 1
+            }
           ]
         }
       ],
@@ -2546,7 +3579,19 @@
         "spa": 70,
         "spd": 105,
         "spe": 80
-      }
+      },
+      "abilities": [
+        {
+          "id": "natural-cure",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "cloud-nine",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 350,
@@ -2575,7 +3620,24 @@
         "spa": 100,
         "spd": 125,
         "spe": 81
-      }
+      },
+      "abilities": [
+        {
+          "id": "marvel-scale",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "competitive",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "cute-charm",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 351,
@@ -2604,7 +3666,14 @@
         "spa": 70,
         "spd": 70,
         "spe": 70
-      }
+      },
+      "abilities": [
+        {
+          "id": "forecast",
+          "isHidden": false,
+          "slot": 1
+        }
+      ]
     },
     {
       "id": 354,
@@ -2644,6 +3713,13 @@
             "bug",
             "psychic",
             "grass"
+          ],
+          "abilities": [
+            {
+              "id": "prankster",
+              "isHidden": false,
+              "slot": 1
+            }
           ]
         }
       ],
@@ -2655,7 +3731,24 @@
         "spa": 83,
         "spd": 63,
         "spe": 65
-      }
+      },
+      "abilities": [
+        {
+          "id": "insomnia",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "frisk",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "cursed-body",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 358,
@@ -2692,6 +3785,13 @@
             "ice",
             "dark",
             "ghost"
+          ],
+          "abilities": [
+            {
+              "id": "levitate",
+              "isHidden": false,
+              "slot": 1
+            }
           ]
         }
       ],
@@ -2703,7 +3803,14 @@
         "spa": 95,
         "spd": 90,
         "spe": 65
-      }
+      },
+      "abilities": [
+        {
+          "id": "levitate",
+          "isHidden": false,
+          "slot": 1
+        }
+      ]
     },
     {
       "id": 359,
@@ -2749,6 +3856,13 @@
             "rock",
             "electric",
             "grass"
+          ],
+          "abilities": [
+            {
+              "id": "magic-bounce",
+              "isHidden": false,
+              "slot": 1
+            }
           ]
         }
       ],
@@ -2760,7 +3874,24 @@
         "spa": 75,
         "spd": 60,
         "spe": 75
-      }
+      },
+      "abilities": [
+        {
+          "id": "pressure",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "super-luck",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "justified",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 362,
@@ -2794,6 +3925,13 @@
             "steel",
             "ghost",
             "grass"
+          ],
+          "abilities": [
+            {
+              "id": "refrigerate",
+              "isHidden": false,
+              "slot": 1
+            }
           ]
         }
       ],
@@ -2805,7 +3943,24 @@
         "spa": 80,
         "spd": 80,
         "spe": 80
-      }
+      },
+      "abilities": [
+        {
+          "id": "inner-focus",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "ice-body",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "moody",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 389,
@@ -2834,7 +3989,19 @@
         "spa": 75,
         "spd": 85,
         "spe": 56
-      }
+      },
+      "abilities": [
+        {
+          "id": "overgrow",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "shell-armor",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 392,
@@ -2868,7 +4035,19 @@
         "spa": 104,
         "spd": 71,
         "spe": 108
-      }
+      },
+      "abilities": [
+        {
+          "id": "blaze",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "iron-fist",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 395,
@@ -2899,7 +4078,19 @@
         "spa": 111,
         "spd": 101,
         "spe": 60
-      }
+      },
+      "abilities": [
+        {
+          "id": "torrent",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "competitive",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 405,
@@ -2928,7 +4119,24 @@
         "spa": 95,
         "spd": 79,
         "spe": 70
-      }
+      },
+      "abilities": [
+        {
+          "id": "rivalry",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "intimidate",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "guts",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 407,
@@ -2955,7 +4163,24 @@
         "spa": 125,
         "spd": 105,
         "spe": 90
-      }
+      },
+      "abilities": [
+        {
+          "id": "natural-cure",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "poison-point",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "technician",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 409,
@@ -2987,7 +4212,19 @@
         "spa": 65,
         "spd": 50,
         "spe": 58
-      }
+      },
+      "abilities": [
+        {
+          "id": "mold-breaker",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "sheer-force",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 411,
@@ -3018,7 +4255,19 @@
         "spa": 47,
         "spd": 138,
         "spe": 30
-      }
+      },
+      "abilities": [
+        {
+          "id": "sturdy",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "soundproof",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 428,
@@ -3065,6 +4314,13 @@
             "bug",
             "ghost",
             "electric"
+          ],
+          "abilities": [
+            {
+              "id": "scrappy",
+              "isHidden": false,
+              "slot": 1
+            }
           ]
         }
       ],
@@ -3076,7 +4332,24 @@
         "spa": 54,
         "spd": 96,
         "spe": 105
-      }
+      },
+      "abilities": [
+        {
+          "id": "cute-charm",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "klutz",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "limber",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 442,
@@ -3103,7 +4376,19 @@
         "spa": 92,
         "spd": 108,
         "spe": 35
-      }
+      },
+      "abilities": [
+        {
+          "id": "pressure",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "infiltrator",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 445,
@@ -3149,6 +4434,13 @@
             "rock",
             "ghost",
             "electric"
+          ],
+          "abilities": [
+            {
+              "id": "sand-force",
+              "isHidden": false,
+              "slot": 1
+            }
           ]
         }
       ],
@@ -3160,7 +4452,19 @@
         "spa": 80,
         "spd": 85,
         "spe": 102
-      }
+      },
+      "abilities": [
+        {
+          "id": "sand-veil",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "rough-skin",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 448,
@@ -3212,6 +4516,13 @@
             "electric",
             "grass",
             "water"
+          ],
+          "abilities": [
+            {
+              "id": "adaptability",
+              "isHidden": false,
+              "slot": 1
+            }
           ]
         }
       ],
@@ -3223,7 +4534,24 @@
         "spa": 115,
         "spd": 70,
         "spe": 90
-      }
+      },
+      "abilities": [
+        {
+          "id": "steadfast",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "inner-focus",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "justified",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 450,
@@ -3252,7 +4580,19 @@
         "spa": 68,
         "spd": 72,
         "spe": 47
-      }
+      },
+      "abilities": [
+        {
+          "id": "sand-stream",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "sand-force",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 454,
@@ -3285,7 +4625,24 @@
         "spa": 86,
         "spd": 65,
         "spe": 85
-      }
+      },
+      "abilities": [
+        {
+          "id": "anticipation",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "dry-skin",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "poison-touch",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 460,
@@ -3327,6 +4684,13 @@
             "dragon",
             "rock",
             "ghost"
+          ],
+          "abilities": [
+            {
+              "id": "snow-warning",
+              "isHidden": false,
+              "slot": 1
+            }
           ]
         }
       ],
@@ -3338,7 +4702,19 @@
         "spa": 92,
         "spd": 85,
         "spe": 60
-      }
+      },
+      "abilities": [
+        {
+          "id": "snow-warning",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "soundproof",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 461,
@@ -3370,7 +4746,19 @@
         "spa": 45,
         "spd": 85,
         "spe": 125
-      }
+      },
+      "abilities": [
+        {
+          "id": "pressure",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "pickpocket",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 464,
@@ -3404,7 +4792,24 @@
         "spa": 55,
         "spd": 55,
         "spe": 40
-      }
+      },
+      "abilities": [
+        {
+          "id": "lightning-rod",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "solid-rock",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "reckless",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 470,
@@ -3432,7 +4837,19 @@
         "spa": 60,
         "spd": 65,
         "spe": 95
-      }
+      },
+      "abilities": [
+        {
+          "id": "leaf-guard",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "chlorophyll",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 471,
@@ -3460,7 +4877,19 @@
         "spa": 130,
         "spd": 95,
         "spe": 65
-      }
+      },
+      "abilities": [
+        {
+          "id": "snow-cloak",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "ice-body",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 472,
@@ -3496,7 +4925,24 @@
         "spa": 45,
         "spd": 75,
         "spe": 95
-      }
+      },
+      "abilities": [
+        {
+          "id": "hyper-cutter",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "sand-veil",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "poison-heal",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 473,
@@ -3524,7 +4970,24 @@
         "spa": 70,
         "spd": 60,
         "spe": 80
-      }
+      },
+      "abilities": [
+        {
+          "id": "oblivious",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "snow-cloak",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "thick-fat",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 475,
@@ -3576,6 +5039,13 @@
             "poison",
             "rock",
             "bug"
+          ],
+          "abilities": [
+            {
+              "id": "inner-focus",
+              "isHidden": false,
+              "slot": 1
+            }
           ]
         }
       ],
@@ -3587,7 +5057,24 @@
         "spa": 65,
         "spd": 115,
         "spe": 80
-      }
+      },
+      "abilities": [
+        {
+          "id": "steadfast",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "sharpness",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "justified",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 478,
@@ -3625,6 +5112,13 @@
             "psychic",
             "electric",
             "grass"
+          ],
+          "abilities": [
+            {
+              "id": "snow-warning",
+              "isHidden": false,
+              "slot": 1
+            }
           ]
         }
       ],
@@ -3636,7 +5130,19 @@
         "spa": 80,
         "spd": 70,
         "spe": 110
-      }
+      },
+      "abilities": [
+        {
+          "id": "snow-cloak",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "cursed-body",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 479,
@@ -3682,7 +5188,14 @@
             "spa": 105,
             "spd": 107,
             "spe": 86
-          }
+          },
+          "abilities": [
+            {
+              "id": "levitate",
+              "isHidden": false,
+              "slot": 1
+            }
+          ]
         },
         {
           "name": "Wash Rotom",
@@ -3707,7 +5220,14 @@
             "spa": 105,
             "spd": 107,
             "spe": 86
-          }
+          },
+          "abilities": [
+            {
+              "id": "levitate",
+              "isHidden": false,
+              "slot": 1
+            }
+          ]
         },
         {
           "name": "Frost Rotom",
@@ -3731,7 +5251,14 @@
             "spa": 105,
             "spd": 107,
             "spe": 86
-          }
+          },
+          "abilities": [
+            {
+              "id": "levitate",
+              "isHidden": false,
+              "slot": 1
+            }
+          ]
         },
         {
           "name": "Fan Rotom",
@@ -3756,7 +5283,14 @@
             "spa": 105,
             "spd": 107,
             "spe": 86
-          }
+          },
+          "abilities": [
+            {
+              "id": "levitate",
+              "isHidden": false,
+              "slot": 1
+            }
+          ]
         },
         {
           "name": "Mow Rotom",
@@ -3780,7 +5314,14 @@
             "spa": 105,
             "spd": 107,
             "spe": 86
-          }
+          },
+          "abilities": [
+            {
+              "id": "levitate",
+              "isHidden": false,
+              "slot": 1
+            }
+          ]
         }
       ],
       "stats": {
@@ -3791,7 +5332,14 @@
         "spa": 95,
         "spd": 77,
         "spe": 91
-      }
+      },
+      "abilities": [
+        {
+          "id": "levitate",
+          "isHidden": false,
+          "slot": 1
+        }
+      ]
     },
     {
       "id": 497,
@@ -3817,7 +5365,19 @@
         "spa": 75,
         "spd": 95,
         "spe": 113
-      }
+      },
+      "abilities": [
+        {
+          "id": "overgrow",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "contrary",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 500,
@@ -3861,6 +5421,13 @@
             "water",
             "electric",
             "psychic"
+          ],
+          "abilities": [
+            {
+              "id": "mold-breaker",
+              "isHidden": false,
+              "slot": 1
+            }
           ]
         }
       ],
@@ -3872,7 +5439,19 @@
         "spa": 100,
         "spd": 65,
         "spe": 65
-      }
+      },
+      "abilities": [
+        {
+          "id": "blaze",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "reckless",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 503,
@@ -3911,7 +5490,8 @@
             "grass",
             "steel",
             "bug"
-          ]
+          ],
+          "abilities": []
         }
       ],
       "stats": {
@@ -3922,7 +5502,19 @@
         "spa": 108,
         "spd": 70,
         "spe": 70
-      }
+      },
+      "abilities": [
+        {
+          "id": "torrent",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "shell-armor",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 505,
@@ -3953,7 +5545,24 @@
         "spa": 60,
         "spd": 69,
         "spe": 77
-      }
+      },
+      "abilities": [
+        {
+          "id": "illuminate",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "keen-eye",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "analytic",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 510,
@@ -3984,7 +5593,24 @@
         "spa": 88,
         "spd": 50,
         "spe": 106
-      }
+      },
+      "abilities": [
+        {
+          "id": "limber",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "unburden",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "prankster",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 512,
@@ -4013,7 +5639,19 @@
         "spa": 98,
         "spd": 63,
         "spe": 101
-      }
+      },
+      "abilities": [
+        {
+          "id": "gluttony",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "overgrow",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 514,
@@ -4043,7 +5681,19 @@
         "spa": 98,
         "spd": 63,
         "spe": 101
-      }
+      },
+      "abilities": [
+        {
+          "id": "gluttony",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "blaze",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 516,
@@ -4074,7 +5724,19 @@
         "spa": 98,
         "spd": 63,
         "spe": 101
-      }
+      },
+      "abilities": [
+        {
+          "id": "gluttony",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "torrent",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 530,
@@ -4114,6 +5776,13 @@
             "poison",
             "rock",
             "ghost"
+          ],
+          "abilities": [
+            {
+              "id": "piercing-drill",
+              "isHidden": false,
+              "slot": 1
+            }
           ]
         }
       ],
@@ -4125,7 +5794,24 @@
         "spa": 50,
         "spd": 65,
         "spe": 88
-      }
+      },
+      "abilities": [
+        {
+          "id": "sand-rush",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "sand-force",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "mold-breaker",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 531,
@@ -4170,6 +5856,13 @@
             "psychic",
             "ghost",
             "electric"
+          ],
+          "abilities": [
+            {
+              "id": "healer",
+              "isHidden": false,
+              "slot": 1
+            }
           ]
         }
       ],
@@ -4181,7 +5874,24 @@
         "spa": 60,
         "spd": 86,
         "spe": 50
-      }
+      },
+      "abilities": [
+        {
+          "id": "healer",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "regenerator",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "klutz",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 534,
@@ -4211,7 +5921,24 @@
         "spa": 55,
         "spd": 65,
         "spe": 45
-      }
+      },
+      "abilities": [
+        {
+          "id": "guts",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "sheer-force",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "iron-fist",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 547,
@@ -4239,7 +5966,24 @@
         "spa": 77,
         "spd": 75,
         "spe": 116
-      }
+      },
+      "abilities": [
+        {
+          "id": "prankster",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "infiltrator",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "chlorophyll",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 553,
@@ -4274,7 +6018,24 @@
         "spa": 65,
         "spd": 70,
         "spe": 92
-      }
+      },
+      "abilities": [
+        {
+          "id": "intimidate",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "moxie",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "anger-point",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 563,
@@ -4299,7 +6060,14 @@
         "spa": 95,
         "spd": 105,
         "spe": 30
-      }
+      },
+      "abilities": [
+        {
+          "id": "mummy",
+          "isHidden": false,
+          "slot": 1
+        }
+      ]
     },
     {
       "id": 569,
@@ -4327,7 +6095,24 @@
         "spa": 60,
         "spd": 82,
         "spe": 75
-      }
+      },
+      "abilities": [
+        {
+          "id": "stench",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "weak-armor",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "aftermath",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 571,
@@ -4370,7 +6155,8 @@
             "bug",
             "poison",
             "ice"
-          ]
+          ],
+          "abilities": []
         }
       ],
       "stats": {
@@ -4381,7 +6167,14 @@
         "spa": 120,
         "spd": 60,
         "spe": 105
-      }
+      },
+      "abilities": [
+        {
+          "id": "illusion",
+          "isHidden": false,
+          "slot": 1
+        }
+      ]
     },
     {
       "id": 579,
@@ -4411,7 +6204,24 @@
         "spa": 125,
         "spd": 85,
         "spe": 30
-      }
+      },
+      "abilities": [
+        {
+          "id": "overcoat",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "magic-guard",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "regenerator",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 584,
@@ -4436,7 +6246,24 @@
         "spa": 110,
         "spd": 95,
         "spe": 79
-      }
+      },
+      "abilities": [
+        {
+          "id": "ice-body",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "snow-warning",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "weak-armor",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 587,
@@ -4463,7 +6290,19 @@
         "spa": 75,
         "spd": 60,
         "spe": 103
-      }
+      },
+      "abilities": [
+        {
+          "id": "static",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "motor-drive",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 609,
@@ -4499,6 +6338,13 @@
             "ghost",
             "psychic",
             "bug"
+          ],
+          "abilities": [
+            {
+              "id": "infiltrator",
+              "isHidden": false,
+              "slot": 1
+            }
           ]
         }
       ],
@@ -4510,7 +6356,24 @@
         "spa": 145,
         "spd": 90,
         "spe": 80
-      }
+      },
+      "abilities": [
+        {
+          "id": "flash-fire",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "flame-body",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "infiltrator",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 614,
@@ -4542,7 +6405,24 @@
         "spa": 70,
         "spd": 80,
         "spe": 50
-      }
+      },
+      "abilities": [
+        {
+          "id": "snow-cloak",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "slush-rush",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "swift-swim",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 618,
@@ -4584,7 +6464,8 @@
             "fighting",
             "steel",
             "ice"
-          ]
+          ],
+          "abilities": []
         }
       ],
       "stats": {
@@ -4595,7 +6476,24 @@
         "spa": 81,
         "spd": 99,
         "spe": 32
-      }
+      },
+      "abilities": [
+        {
+          "id": "static",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "limber",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "sand-veil",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 623,
@@ -4641,6 +6539,13 @@
             "ice",
             "psychic",
             "rock"
+          ],
+          "abilities": [
+            {
+              "id": "unseen-fist",
+              "isHidden": false,
+              "slot": 1
+            }
           ]
         }
       ],
@@ -4652,7 +6557,24 @@
         "spa": 55,
         "spd": 80,
         "spe": 55
-      }
+      },
+      "abilities": [
+        {
+          "id": "iron-fist",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "klutz",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "no-guard",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 635,
@@ -4687,7 +6609,14 @@
         "spa": 125,
         "spd": 90,
         "spe": 98
-      }
+      },
+      "abilities": [
+        {
+          "id": "levitate",
+          "isHidden": false,
+          "slot": 1
+        }
+      ]
     },
     {
       "id": 637,
@@ -4715,7 +6644,19 @@
         "spa": 135,
         "spd": 105,
         "spe": 100
-      }
+      },
+      "abilities": [
+        {
+          "id": "flame-body",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "swarm",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 652,
@@ -4763,6 +6704,13 @@
             "ghost",
             "electric",
             "psychic"
+          ],
+          "abilities": [
+            {
+              "id": "bulletproof",
+              "isHidden": false,
+              "slot": 1
+            }
           ]
         }
       ],
@@ -4774,7 +6722,19 @@
         "spa": 74,
         "spd": 75,
         "spe": 64
-      }
+      },
+      "abilities": [
+        {
+          "id": "overgrow",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "bulletproof",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 655,
@@ -4816,6 +6776,13 @@
             "steel",
             "ground",
             "electric"
+          ],
+          "abilities": [
+            {
+              "id": "levitate",
+              "isHidden": false,
+              "slot": 1
+            }
           ]
         }
       ],
@@ -4827,7 +6794,19 @@
         "spa": 114,
         "spd": 100,
         "spe": 104
-      }
+      },
+      "abilities": [
+        {
+          "id": "blaze",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "magician",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 658,
@@ -4873,6 +6852,13 @@
             "rock",
             "ghost",
             "bug"
+          ],
+          "abilities": [
+            {
+              "id": "protean",
+              "isHidden": false,
+              "slot": 1
+            }
           ]
         }
       ],
@@ -4884,7 +6870,19 @@
         "spa": 103,
         "spd": 71,
         "spe": 122
-      }
+      },
+      "abilities": [
+        {
+          "id": "torrent",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "protean",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 660,
@@ -4918,7 +6916,24 @@
         "spa": 50,
         "spd": 77,
         "spe": 78
-      }
+      },
+      "abilities": [
+        {
+          "id": "pickup",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "cheek-pouch",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "huge-power",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 663,
@@ -4946,7 +6961,19 @@
         "spa": 74,
         "spd": 69,
         "spe": 126
-      }
+      },
+      "abilities": [
+        {
+          "id": "flame-body",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "gale-wings",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 666,
@@ -4973,7 +7000,24 @@
         "spa": 90,
         "spd": 50,
         "spe": 89
-      }
+      },
+      "abilities": [
+        {
+          "id": "shield-dust",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "compound-eyes",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "friend-guard",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 670,
@@ -5003,6 +7047,13 @@
             "grass",
             "bug",
             "psychic"
+          ],
+          "abilities": [
+            {
+              "id": "fairy-aura",
+              "isHidden": false,
+              "slot": 1
+            }
           ]
         }
       ],
@@ -5014,7 +7065,19 @@
         "spa": 125,
         "spd": 128,
         "spe": 92
-      }
+      },
+      "abilities": [
+        {
+          "id": "flower-veil",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "symbiosis",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 671,
@@ -5039,7 +7102,19 @@
         "spa": 112,
         "spd": 154,
         "spe": 75
-      }
+      },
+      "abilities": [
+        {
+          "id": "flower-veil",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "symbiosis",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 675,
@@ -5075,7 +7150,24 @@
         "spa": 69,
         "spd": 71,
         "spe": 58
-      }
+      },
+      "abilities": [
+        {
+          "id": "iron-fist",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "mold-breaker",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "scrappy",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 676,
@@ -5105,7 +7197,14 @@
         "spa": 65,
         "spd": 90,
         "spe": 102
-      }
+      },
+      "abilities": [
+        {
+          "id": "fur-coat",
+          "isHidden": false,
+          "slot": 1
+        }
+      ]
     },
     {
       "id": 678,
@@ -5141,6 +7240,13 @@
             "psychic",
             "steel",
             "ghost"
+          ],
+          "abilities": [
+            {
+              "id": "trace",
+              "isHidden": false,
+              "slot": 1
+            }
           ]
         }
       ],
@@ -5152,7 +7258,24 @@
         "spa": 83,
         "spd": 81,
         "spe": 104
-      }
+      },
+      "abilities": [
+        {
+          "id": "keen-eye",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "infiltrator",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "prankster",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 681,
@@ -5181,7 +7304,14 @@
         "spa": 50,
         "spd": 140,
         "spe": 60
-      }
+      },
+      "abilities": [
+        {
+          "id": "stance-change",
+          "isHidden": false,
+          "slot": 1
+        }
+      ]
     },
     {
       "id": 683,
@@ -5207,7 +7337,19 @@
         "spa": 99,
         "spd": 89,
         "spe": 29
-      }
+      },
+      "abilities": [
+        {
+          "id": "healer",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "aroma-veil",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 685,
@@ -5235,7 +7377,19 @@
         "spa": 85,
         "spd": 75,
         "spe": 72
-      }
+      },
+      "abilities": [
+        {
+          "id": "sweet-veil",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "unburden",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 693,
@@ -5267,7 +7421,14 @@
         "spa": 120,
         "spd": 89,
         "spe": 59
-      }
+      },
+      "abilities": [
+        {
+          "id": "mega-launcher",
+          "isHidden": false,
+          "slot": 1
+        }
+      ]
     },
     {
       "id": 695,
@@ -5299,7 +7460,24 @@
         "spa": 109,
         "spd": 94,
         "spe": 109
-      }
+      },
+      "abilities": [
+        {
+          "id": "dry-skin",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "sand-veil",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "solar-power",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 697,
@@ -5332,7 +7510,19 @@
         "spa": 69,
         "spd": 59,
         "spe": 71
-      }
+      },
+      "abilities": [
+        {
+          "id": "strong-jaw",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "rock-head",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 699,
@@ -5362,7 +7552,19 @@
         "spa": 99,
         "spd": 92,
         "spe": 58
-      }
+      },
+      "abilities": [
+        {
+          "id": "refrigerate",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "snow-warning",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 700,
@@ -5389,7 +7591,19 @@
         "spa": 110,
         "spd": 130,
         "spe": 60
-      }
+      },
+      "abilities": [
+        {
+          "id": "cute-charm",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "pixilate",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 701,
@@ -5435,6 +7649,13 @@
             "rock",
             "electric",
             "psychic"
+          ],
+          "abilities": [
+            {
+              "id": "no-guard",
+              "isHidden": false,
+              "slot": 1
+            }
           ]
         }
       ],
@@ -5446,7 +7667,24 @@
         "spa": 74,
         "spd": 63,
         "spe": 118
-      }
+      },
+      "abilities": [
+        {
+          "id": "limber",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "unburden",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "mold-breaker",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 702,
@@ -5474,7 +7712,24 @@
         "spa": 81,
         "spd": 67,
         "spe": 101
-      }
+      },
+      "abilities": [
+        {
+          "id": "cheek-pouch",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "pickup",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "plus",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 706,
@@ -5521,7 +7776,8 @@
             "rock",
             "bug",
             "electric"
-          ]
+          ],
+          "abilities": []
         }
       ],
       "stats": {
@@ -5532,7 +7788,24 @@
         "spa": 110,
         "spd": 150,
         "spe": 80
-      }
+      },
+      "abilities": [
+        {
+          "id": "sap-sipper",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "hydration",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "gooey",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 707,
@@ -5558,7 +7831,19 @@
         "spa": 80,
         "spd": 87,
         "spe": 75
-      }
+      },
+      "abilities": [
+        {
+          "id": "prankster",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "magician",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 709,
@@ -5589,7 +7874,24 @@
         "spa": 65,
         "spd": 82,
         "spe": 56
-      }
+      },
+      "abilities": [
+        {
+          "id": "natural-cure",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "frisk",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "harvest",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 711,
@@ -5621,7 +7923,24 @@
         "spa": 58,
         "spd": 75,
         "spe": 84
-      }
+      },
+      "abilities": [
+        {
+          "id": "pickup",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "frisk",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "insomnia",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 713,
@@ -5658,7 +7977,8 @@
             "steel",
             "psychic",
             "rock"
-          ]
+          ],
+          "abilities": []
         }
       ],
       "stats": {
@@ -5669,7 +7989,24 @@
         "spa": 44,
         "spd": 46,
         "spe": 28
-      }
+      },
+      "abilities": [
+        {
+          "id": "own-tempo",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "ice-body",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "sturdy",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 715,
@@ -5702,7 +8039,24 @@
         "spa": 97,
         "spd": 80,
         "spe": 123
-      }
+      },
+      "abilities": [
+        {
+          "id": "frisk",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "infiltrator",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "telepathy",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 724,
@@ -5742,7 +8096,8 @@
             "bug",
             "rock",
             "steel"
-          ]
+          ],
+          "abilities": []
         }
       ],
       "stats": {
@@ -5753,7 +8108,19 @@
         "spa": 100,
         "spd": 100,
         "spe": 70
-      }
+      },
+      "abilities": [
+        {
+          "id": "overgrow",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "long-reach",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 727,
@@ -5785,7 +8152,19 @@
         "spa": 80,
         "spd": 90,
         "spe": 60
-      }
+      },
+      "abilities": [
+        {
+          "id": "blaze",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "intimidate",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 730,
@@ -5814,7 +8193,19 @@
         "spa": 126,
         "spd": 116,
         "spe": 60
-      }
+      },
+      "abilities": [
+        {
+          "id": "torrent",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "liquid-voice",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 733,
@@ -5844,7 +8235,24 @@
         "spa": 75,
         "spd": 75,
         "spe": 60
-      }
+      },
+      "abilities": [
+        {
+          "id": "keen-eye",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "skill-link",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "sheer-force",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 740,
@@ -5886,6 +8294,13 @@
             "rock",
             "electric",
             "psychic"
+          ],
+          "abilities": [
+            {
+              "id": "iron-fist",
+              "isHidden": false,
+              "slot": 1
+            }
           ]
         }
       ],
@@ -5897,7 +8312,24 @@
         "spa": 62,
         "spd": 67,
         "spe": 43
-      }
+      },
+      "abilities": [
+        {
+          "id": "hyper-cutter",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "iron-fist",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "anger-point",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 745,
@@ -5929,7 +8361,24 @@
         "spa": 55,
         "spd": 65,
         "spe": 112
-      }
+      },
+      "abilities": [
+        {
+          "id": "keen-eye",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "sand-rush",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "steadfast",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 748,
@@ -5958,7 +8407,24 @@
         "spa": 53,
         "spd": 142,
         "spe": 35
-      }
+      },
+      "abilities": [
+        {
+          "id": "merciless",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "limber",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "regenerator",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 750,
@@ -5983,7 +8449,24 @@
         "spa": 55,
         "spd": 85,
         "spe": 35
-      }
+      },
+      "abilities": [
+        {
+          "id": "own-tempo",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "stamina",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "inner-focus",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 752,
@@ -6011,7 +8494,19 @@
         "spa": 50,
         "spd": 132,
         "spe": 42
-      }
+      },
+      "abilities": [
+        {
+          "id": "water-bubble",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "water-absorb",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 758,
@@ -6042,7 +8537,19 @@
         "spa": 111,
         "spd": 60,
         "spe": 117
-      }
+      },
+      "abilities": [
+        {
+          "id": "corrosion",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "oblivious",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 763,
@@ -6070,7 +8577,24 @@
         "spa": 50,
         "spd": 98,
         "spe": 72
-      }
+      },
+      "abilities": [
+        {
+          "id": "leaf-guard",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "queenly-majesty",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "sweet-veil",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 765,
@@ -6100,7 +8624,24 @@
         "spa": 90,
         "spd": 110,
         "spe": 60
-      }
+      },
+      "abilities": [
+        {
+          "id": "inner-focus",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "telepathy",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "symbiosis",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 766,
@@ -6132,7 +8673,19 @@
         "spa": 40,
         "spd": 60,
         "spe": 80
-      }
+      },
+      "abilities": [
+        {
+          "id": "receiver",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "defiant",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 778,
@@ -6162,7 +8715,14 @@
         "spa": 50,
         "spd": 105,
         "spe": 96
-      }
+      },
+      "abilities": [
+        {
+          "id": "disguise",
+          "isHidden": false,
+          "slot": 1
+        }
+      ]
     },
     {
       "id": 780,
@@ -6214,6 +8774,13 @@
             "ghost",
             "steel",
             "electric"
+          ],
+          "abilities": [
+            {
+              "id": "berserk",
+              "isHidden": false,
+              "slot": 1
+            }
           ]
         }
       ],
@@ -6225,7 +8792,24 @@
         "spa": 135,
         "spd": 91,
         "spe": 36
-      }
+      },
+      "abilities": [
+        {
+          "id": "berserk",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "sap-sipper",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "cloud-nine",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 784,
@@ -6259,7 +8843,24 @@
         "spa": 100,
         "spd": 105,
         "spe": 85
-      }
+      },
+      "abilities": [
+        {
+          "id": "bulletproof",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "soundproof",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "overcoat",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 823,
@@ -6285,7 +8886,24 @@
         "spa": 53,
         "spd": 85,
         "spe": 67
-      }
+      },
+      "abilities": [
+        {
+          "id": "pressure",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "unnerve",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "mirror-armor",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 841,
@@ -6313,7 +8931,24 @@
         "spa": 95,
         "spd": 60,
         "spe": 70
-      }
+      },
+      "abilities": [
+        {
+          "id": "ripen",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "gluttony",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "hustle",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 842,
@@ -6342,7 +8977,24 @@
         "spa": 100,
         "spd": 80,
         "spe": 30
-      }
+      },
+      "abilities": [
+        {
+          "id": "ripen",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "gluttony",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "thick-fat",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 844,
@@ -6374,7 +9026,24 @@
         "spa": 65,
         "spd": 70,
         "spe": 71
-      }
+      },
+      "abilities": [
+        {
+          "id": "sand-spit",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "shed-skin",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "sand-veil",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 855,
@@ -6398,7 +9067,19 @@
         "spa": 134,
         "spd": 114,
         "spe": 70
-      }
+      },
+      "abilities": [
+        {
+          "id": "weak-armor",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "cursed-body",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 858,
@@ -6426,7 +9107,24 @@
         "spa": 136,
         "spd": 103,
         "spe": 29
-      }
+      },
+      "abilities": [
+        {
+          "id": "healer",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "anticipation",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "magic-bounce",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 866,
@@ -6457,7 +9155,24 @@
         "spa": 110,
         "spd": 100,
         "spe": 70
-      }
+      },
+      "abilities": [
+        {
+          "id": "tangled-feet",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "screen-cleaner",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "ice-body",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 867,
@@ -6486,7 +9201,14 @@
         "spa": 50,
         "spd": 105,
         "spe": 30
-      }
+      },
+      "abilities": [
+        {
+          "id": "wandering-spirit",
+          "isHidden": false,
+          "slot": 1
+        }
+      ]
     },
     {
       "id": 869,
@@ -6512,7 +9234,19 @@
         "spa": 110,
         "spd": 121,
         "spe": 64
-      }
+      },
+      "abilities": [
+        {
+          "id": "sweet-veil",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "aroma-veil",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 877,
@@ -6542,7 +9276,14 @@
         "spa": 70,
         "spd": 58,
         "spe": 97
-      }
+      },
+      "abilities": [
+        {
+          "id": "hunger-switch",
+          "isHidden": false,
+          "slot": 1
+        }
+      ]
     },
     {
       "id": 887,
@@ -6574,7 +9315,24 @@
         "spa": 100,
         "spd": 75,
         "spe": 142
-      }
+      },
+      "abilities": [
+        {
+          "id": "clear-body",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "infiltrator",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "cursed-body",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 899,
@@ -6602,7 +9360,24 @@
         "spa": 105,
         "spd": 75,
         "spe": 65
-      }
+      },
+      "abilities": [
+        {
+          "id": "intimidate",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "frisk",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "sap-sipper",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 900,
@@ -6629,7 +9404,24 @@
         "spa": 45,
         "spd": 70,
         "spe": 85
-      }
+      },
+      "abilities": [
+        {
+          "id": "swarm",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "sheer-force",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "sharpness",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 902,
@@ -6658,7 +9450,24 @@
         "spa": 80,
         "spd": 75,
         "spe": 78
-      }
+      },
+      "abilities": [
+        {
+          "id": "swift-swim",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "adaptability",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "mold-breaker",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 903,
@@ -6689,7 +9498,24 @@
         "spa": 40,
         "spd": 80,
         "spe": 120
-      }
+      },
+      "abilities": [
+        {
+          "id": "pressure",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "unburden",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "poison-touch",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 908,
@@ -6722,7 +9548,19 @@
         "spa": 81,
         "spd": 70,
         "spe": 123
-      }
+      },
+      "abilities": [
+        {
+          "id": "overgrow",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "protean",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 911,
@@ -6753,7 +9591,19 @@
         "spa": 110,
         "spd": 75,
         "spe": 66
-      }
+      },
+      "abilities": [
+        {
+          "id": "blaze",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "unaware",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 914,
@@ -6780,7 +9630,19 @@
         "spa": 85,
         "spd": 75,
         "spe": 85
-      }
+      },
+      "abilities": [
+        {
+          "id": "torrent",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "moxie",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 925,
@@ -6809,7 +9671,24 @@
         "spa": 65,
         "spd": 75,
         "spe": 111
-      }
+      },
+      "abilities": [
+        {
+          "id": "friend-guard",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "cheek-pouch",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "technician",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 934,
@@ -6838,7 +9717,24 @@
         "spa": 45,
         "spd": 90,
         "spe": 35
-      }
+      },
+      "abilities": [
+        {
+          "id": "purifying-salt",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "sturdy",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "clear-body",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 936,
@@ -6870,7 +9766,19 @@
         "spa": 125,
         "spd": 80,
         "spe": 75
-      }
+      },
+      "abilities": [
+        {
+          "id": "flash-fire",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "weak-armor",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 937,
@@ -6901,7 +9809,19 @@
         "spa": 60,
         "spd": 100,
         "spe": 85
-      }
+      },
+      "abilities": [
+        {
+          "id": "flash-fire",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "weak-armor",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 939,
@@ -6926,7 +9846,24 @@
         "spa": 103,
         "spd": 83,
         "spe": 45
-      }
+      },
+      "abilities": [
+        {
+          "id": "electromorphosis",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "static",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "damp",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 952,
@@ -6960,6 +9897,13 @@
             "ground",
             "electric",
             "psychic"
+          ],
+          "abilities": [
+            {
+              "id": "spicy-spray",
+              "isHidden": false,
+              "slot": 1
+            }
           ]
         }
       ],
@@ -6971,7 +9915,24 @@
         "spa": 108,
         "spd": 65,
         "spe": 75
-      }
+      },
+      "abilities": [
+        {
+          "id": "chlorophyll",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "insomnia",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "moody",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 956,
@@ -7001,7 +9962,24 @@
         "spa": 101,
         "spd": 60,
         "spe": 105
-      }
+      },
+      "abilities": [
+        {
+          "id": "opportunist",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "frisk",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "speed-boost",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 959,
@@ -7031,7 +10009,24 @@
         "spa": 70,
         "spd": 105,
         "spe": 94
-      }
+      },
+      "abilities": [
+        {
+          "id": "mold-breaker",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "own-tempo",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "pickpocket",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 964,
@@ -7061,7 +10056,14 @@
         "spa": 53,
         "spd": 62,
         "spe": 100
-      }
+      },
+      "abilities": [
+        {
+          "id": "zero-to-hero",
+          "isHidden": false,
+          "slot": 1
+        }
+      ]
     },
     {
       "id": 968,
@@ -7085,7 +10087,19 @@
         "spa": 60,
         "spd": 55,
         "spe": 65
-      }
+      },
+      "abilities": [
+        {
+          "id": "earth-eater",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "sand-veil",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 970,
@@ -7119,6 +10133,13 @@
             "grass",
             "normal",
             "steel"
+          ],
+          "abilities": [
+            {
+              "id": "adaptability",
+              "isHidden": false,
+              "slot": 1
+            }
           ]
         }
       ],
@@ -7130,7 +10151,19 @@
         "spa": 130,
         "spd": 81,
         "spe": 86
-      }
+      },
+      "abilities": [
+        {
+          "id": "toxic-debris",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "corrosion",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 981,
@@ -7160,7 +10193,24 @@
         "spa": 110,
         "spd": 70,
         "spe": 60
-      }
+      },
+      "abilities": [
+        {
+          "id": "cud-chew",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "armor-tail",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "sap-sipper",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 983,
@@ -7192,7 +10242,24 @@
         "spa": 60,
         "spd": 85,
         "spe": 50
-      }
+      },
+      "abilities": [
+        {
+          "id": "defiant",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "supreme-overlord",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "pressure",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 1013,
@@ -7217,7 +10284,19 @@
         "spa": 121,
         "spd": 80,
         "spe": 70
-      }
+      },
+      "abilities": [
+        {
+          "id": "hospitality",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "heatproof",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 1018,
@@ -7247,7 +10326,24 @@
         "spa": 125,
         "spd": 65,
         "spe": 85
-      }
+      },
+      "abilities": [
+        {
+          "id": "stamina",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "sturdy",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "stalwart",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     },
     {
       "id": 1019,
@@ -7276,7 +10372,24 @@
         "spa": 120,
         "spd": 80,
         "spe": 44
-      }
+      },
+      "abilities": [
+        {
+          "id": "supersweet-syrup",
+          "isHidden": false,
+          "slot": 1
+        },
+        {
+          "id": "regenerator",
+          "isHidden": false,
+          "slot": 2
+        },
+        {
+          "id": "sticky-hold",
+          "isHidden": true,
+          "slot": 3
+        }
+      ]
     }
   ],
   "meta": {
