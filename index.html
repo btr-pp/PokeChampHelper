@@ -2591,6 +2591,7 @@
         const team = teams[currentTeamIdx];
         const section = document.getElementById("opponentSection");
         section.style.display = team.length > 0 ? "" : "none";
+        if (team.length > 0) renderOpponent();
       }
 
       function renderOpponent() {
