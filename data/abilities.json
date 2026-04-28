@@ -43,9 +43,9 @@
   },
   "armor-tail": {
     "id": "armor-tail",
-    "nameTW": "Armor Tail",
+    "nameTW": "尾甲",
     "nameEN": "Armor Tail",
-    "descTW": "Prevents the opponent from using any moves that have priority, such as Quick Attack.",
+    "descTW": "神祕的尾巴覆蓋著頭部，使對手無法對自己使出先制招式。",
     "descEN": "Prevents the opponent from using any moves that have priority, such as Quick Attack."
   },
   "aroma-veil": {
@@ -141,9 +141,9 @@
   },
   "cud-chew": {
     "id": "cud-chew",
-    "nameTW": "Cud Chew",
+    "nameTW": "反芻",
     "nameEN": "Cud Chew",
-    "descTW": "Causes the Pokémon to reuse an already consumed Berry at the end of the next turn.",
+    "descTW": "1 回合內吃下了樹果的話，會在下回合結束時將樹果從胃裡吐出再吃 1 次。",
     "descEN": "Causes the Pokémon to reuse an already consumed Berry at the end of the next turn."
   },
   "cursed-body": {
@@ -183,9 +183,9 @@
   },
   "dragonize": {
     "id": "dragonize",
-    "nameTW": "Dragonize",
+    "nameTW": "龍化",
     "nameEN": "Dragonize",
-    "descTW": "The Pokémon's Normal-type moves become Dragon-type moves and their power is boosted by 20%.",
+    "descTW": "一般屬性的招式變為龍屬性招式，且威力會稍微提高（×1.2）。",
     "descEN": "The Pokémon's Normal-type moves become Dragon-type moves and their power is boosted by 20%."
   },
   "drizzle": {
@@ -218,16 +218,16 @@
   },
   "earth-eater": {
     "id": "earth-eater",
-    "nameTW": "Earth Eater",
+    "nameTW": "食土",
     "nameEN": "Earth Eater",
-    "descTW": "Restores HP when hit by a Ground-type move.",
+    "descTW": "受到地面屬性招式攻擊時不會受到傷害，反而能回復ＨＰ。",
     "descEN": "Restores HP when hit by a Ground-type move."
   },
   "electromorphosis": {
     "id": "electromorphosis",
-    "nameTW": "Electromorphosis",
+    "nameTW": "電力轉換",
     "nameEN": "Electromorphosis",
-    "descTW": "When hit by an attack, the power of the next Electric-type move it uses is doubled.",
+    "descTW": "受到攻擊時，下一次使出的電屬性招式威力會變為 2 倍。",
     "descEN": "When hit by an attack, the power of the next Electric-type move it uses is doubled."
   },
   "fairy-aura": {
@@ -353,7 +353,7 @@
     "id": "hospitality",
     "nameTW": "款待",
     "nameEN": "Hospitality",
-    "descTW": "When a Pokémon with Hospitality enters a battle, it restores HP for an ally by 25%.",
+    "descTW": "出場時會款待同伴，回復同伴少量的ＨＰ。",
     "descEN": "When a Pokémon with Hospitality enters a battle, it restores HP for an ally by 25%."
   },
   "huge-power": {
@@ -582,9 +582,9 @@
   },
   "mega-sol": {
     "id": "mega-sol",
-    "nameTW": "Mega Sol",
+    "nameTW": "太陽之主",
     "nameEN": "Mega Sol",
-    "descTW": "The Pokémon can use its moves as if the weather were harsh sunlight.",
+    "descTW": "在場上時，自身的招式威力如同處於強烈陽光下。",
     "descEN": "The Pokémon can use its moves as if the weather were harsh sunlight."
   },
   "merciless": {
@@ -673,9 +673,9 @@
   },
   "opportunist": {
     "id": "opportunist",
-    "nameTW": "Opportunist",
+    "nameTW": "跟風",
     "nameEN": "Opportunist",
-    "descTW": "Copies stat boosts by the opponent.",
+    "descTW": "當對手的能力提高時，自己的能力也會跟著提高。",
     "descEN": "Copies stat boosts by the opponent."
   },
   "overcoat": {
@@ -722,9 +722,9 @@
   },
   "piercing-drill": {
     "id": "piercing-drill",
-    "nameTW": "Piercing Drill",
+    "nameTW": "貫穿",
     "nameEN": "Piercing Drill",
-    "descTW": "When the Pokémon uses contact moves, it can hit even targets that are protecting themselves.",
+    "descTW": "自身的接觸招式無視對手的「守住」「看穿」等防禦效果。",
     "descEN": "When the Pokémon uses contact moves, it can hit even targets that are protecting themselves."
   },
   "pixilate": {
@@ -792,9 +792,9 @@
   },
   "purifying-salt": {
     "id": "purifying-salt",
-    "nameTW": "Purifying Salt",
+    "nameTW": "淨化之鹽",
     "nameEN": "Purifying Salt",
-    "descTW": "Protects from status conditions and halves damage from Ghost-type moves.",
+    "descTW": "純淨的鹽能保護自己免於陷入異常狀態，並且讓所受到的幽靈屬性招式的傷害減半。",
     "descEN": "Protects from status conditions and halves damage from Ghost-type moves."
   },
   "queenly-majesty": {
@@ -939,9 +939,9 @@
   },
   "sharpness": {
     "id": "sharpness",
-    "nameTW": "Sharpness",
+    "nameTW": "銳利",
     "nameEN": "Sharpness",
-    "descTW": "Powers up slicing moves.",
+    "descTW": "提高切斷類招式的威力。",
     "descEN": "Powers up slicing moves."
   },
   "shed-skin": {
@@ -1037,9 +1037,9 @@
   },
   "spicy-spray": {
     "id": "spicy-spray",
-    "nameTW": "Spicy Spray",
+    "nameTW": "辣噴霧",
     "nameEN": "Spicy Spray",
-    "descTW": "When the Pokémon takes damage from a move, it burns the attacker.",
+    "descTW": "受到招式傷害時，會讓攻擊方陷入灼傷狀態。",
     "descEN": "When the Pokémon takes damage from a move, it burns the attacker."
   },
   "stall": {
@@ -1123,14 +1123,14 @@
     "id": "supersweet-syrup",
     "nameTW": "甘露之蜜",
     "nameEN": "Supersweet Syrup",
-    "descTW": "Once per battle, when a Pokémon with Supersweet Syrup enters the battle, it lowers the evasion stat of all adjacent opponents by one stage. ",
+    "descTW": "第一次出場時會散發出甘甜的香氣，降低對手的閃避率。",
     "descEN": "Once per battle, when a Pokémon with Supersweet Syrup enters the battle, it lowers the evasion stat of all adjacent opponents by one stage. "
   },
   "supreme-overlord": {
     "id": "supreme-overlord",
-    "nameTW": "Supreme Overlord",
+    "nameTW": "拔群之將",
     "nameEN": "Supreme Overlord",
-    "descTW": "Attack and Special Attack are boosted for each party Pokémon that has been defeated.",
+    "descTW": "出場時，每有 1 隻同伴在這場對戰中倒下，自己的攻擊和特攻就會稍微提高。",
     "descEN": "Attack and Special Attack are boosted for each party Pokémon that has been defeated."
   },
   "swarm": {
@@ -1212,9 +1212,9 @@
   },
   "toxic-debris": {
     "id": "toxic-debris",
-    "nameTW": "Toxic Debris",
+    "nameTW": "毒滿地",
     "nameEN": "Toxic Debris",
-    "descTW": "Scatters poison spikes at the feet of the opposing team when the Pokémon takes damage from physical moves.",
+    "descTW": "受到物理招式的傷害時，會在對手腳下散布毒菱。",
     "descEN": "Scatters poison spikes at the feet of the opposing team when the Pokémon takes damage from physical moves."
   },
   "trace": {
@@ -1296,9 +1296,9 @@
   },
   "zero-to-hero": {
     "id": "zero-to-hero",
-    "nameTW": "Zero to Hero",
+    "nameTW": "全憑己力",
     "nameEN": "Zero to Hero",
-    "descTW": "Transforms into its Hero Form when switching out.",
+    "descTW": "第一次替換回後場時，會變成全力形態。",
     "descEN": "Transforms into its Hero Form when switching out."
   }
 }
