@@ -1201,18 +1201,25 @@
       <div class="team-panel" id="teamPanel">
         <div class="team-tabs" id="teamTabs"></div>
 
-        <div style="display: flex; gap: 8px; margin-bottom: 16px">
+        <div style="display: flex; gap: 6px; margin-bottom: 16px">
           <button
             class="btn-clear"
             id="btnExportTeam"
-            style="flex: 1; font-size: 0.85rem; min-height: 36px"
+            style="flex: 1; font-size: 0.8rem; min-height: 36px; padding: 6px 4px"
           >
-            📋 複製隊伍
+            📋 複製本隊
+          </button>
+          <button
+            class="btn-clear"
+            id="btnExportAllTeams"
+            style="flex: 1; font-size: 0.8rem; min-height: 36px; padding: 6px 4px"
+          >
+            📦 匯出全部
           </button>
           <button
             class="btn-clear"
             id="btnImportTeam"
-            style="flex: 1; font-size: 0.85rem; min-height: 36px"
+            style="flex: 1; font-size: 0.8rem; min-height: 36px; padding: 6px 4px"
           >
             📥 匯入隊伍
           </button>
@@ -1665,50 +1672,92 @@
         localStorage.setItem("poke-teams", JSON.stringify(teams));
       }
 
-      function exportTeamJSON() {
-        const team = teams[currentTeamIdx];
-        if (team.length === 0) {
-          alert("隊伍為空！");
-          return;
-        }
-        const json = JSON.stringify(team, null, 2);
+      function copyToClipboard(text, successMsg) {
         navigator.clipboard
-          .writeText(json)
-          .then(() => alert("✅ 隊伍已複製到剪貼簿！"))
+          .writeText(text)
+          .then(() => alert(successMsg))
           .catch(() => {
             const textarea = document.createElement("textarea");
-            textarea.value = json;
+            textarea.value = text;
             document.body.appendChild(textarea);
             textarea.select();
             document.execCommand("copy");
             document.body.removeChild(textarea);
-            alert("✅ 隊伍已複製到剪貼簿！");
+            alert(successMsg);
           });
       }
 
+      function exportTeamJSON() {
+        const team = teams[currentTeamIdx];
+        if (team.length === 0) {
+          alert("本隊伍為空！");
+          return;
+        }
+        copyToClipboard(JSON.stringify(team, null, 2), "✅ 本隊伍已複製到剪貼簿！");
+      }
+
+      function exportAllTeamsJSON() {
+        if (teams.every((t) => t.length === 0)) {
+          alert("3 組隊伍全部都是空的！");
+          return;
+        }
+        copyToClipboard(JSON.stringify(teams, null, 2), "✅ 全部 3 組隊伍已複製到剪貼簿！");
+      }
+
+      // 把單筆 member raw 物件清洗為合法成員（同舊版邏輯）
+      function sanitizeMember(m, validTypeIds) {
+        const entry = {
+          name: m.name || "",
+          types: (m.types || []).filter((t) => validTypeIds.includes(t)),
+          moves: (m.moves || []).filter((t) => validTypeIds.includes(t)),
+        };
+        if (m.stats) entry.stats = m.stats;
+        if (m.ability) entry.ability = m.ability;
+        // Try to restore stats from Champions data if missing
+        if (!entry.stats && entry.name && typeof CHAMPIONS_DATA !== "undefined") {
+          const match = CHAMPIONS_DATA.pokemon.find((p) =>
+            p.nameTW === entry.name || p.name.toLowerCase() === entry.name.toLowerCase()
+          );
+          if (match) entry.stats = match.stats;
+        }
+        return entry;
+      }
+
+      // 自動偵測：3 隊（陣列的陣列）或單隊（成員陣列）
       function importTeamJSON() {
-        const json = prompt("貼上隊伍 JSON 資料：");
+        const json = prompt("貼上隊伍 JSON 資料（可以是單隊或全部 3 隊）：");
         if (!json) return;
         try {
           const imported = JSON.parse(json);
           if (!Array.isArray(imported)) throw new Error("必須是陣列");
           const validTypeIds = TYPES.map((t) => t.id);
-          const validated = imported.map((m) => {
-            const entry = {
-              name: m.name || "",
-              types: (m.types || []).filter((t) => validTypeIds.includes(t)),
-              moves: (m.moves || []).filter((t) => validTypeIds.includes(t)),
-            };
-            if (m.stats) entry.stats = m.stats;
-            // Try to restore stats from Champions data if missing
-            if (!entry.stats && entry.name && typeof CHAMPIONS_DATA !== "undefined") {
-              const match = CHAMPIONS_DATA.pokemon.find((p) =>
-                p.nameTW === entry.name || p.name.toLowerCase() === entry.name.toLowerCase()
-              );
-              if (match) entry.stats = match.stats;
+
+          // 多隊格式：[[member,...],[member,...],[member,...]] — 每個元素本身也是 array
+          const isMulti =
+            imported.length > 0 && imported.every((t) => Array.isArray(t));
+
+          if (isMulti) {
+            if (imported.length !== 3) {
+              throw new Error(`全部隊伍格式需要剛好 3 組，目前有 ${imported.length} 組`);
             }
-            return entry;
-          });
+            if (!confirm("匯入會覆蓋現有 3 組隊伍，確定？")) return;
+            teams = imported.map((team) => team.map((m) => sanitizeMember(m, validTypeIds)));
+            saveTeams();
+            teamSelected = [];
+            teamMoves = [];
+            opponentSelected = [];
+            megaSelection = {};
+            battleSelection = [];
+            document.getElementById("memberNameInput").value = "";
+            document.getElementById("teamResults").innerHTML = "";
+            document.getElementById("matchupResult").innerHTML = "";
+            renderTeam();
+            alert("✅ 全部 3 組隊伍已匯入！");
+            return;
+          }
+
+          // 單隊格式：[member, member, ...]
+          const validated = imported.map((m) => sanitizeMember(m, validTypeIds));
           teams[currentTeamIdx] = validated;
           saveTeams();
           teamSelected = [];
@@ -1718,7 +1767,7 @@
           document.getElementById("teamResults").innerHTML = "";
           document.getElementById("matchupResult").innerHTML = "";
           renderTeam();
-          alert("✅ 隊伍已導入！");
+          alert("✅ 本隊伍已匯入！");
         } catch (e) {
           alert("❌ JSON 格式錯誤：" + e.message);
         }
@@ -3081,6 +3130,7 @@
         }
       });
       document.getElementById("btnExportTeam").onclick = exportTeamJSON;
+      document.getElementById("btnExportAllTeams").onclick = exportAllTeamsJSON;
       document.getElementById("btnImportTeam").onclick = importTeamJSON;
 
       // ===== Champions Pokemon Data & Autocomplete =====
