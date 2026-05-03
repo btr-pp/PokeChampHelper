@@ -1336,6 +1336,27 @@
       </div>
     </div>
 
+    <div class="help-modal-backdrop" id="importBackdrop" role="dialog" aria-modal="true">
+      <div class="help-modal">
+        <div class="help-modal-header">
+          <span>📥 匯入隊伍</span>
+          <button class="help-modal-close" id="importClose" aria-label="關閉">&times;</button>
+        </div>
+        <div class="help-modal-body" style="padding:14px 18px;gap:10px;display:flex;flex-direction:column">
+          <p style="margin:0;font-size:0.85rem;color:var(--text-muted)">
+            貼上隊伍 JSON（單隊或全部 3 隊），手機長 JSON 也沒問題。
+          </p>
+          <textarea id="importTextarea" rows="14" spellcheck="false"
+            style="flex:1;min-height:200px;width:100%;box-sizing:border-box;background:var(--bg-primary);color:var(--text-primary);border:1px solid var(--border-primary);border-radius:6px;padding:8px;font-family:ui-monospace,monospace;font-size:0.78rem;resize:vertical"
+            placeholder='[ ... ] 或 [[ ... ], [ ... ], [ ... ]]'></textarea>
+          <div style="display:flex;gap:8px;justify-content:flex-end">
+            <button class="btn-clear" id="importCancel" style="min-height:36px;padding:6px 16px">取消</button>
+            <button class="btn-clear" id="importConfirm" style="min-height:36px;padding:6px 16px;background:var(--accent-gold);color:var(--bg-primary);font-weight:600">確認匯入</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <script src="data/champions-pokemon.js"></script>
     <script src="data/abilities.js"></script>
     <script src="vendor/marked.min.js"></script>
@@ -1723,10 +1744,22 @@
         return entry;
       }
 
-      // 自動偵測：3 隊（陣列的陣列）或單隊（成員陣列）
+      // 開啟匯入 modal（用 textarea 取代 prompt，避免 iOS Safari 對長字串截斷）
       function importTeamJSON() {
-        const json = prompt("貼上隊伍 JSON 資料（可以是單隊或全部 3 隊）：");
-        if (!json) return;
+        const ta = document.getElementById("importTextarea");
+        ta.value = "";
+        document.getElementById("importBackdrop").style.display = "flex";
+        setTimeout(() => ta.focus(), 50);
+      }
+
+      function closeImportModal() {
+        document.getElementById("importBackdrop").style.display = "none";
+      }
+
+      // 自動偵測：3 隊（陣列的陣列）或單隊（成員陣列）
+      function confirmImport() {
+        const json = document.getElementById("importTextarea").value.trim();
+        if (!json) { alert("請先貼上 JSON"); return; }
         try {
           const imported = JSON.parse(json);
           if (!Array.isArray(imported)) throw new Error("必須是陣列");
@@ -1740,7 +1773,7 @@
             if (imported.length !== 3) {
               throw new Error(`全部隊伍格式需要剛好 3 組，目前有 ${imported.length} 組`);
             }
-            if (!confirm("匯入會覆蓋現有 3 組隊伍，確定？")) return;
+            if (!confirm("匯入會覆蓋現有 3 組隊伍，確定?")) return;
             teams = imported.map((team) => team.map((m) => sanitizeMember(m, validTypeIds)));
             saveTeams();
             teamSelected = [];
@@ -1752,6 +1785,7 @@
             document.getElementById("teamResults").innerHTML = "";
             document.getElementById("matchupResult").innerHTML = "";
             renderTeam();
+            closeImportModal();
             alert("✅ 全部 3 組隊伍已匯入！");
             return;
           }
@@ -1767,6 +1801,7 @@
           document.getElementById("teamResults").innerHTML = "";
           document.getElementById("matchupResult").innerHTML = "";
           renderTeam();
+          closeImportModal();
           alert("✅ 本隊伍已匯入！");
         } catch (e) {
           alert("❌ JSON 格式錯誤：" + e.message);
@@ -3412,13 +3447,18 @@
       document.getElementById("helpBackdrop").addEventListener("click", (e) => {
         if (e.target.id === "helpBackdrop") closeHelpModal();
       });
+
+      document.getElementById("importClose").onclick = closeImportModal;
+      document.getElementById("importCancel").onclick = closeImportModal;
+      document.getElementById("importConfirm").onclick = confirmImport;
+      document.getElementById("importBackdrop").addEventListener("click", (e) => {
+        if (e.target.id === "importBackdrop") closeImportModal();
+      });
+
       document.addEventListener("keydown", (e) => {
-        if (
-          e.key === "Escape" &&
-          document.getElementById("helpBackdrop").style.display === "flex"
-        ) {
-          closeHelpModal();
-        }
+        if (e.key !== "Escape") return;
+        if (document.getElementById("helpBackdrop").style.display === "flex") closeHelpModal();
+        if (document.getElementById("importBackdrop").style.display === "flex") closeImportModal();
       });
 
       // ===== PWA: Service Worker 註冊（漸進式增強，不支援的瀏覽器會跳過）=====
